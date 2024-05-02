@@ -49,4 +49,17 @@ class UserController extends Controller
         $user->delete();
         return redirect()->route('admin.index')->with('success', 'User berhasil dihapus');
     }
+
+    public function update(Request $request, User $user)
+    {
+        $request->validate([
+            'role' => 'required|in:admin,organik,anorganik'
+        ]);
+
+        $user->update([
+            'role' => $request->role
+        ]);
+
+        return redirect()->route('admin.index')->with('success', 'Peran pengguna berhasil diperbarui');
+    }
 }

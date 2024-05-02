@@ -217,7 +217,7 @@
                                         </td>
                                         <td class="px-6 py-2 whitespace-nowrap text-end text-sm font-medium">
                                             <button type="button"
-                                                class="py-1 px-1 inline-flex items-center gap-x-2 text-sm font-semibold rounded border border-transparent bg-yellow-300  text-white hover:bg-yellow-400 disabled:opacity-50 disabled:pointer-events-none">
+                                                class="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none" data-hs-overlay="#hs-focus-management-modaleditadmin">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24"
                                                     style="fill: rgba(255, 255, 255, 1);transform: ;msFilter:;">
                                                     <path
@@ -228,6 +228,7 @@
                                                     </path>
                                                 </svg>
                                             </button>
+                                            @include('page.admin.users.edit')
 
                                              <!-- Tombol Hapus -->
                                              <form action="{{ route('users.destroy', $user->id) }}" method="POST" id="deleteForm{{ $user->id }}">
