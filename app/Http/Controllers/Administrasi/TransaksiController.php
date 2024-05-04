@@ -36,7 +36,7 @@ class TransaksiController extends Controller
 
 
         $this->progres($akun->id);
-        return view('administrasi.transaksi.index', [
+        return view('page.administrasi.transaksi.index', [
             'akun' => $akun,
             'transaksis' => Transaksi::where('akun_id', $akun->id)
                 ->filter($query)
@@ -97,7 +97,7 @@ class TransaksiController extends Controller
             return redirect()->back()->with('error', 'Error saat input data: ' . $e->getMessage());
         }
 
-        return redirect('/administrasi/transaksi?akun=' . $akun_id . '&kegiatan=' . $kegiatan . '&periode=' . $periode . '&fungsi=' . $fungsi)->with('success', 'Data berhasil disimpan!');
+        return redirect('/administrasi/transaksi?akun=' . $akun_id . '&kegiatan=' . $kegiatan . '&periode=' . $periode . '&fungsi=' . $fungsi)->with('success', 'Transaksi berhasil disimpan!');
     }
 
     /**
@@ -179,7 +179,7 @@ class TransaksiController extends Controller
             return redirect()->back()->with('error', 'Error saat mengimpor file: ' . $e->getMessage());
         }
 
-        return redirect('/administrasi/transaksi?akun=' . $akun_id . '&kegiatan=' . $kegiatan . '&periode=' . $periode . '&fungsi=' . $fungsi)->with('success', 'Data berhasil diimpor!');
+        return redirect('/administrasi/transaksi?akun=' . $akun_id . '&kegiatan=' . $kegiatan . '&periode=' . $periode . '&fungsi=' . $fungsi)->with('success', 'Data excel berhasil diimpor!');
     }
 
     public function getAkun()

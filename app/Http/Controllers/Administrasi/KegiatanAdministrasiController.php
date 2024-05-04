@@ -30,7 +30,7 @@ class KegiatanAdministrasiController extends Controller
         $query = array_merge($previousQuery, ['search' => $search]);
 
         $this->progres($periode->id);
-        return view('administrasi.kegiatan.index', [
+        return view('page.administrasi.kegiatan.index', [
             'periode' => $periode,
             'fungsi' => $fungsi,
             'kegiatans' => KegiatanAdministrasi::where('periode_id', $periode->id)
@@ -85,7 +85,7 @@ class KegiatanAdministrasiController extends Controller
             // Tangkap pengecualian dan tampilkan pesan kesalahan
             return redirect()->back()->with('error', 'Error saat input data:  ' . $e->getMessage());
         }
-        return redirect('/administrasi/kegiatan?periode=' . $periode->slug . '&fungsi=' . $fungsi)->with('success', 'Data berhasil diimpor!');
+        return redirect('/administrasi/periode?fungsi=' . $fungsi)->with('success', 'Kegiatan ' . $request->nama . ' berhasil ditambahkan!');
     }
 
     /**
@@ -168,7 +168,7 @@ class KegiatanAdministrasiController extends Controller
             // Tangkap pengecualian dan tampilkan pesan kesalahan
             return redirect()->back()->with('error', 'Error saat mengimpor file: ' . $e->getMessage());
         }
-        return redirect('/administrasi/kegiatan?periode=' . $periode->slug . '&fungsi=' . $fungsi)->with('success', 'Data berhasil diimpor!');
+        return redirect('/administrasi/periode?fungsi=' . $fungsi)->with('success', 'Data Excel berhasil diimpor!');
     }
 
     public function getPeriode()

@@ -29,7 +29,7 @@
                 <li class="inline-flex items-center">
                     <a class="flex items-center text-sm text-gray-500 hover:text-blue-600 focus:outline-none focus:text-blue-600 dark:text-neutral-500 dark:hover:text-blue-500 dark:focus:text-blue-500"
                         href="#">
-                        Umum
+                        {{ $fungsi }}
                     </a>
                     <svg class="flex-shrink-0 mx-2 overflow-visible size-4 text-gray-400 dark:text-neutral-600"
                         xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -60,24 +60,30 @@
                 @include('page.administrasi.periode.create')
 
                 <!-- Progress Indicators Container -->
+                @foreach ($periode as $periodeProgres)
                 <div class="flex items-center space-x-4">
+                    @if ($periodeProgres->progres !== null)
                     <!-- Fraction Indicator -->
                     <div class="flex items-center bg-blue-100 rounded-full p-1">
                         <div class="py-1.5 px-1.5 bg-blue-500 text-white rounded-full text-sm mr-1">
-                            75/150
+                            {{$periodeProgres->complete_file}}/ {{$periodeProgres->amount_file}}
                         </div>
                         <span class="text-gray-800 dark:text-gray-400 text-sm mr-2">Uploaded</span>
                     </div>
 
-
                     <!-- Percentage Indicator -->
                     <div class="flex items-center bg-blue-100 rounded-full p-1">
                         <div class="py-1.5 px-1.5 bg-blue-500 text-white rounded-full text-sm mr-1">
-                            50%
+                            {{$periodeProgres->progres}}%
                         </div>
                         <span class="text-gray-800 dark:text-gray-400 text-sm mr-2">Progress</span>
                     </div>
+                    @else
+                    <div></div>
+                    <div></div>
+                    @endif
                 </div>
+                @endforeach
 
             </div>
 
@@ -102,6 +108,9 @@
                                 <p class="text-xs text-gray-600 dark:text-neutral-400">
                                     {{$periodeAdministrasi->tgl_awal}} -  {{$periodeAdministrasi->tgl_akhir}}
                                 </p>
+                                <h2 class="text-xl mt-2 font-normal text-blue-700 dark:text-neutral-200">
+                                    {{$periodeAdministrasi->periode}}
+                                </h2>
                             </div>
 
                             <div>
@@ -127,73 +136,8 @@
                                         Import
                                     </button>
 
-                                    <div id="hs-sign-out-alert"
-                                        class="hs-overlay hidden size-full fixed inset-0 z-[80] overflow-x-hidden overflow-y-auto bg-gray-900 bg-opacity-50">
-                                        <div class="flex items-center justify-center min-h-screen">
-                                            <div
-                                                class="hs-overlay-open:animate-scaleUp hs-overlay-open:opacity-100 hs-overlay-open:duration-500 opacity-0 transition transform-gpu scale-95 sm:max-w-lg sm:w-full mx-4">
-                                                <div
-                                                    class="relative bg-white shadow-xl rounded-2xl dark:bg-blue-800">
-                                                    <div
-                                                        class="flex justify-between items-center p-5 rounded-t-2xl border-b dark:border-gray-600">
-                                                        <h3 class="text-xl font-bold text-gray-800 dark:text-white">
-                                                            Import Excel
-                                                        </h3>
-                                                        <button type="button"
-                                                            class="flex justify-center items-center size-7 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-gray-700"
-                                                            data-hs-overlay="#hs-sign-out-alert">
-                                                            <span class="sr-only">Close</span>
-                                                            <svg class="flex-shrink-0 size-5"
-                                                                xmlns="http://www.w3.org/2000/svg" width="24"
-                                                                height="24" viewBox="0 0 24 24" fill="none"
-                                                                stroke="currentColor" stroke-width="2"
-                                                                stroke-linecap="round" stroke-linejoin="round">
-                                                                <path d="M18 6 6 18"></path>
-                                                                <path d="m6 6 12 12"></path>
-                                                            </svg>
-                                                        </button>
-                                                    </div>
-                                                    <div class="p-6 text-center">
-
-                                                        <form class="flex justify-center items-center mt-4">
-                                                            <label class="block w-full">
-                                                                <span class="sr-only">Choose file</span>
-                                                                <div
-                                                                    class="flex flex-col items-center justify-center w-full">
-                                                                    <div
-                                                                        class="border-2 border-dashed border-gray-300 rounded-lg text-sm leading-normal text-gray-500 bg-white py-10 px-4 w-full flex flex-col justify-center items-center">
-                                                                        <svg class="w-8 h-8  mb-3 text-gray-500"
-                                                                            fill="none" stroke="currentColor"
-                                                                            viewBox="0 0 24 24"
-                                                                            xmlns="http://www.w3.org/2000/svg">
-                                                                            <path stroke-linecap="round"
-                                                                                stroke-linejoin="round"
-                                                                                stroke-width="2" d="M12 4v16m8-8H4">
-                                                                            </path>
-                                                                        </svg>
-                                                                        <span class="mb-2">Drag and drop your
-                                                                            file here or click to upload</span>
-                                                                        <input type="file" class="hidden" />
-                                                                    </div>
-                                                                </div>
-                                                            </label>
-                                                        </form>
-
-                                                        <div class="mt-6 flex justify-center gap-x-4">
-                                                            <button type="button"
-                                                                class="inline-flex justify-center items-center px-4 py-2 text-sm font-medium rounded-md border border-transparent bg-red-600 text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-                                                                Batal
-                                                            </button>
-                                                            <button type="button"
-                                                                class="inline-flex justify-center items-center px-4 py-2 text-sm font-medium rounded-md border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                                                                Import
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    @include('page.administrasi.kegiatan.create-excel')
+                                   
                                     <button type="button"
                                         class="py-2 px-2 pr-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-xl border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
                                         data-hs-overlay="#hs-slide-down-animation-modal-folder">
@@ -204,93 +148,10 @@
                                             <path d="M5 12h14" />
                                             <path d="M12 5v14" />
                                         </svg>
-                                        Buat Folder
+                                        Kegiatan
                                     </button>
 
-                                    <div id="hs-slide-down-animation-modal-folder"
-                                        class="hs-overlay hidden size-full fixed top-0 start-0 z-[80] overflow-x-hidden overflow-y-auto pointer-events-none">
-                                        <div
-                                            class="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-lg sm:w-full m-3 sm:mx-auto">
-                                            <div
-                                                class="flex flex-col bg-white border shadow-sm rounded-xl pointer-events-auto dark:bg-gray-800 dark:border-gray-700 dark:shadow-slate-700/[.7]">
-                                                <div
-                                                    class="flex justify-between items-center py-3 px-4 border-b dark:border-gray-700">
-                                                    <h3 class="font-bold text-gray-800 dark:text-white">
-                                                        Masukkan Nama & Periode
-                                                        Kegiatan
-                                                    </h3>
-                                                    <button type="button"
-                                                        class="flex justify-center items-center size-7 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-gray-700"
-                                                        data-hs-overlay="#hs-slide-down-animation-modal-folder">
-                                                        <span class="sr-only">Close</span>
-                                                        <svg class="flex-shrink-0 size-5"
-                                                            xmlns="http://www.w3.org/2000/svg" width="24"
-                                                            height="24" viewBox="0 0 24 24" fill="none"
-                                                            stroke="currentColor" stroke-width="2"
-                                                            stroke-linecap="round" stroke-linejoin="round">
-                                                            <path d="M18 6 6 18">
-                                                            </path>
-                                                            <path d="m6 6 12 12">
-                                                            </path>
-                                                        </svg>
-                                                    </button>
-                                                </div>
-                                                <div class="flex flex-col space-y-4 p-4 overflow-y-auto">
-                                                    <!-- Nama Kegiatan -->
-                                                    <div>
-                                                        <label
-                                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">
-                                                            Nama Kegiatan
-                                                        </label>
-                                                        <input type="input"
-                                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
-                                                            required>
-                                                    </div>
-
-                                                    <!-- Tanggal Mulai -->
-                                                    <div>
-                                                        <label for="start-date"
-                                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Tanggal
-                                                            Mulai</label>
-                                                        <input type="date" id="start-date" name="start-date"
-                                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
-                                                            required>
-                                                    </div>
-
-                                                    <!-- Tanggal Selesai -->
-                                                    <div>
-                                                        <label for="end-date"
-                                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Tanggal
-                                                            Selesai</label>
-                                                        <input type="date" id="end-date" name="end-date"
-                                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
-                                                            required>
-                                                    </div>
-                                                </div>
-
-                                                <div
-                                                    class="flex items-center justify-center h-full p-4 overflow-y-auto">
-                                                    <p class="text-gray-800 dark:text-gray-400 text-center">
-                                                        Apakah anda sudah yakin dengan kegiatan yang akan dibuat?
-                                                    </p>
-                                                </div>
-
-                                                <div
-                                                    class="flex justify-end items-center gap-x-2 py-3 px-4 border-t dark:border-gray-700">
-                                                    <button type="button"
-                                                        class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-gray-200 bg-red-600 text-white shadow-sm hover:bg-red-700 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800"
-                                                        data-hs-overlay="#hs-slide-down-animation-modal">
-                                                        Batal
-                                                    </button>
-                                                    <button type="button"
-                                                        class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
-                                                        data-hs-overlay="#hs-slide-down-animation-modal">
-                                                        Selesai
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    @include('page.administrasi.kegiatan.create')
 
                                 </div>
                             </div>
@@ -298,7 +159,7 @@
                         <!-- End Header -->
                     
                         <!-- Table -->
-                        @foreach ($periodeAdministrasi->kegiatanAdministrasi as $kegiatan)
+                        @foreach ($periodeAdministrasi->kegiatanAdministrasi as $kegiatanAdministrasi)
                         <table class="min-w-full divide-y divide-gray-200 dark:divide-neutral-700">
                             <tbody class="divide-y divide-gray-200 dark:divide-neutral-700">
                                 <tr class="hover:bg-gray-100 dark:hover:bg-neutral-700">
@@ -316,17 +177,19 @@
                                         </div>
                                     </td>
                                     <td class="size-px whitespace-nowrap">
+                                        <a href="/administrasi/akun?kegiatan={{ $kegiatanAdministrasi->id }}&periode={{ $periodeAdministrasi->slug }}&fungsi={{ $fungsi }}">
                                         <div class="px-3 py-3 text-start">
                                             <div class="flex items-center gap-x-3">
                                                 <span
                                                     class="text-sm font-medium text-gray-800 dark:text-neutral-200 ml-3 mr-32">
-                                                    {{$kegiatan->nama}}
+                                                    {{$kegiatanAdministrasi->nama}}
                                                 </span>
                                             </div>
                                         </div>
+                                     </a>
                                     </td>
 
-                                    @if ($kegiatan->progres !== null)
+                                    @if ($kegiatanAdministrasi->progres !== null)
                                         <td class="size-px whitespace-nowrap">
                                             <div class="px-6 py-3 mr-10">
                                                 <span
@@ -336,7 +199,7 @@
                                                         <path
                                                             d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
                                                     </svg>
-                                                    {{$kegiatan->progres}}%
+                                                    {{$kegiatanAdministrasi->progres}}%
                                                 </span>
                                             </div>
                                         </td>
@@ -349,11 +212,12 @@
                                                         <path
                                                             d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
                                                     </svg>
-                                                    {{ $kegiatan->complete_file }}/{{ $kegiatan->amount_file }}
+                                                    {{ $kegiatanAdministrasi->complete_file }}/{{ $kegiatanAdministrasi->amount_file }}
                                                 </span>
                                             </div>
                                         </td>
                                     @else
+                                        <td></td>
                                         <td></td>
                                         <td></td>
                                     @endif
@@ -361,25 +225,33 @@
                                     <td class="size-px whitespace-nowrap">
                                         <div class="px-6 py-3 mr-10">
                                             <span class="text-sm text-gray-500 dark:text-neutral-500">
-                                                {{$kegiatan->tgl_awal}} - {{$kegiatan->tgl_akhir}}</span>
+                                                {{$kegiatanAdministrasi->tgl_awal}} - {{$kegiatanAdministrasi->tgl_akhir}}</span>
                                         </div>
                                     </td>
                                     <td class="size-px whitespace-nowrap">
                                         <div class="px-3 py-1.5">
-                                            <button
-                                                class="bg-red-600 hover:bg-red-700 text-white p-1 rounded focus:outline-none focus:shadow-outline">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-                                                    viewBox="0 0 24 24"
-                                                    style="fill: rgba(255, 252, 252, 1);transform: ;msFilter:;">
-                                                    <path
-                                                        d="M5 20a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8h2V6h-4V4a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v2H3v2h2zM9 4h6v2H9zM8 8h9v12H7V8z">
-                                                    </path>
-                                                    <path d="M9 10h2v8H9zm4 0h2v8h-2z">
-                                                    </path>
-                                                </svg>
-                                            </button>
+                                            <form id="delete-form-{{$kegiatanAdministrasi->id}}"
+                                                action="/administrasi/kegiatan/{{ $kegiatanAdministrasi->id }}" method="POST">
+                                                @csrf
+                                                @method('delete')
+                                                <input type="hidden" value="{{ $fungsi }}" name="fungsi">
+                                                <input type="hidden" value="{{ $periodeAdministrasi->slug }}" name="periode">
+                                                <input type="hidden" value="{{ $kegiatanAdministrasi->id }}" name="kegiatan">
+                                                <button type="button"
+                                                    onclick="confirmDelete({{$kegiatanAdministrasi->id}})"
+                                                    class="bg-red-600 hover:bg-red-700 text-white p-1 rounded focus:outline-none focus:shadow-outline">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                                        style="fill: rgba(255, 252, 252, 1);transform: ;msFilter:;">
+                                                        <path
+                                                            d="M5 20a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8h2V6h-4V4a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v2H3v2h2zM9 4h6v2H9zM8 8h9v12H7V8z">
+                                                        </path>
+                                                        <path d="M9 10h2v8H9zm4 0h2v8h-2z">
+                                                        </path>
+                                                    </svg>
+                                                </button>
+                                            </form>
                                         </div>
-                                    </td>
+                                    </td>                                    
                                 </tr>
 
                             </tbody>
@@ -392,7 +264,32 @@
             </div>
         </div>
         <!-- End Card -->
-
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+        <script>
+            function confirmDelete(id) {
+            Swal.fire({
+                title: 'Apakah Anda yakin menghapus?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Ya, hapus saja!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('delete-form-' + id).submit();
+                }
+            });
+        }
+            @if(session('success'))
+                Swal.fire({
+                    icon: 'success',
+                    title: '{{ session('success') }}',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+            @endif
+        </script>
     </div>
 </div>
 <!-- End Content -->

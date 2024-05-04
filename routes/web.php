@@ -26,9 +26,6 @@ Route::get('/', function () {
     return view('home');
 });
 
-// Route::get('/administrasi', function () {
-//     return view('page.administrasi.index');
-// });
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -89,7 +86,7 @@ Route::resource('/administrasi/periode', PeriodeAdministrasiController::class);
 //kegiatan
 Route::resource('/administrasi/kegiatan', KegiatanAdministrasiController::class);
 Route::get('/administrasi/kegiatan/create-excel/{slug}', [KegiatanAdministrasiController::class, 'exportExcel']);
-Route::post('/administrasi/kegiatan/destroy_excel', [KegiatanAdministrasiController::class, 'storeExcel']);
+Route::post('/administrasi/kegiatan/store_excel', [KegiatanAdministrasiController::class, 'storeExcel']);
 
 //akun
 Route::resource('/administrasi/akun', AkunController::class);
@@ -104,7 +101,7 @@ Route::post('/administrasi/transaksi/destroy_excel', [TransaksiController::class
 //file
 Route::resource('/administrasi/file', FileController::class);
 Route::get('/administrasi/file/create-excel/{id}', [FileController::class, 'exportExcel']);
-Route::post('/administrasi/file/destroy_excel', [FileController::class, 'stroreExcel']);
+Route::post('/administrasi/file/store_excel', [FileController::class, 'stroreExcel']);
 Route::post('/administrasi/file/addFile', [FileController::class, 'addFile']);
 
 //download

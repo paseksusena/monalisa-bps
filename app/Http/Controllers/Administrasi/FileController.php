@@ -43,7 +43,7 @@ class FileController extends Controller
         $this->progres($transaksi->id);
 
         // $files = File::where('transaksi_id', $transaksi_id)->get();
-        return view('administrasi.file.index', [
+        return view('page.administrasi.file.index', [
             'transaksi' => $transaksi,
             'fungsi' => $fungsi,
             'files' => File::where('transaksi_id', $transaksi->id)

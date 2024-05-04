@@ -30,7 +30,7 @@ class AkunController extends Controller
         $query = array_merge($previousQuery, ['search' => $search]);
 
         $this->progres($kegiatan->id);
-        return view('administrasi.akun.index', [
+        return view('page.administrasi.akun.index', [
             'kegiatan' => $kegiatan,
             'akuns' => Akun::where('kegiatan_id', $kegiatan->id)
                 ->filter($query)
@@ -45,21 +45,7 @@ class AkunController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
 
-        $kegiatan = request('kegiatan');
-        $periode = request('periode');
-        $fungsi = request('fungsi');
-        // dd(  $kegiatan, $periode, $fungsi);
-
-        return view('administrasi.akun.create', [
-            'kegiatan' => $kegiatan,
-            'periode' => $periode,
-            'fungsi' => $fungsi,
-
-        ]);
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -77,7 +63,7 @@ class AkunController extends Controller
             ]);
             $fungsi = $request->fungsi;
             $periode = $request->periode;
-            $kegiatan_id = $request->kegiatan;
+            $kegiatan_id = $request->kegiatan_id;
 
             $file = Akun::where('kegiatan_id', $kegiatan_id)->get();
             $find = $file->where('nama', $request->nama)->first();
@@ -89,7 +75,7 @@ class AkunController extends Controller
             // Tangkap pengecualian dan tampilkan pesan kesalahan
             return redirect()->back()->with('error', 'Error saat input data: ' . $e->getMessage());
         }
-        return redirect('/administrasi/akun?kegiatan=' . $kegiatan_id . '&periode=' . $periode . '&fungsi=' . $fungsi)->with('success', 'Data berhasil diimpor!');
+        return redirect('/administrasi/akun?kegiatan=' . $kegiatan_id . '&periode=' . $periode . '&fungsi=' . $fungsi)->with('success', 'Akun berhasil ditambahkan!');
     }
 
     /**
@@ -174,7 +160,7 @@ class AkunController extends Controller
             return redirect()->back()->with('error', 'Error saat mengimpor file: ' . $e->getMessage());
         }
 
-        return redirect('/administrasi/akun?kegiatan=' . $kegiatan_id . '&periode=' . $periode->slug . '&fungsi=' . $fungsi)->with('success', 'Data berhasil diimpor!');
+        return redirect('/administrasi/akun?kegiatan=' . $kegiatan_id . '&periode=' . $periode->slug . '&fungsi=' . $fungsi)->with('success', 'Akun berhasil diimpor!');
     }
 
     public function getKegiatan()

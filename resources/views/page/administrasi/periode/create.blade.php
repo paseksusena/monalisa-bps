@@ -62,10 +62,10 @@
                         <label for="periode" class="block text-sm font-medium mb-2 dark:text-white">Periode</label>
                         <select name="periode" id="periode"
                             class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-neutral-900 dark:border-neutral-700 dark:placeholder-neutral-500 dark:text-neutral-400">
-                            <option value="tahunan">Tahunan</option>
-                            <option value="semester">Semester</option>
-                            <option value="triwulan">Triwulan</option>
-                            <option value="bulan">Bulan</option>
+                            <option value="Tahunan">Tahunan</option>
+                            <option value="Semester">Semester</option>
+                            <option value="Triwulan">Triwulan</option>
+                            <option value="Bulan">Bulan</option>
                         </select>
                     </div>
                 </div>
