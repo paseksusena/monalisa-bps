@@ -37,8 +37,25 @@
                         <path d="m9 18 6-6-6-6"></path>
                     </svg>
                     <a class="flex items-center text-sm text-gray-500 hover:text-blue-600 focus:outline-none focus:text-blue-600 dark:text-neutral-500 dark:hover:text-blue-500 dark:focus:text-blue-500"
-                    href="#">
-                    Periode 1
+                    href="/administrasi/akun?kegiatan={{ $akun->id }}&kegiatan={{ $kegiatan->id }}&periode={{ $periode->slug }}&fungsi={{ $fungsi }}">
+                    {{ $kegiatan->nama }}
+                    </a>
+                    <svg class="flex-shrink-0 mx-2 overflow-visible size-4 text-gray-400 dark:text-neutral-600"
+                        xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="m9 18 6-6-6-6"></path>
+                    </svg>
+                    <a class="flex items-center text-sm text-gray-500 hover:text-blue-600 focus:outline-none focus:text-blue-600 dark:text-neutral-500 dark:hover:text-blue-500 dark:focus:text-blue-500"
+                    href="/administrasi/transaksi?akun={{ $akun->id }}&kegiatan={{ $kegiatan->id }}&periode={{ $periode->slug }}&fungsi={{ $fungsi }}">
+                    {{ $akun->nama }}
+                    </a>
+                    <svg class="flex-shrink-0 mx-2 overflow-visible size-4 text-gray-400 dark:text-neutral-600"
+                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m9 18 6-6-6-6"></path>
+                    </svg>
+                    <a class="flex items-center text-sm text-gray-500 hover:text-blue-600 focus:outline-none focus:text-blue-600 dark:text-neutral-500 dark:hover:text-blue-500 dark:focus:text-blue-500">
+                    {{ $transaksi->nama }}
                     </a>
                 </li>
 
@@ -66,7 +83,7 @@
                 <!-- Percentage Indicator -->
                 <div class="flex items-center bg-blue-100 rounded-full p-1">
                     <div class="py-1.5 px-1.5 bg-blue-500 text-white rounded-full text-sm mr-1">
-                        {{$transaksi->progres}}
+                        {{$transaksi->progres}}%
                     </div>
                     <span class="text-gray-800 dark:text-gray-400 text-sm mr-2">Progress</span>
                 </div>
@@ -100,17 +117,17 @@
                             <div>
                                 <div class="inline-flex gap-x-2">
                                     <button type="button"
-                 class="py-2 px-2 pr-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-xl border border-transparent bg-green-600 text-white hover:bg-green-700 disabled:opacity-50 disabled:pointer-events-none"
-                 data-hs-overlay="#hs-sign-out-alert">
-                 <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg"
-                     width="24" height="24" viewBox="0 0 24 24" fill="none"
-                     stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                     stroke-linejoin="round">
-                     <path d="M5 12h14" />
-                     <path d="M12 5v14" />
-                 </svg>
-                 Import Excel
-             </button>
+                                        class="py-2 px-2 pr-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-xl border border-transparent bg-green-600 text-white hover:bg-green-700 disabled:opacity-50 disabled:pointer-events-none"
+                                        data-hs-overlay="#hs-sign-out-alert">
+                                        <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg"
+                                            width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round">
+                                            <path d="M5 12h14" />
+                                            <path d="M12 5v14" />
+                                        </svg>
+                                        Import Excel
+                                    </button>
                                 
                                     <button type="button"
                                         class="py-2 px-2 pr-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-xl border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
@@ -137,10 +154,10 @@
                             <tbody class="divide-y divide-gray-200 dark:divide-neutral-700">
                                 <tr class="hover:bg-gray-100 dark:hover:bg-neutral-700"> 
                                     <td class="size-px whitespace-nowrap"> 
-                                            <div class="px-3 py-3 text-start">
+                                            <div class="px-1 py-3 text-start">
                                                 <div class="flex items-center gap-x-3">
                                                     <span
-                                                        class="text-sm font-medium text-gray-800 dark:text-neutral-200 ml-3 mr-32">
+                                                        class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-3 mr-32">
                                                         Nomor
                                                     </span>
                                                 </div>
@@ -150,95 +167,100 @@
                                         <div class="px-3 py-3 text-start">
                                             <div class="flex items-center gap-x-3">
                                                 <span
-                                                    class="text-sm font-medium text-gray-800 dark:text-neutral-200 ml-3 mr-32">
+                                                    class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-3 mr-32">
                                                     Judul File
                                                 </span>
                                             </div>
                                          </div>
                                     </td>
                                     <td class="size-px whitespace-nowrap"> 
-                                        <div class="px-3 py-3 text-start">
+                                        <div class="px-1 py-3 text-start">
                                             <div class="flex items-center gap-x-3">
                                                 <span
-                                                    class="text-sm font-medium text-gray-800 dark:text-neutral-200 ml-3 mr-32">
+                                                    class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-3 mr-32">
                                                     Nama File
                                                 </span>
                                             </div>
                                      </div>
                                     </td>
                                     <td class="size-px whitespace-nowrap"> 
-                                        <div class="px-3 py-3 text-start">
+                                        <div class="px-1 py-3 text-start">
                                             <div class="flex items-center gap-x-3">
                                                 <span
-                                                    class="text-sm font-medium text-gray-800 dark:text-neutral-200 ml-3 mr-32">
+                                                    class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-3 mr-32">
                                                     Ukuran File
                                                 </span>
                                             </div>
                                         </div>
                                     </td>
                                     <td class="size-px whitespace-nowrap"> 
-                                        <div class="px-3 py-3 text-start">
+                                        <div class="px-1 py-3 text-start">
                                             <div class="flex items-center gap-x-3">
                                                 <span
-                                                    class="text-sm font-medium text-gray-800 dark:text-neutral-200 ml-3 mr-32">
+                                                    class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-3 mr-32">
                                                     Status
                                                 </span>
                                             </div>
                                         </div>
                                     </td>
                                     <td class="size-px whitespace-nowrap"> 
-                                        <div class="px-3 py-3 text-start">
+                                        <div class="px-1 py-3 text-start">
                                             <div class="flex items-center gap-x-3">
                                                 <span
-                                                    class="text-sm font-medium text-gray-800 dark:text-neutral-200 ml-3 mr-32">
+                                                    class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-3 mr-32">
                                                     Update
                                                 </span>
                                             </div>
                                         </div>
                                     </td>
                                     <td class="size-px whitespace-nowrap"> 
-                                        <div class="px-3 py-3 text-start">
+                                        <div class="px-1 py-3 text-start">
                                             <div class="flex items-center gap-x-3">
                                                 <span
-                                                    class="text-sm font-medium text-gray-800 dark:text-neutral-200 ml-3 mr-32">
+                                                    class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-3 mr-32">
                                                     Action
                                                 </span>
                                             </div>
                                         </div>
                                     </td>
                                 </tr>
-                                @foreach ($files as $file)
+                                @foreach ($files as $file => $doc)
                                 <tr class="hover:bg-gray-100 dark:hover:bg-neutral-700">
-                                    <td class="size-px whitespace-nowrap">
-                                        <div class="ps-6 py-3 ml-1">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30"
-                                                viewBox="0 0 24 24"
-                                                style="fill: rgba(0, 0, 0, 1);transform: ;msFilter:;">
-                                                <path d="M13 9h-2v3H8v2h3v3h2v-3h3v-2h-3z">
-                                                </path>
-                                                <path
-                                                    d="M20 5h-8.586L9.707 3.293A.996.996 0 0 0 9 3H4c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2h16c1.103 0 2-.897 2-2V7c0-1.103-.897-2-2-2zM4 19V7h16l.002 12H4z">
-                                                </path>
-                                            </svg>
+                                    <td class="size-px whitespace-nowrap"> 
+                                        <div class="px-3 py-3 text-start">
+                                            <div class="flex items-center gap-x-3">
+                                                <span
+                                                    class="text-sm font-medium text-gray-800 dark:text-neutral-200 ml-3 mr-32">
+                                                    {{$file + 1}}
+                                                </span>
+                                            </div>
                                         </div>
                                     </td>
 
-                                    <td class="size-px whitespace-nowrap"> 
+                                    <td class="size-px whitespace-nowrap">
+                                        <div class="flex items-center space-x-2">
+                                            <div class="ps-6 py-3">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="currentColor">
+                                                    <path d="M13 9h-2v3H8v2h3v3h2v-3h3v-2h-3z"></path>
+                                                    <path d="M20 5h-8.586L9.707 3.293A.996.996 0 0 0 9 3H4c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2h16c1.103 0 2-.897 2-2V7c0-1.103-.897-2-2-2zM4 19V7h16l.002 12H4z"></path>
+                                                </svg>
+                                            </div>
                                             <div class="px-3 py-3 text-start">
                                                 <div class="flex items-center gap-x-3">
-                                                    <span
-                                                        class="text-sm font-medium text-gray-800 dark:text-neutral-200 ml-3 mr-32">
-                                                        {{$file->judul}}
+                                                    <span class="text-sm font-medium text-gray-800 dark:text-neutral-200 ml-3 mr-32">
+                                                        {{$doc->judul}}
                                                     </span>
                                                 </div>
                                             </div>
+                                        </div>
                                     </td>
+                                    
                                     <td class="size-px whitespace-nowrap"> 
                                         <div class="px-3 py-3 text-start">
                                             <div class="flex items-center gap-x-3">
                                                 <span
                                                     class="text-sm font-medium text-gray-800 dark:text-neutral-200 ml-3 mr-32">
-                                                    {{$file->namaFile}}
+                                                    {{$doc->namaFile}}
                                                 </span>
                                             </div>
                                         </div>
@@ -249,27 +271,37 @@
                                             <div class="flex items-center gap-x-3">
                                                 <span
                                                     class="text-sm font-medium text-gray-800 dark:text-neutral-200 ml-3 mr-32">
-                                                    {{$file->ukuran_file}} Mb
+                                                    {{$doc->ukuran_file}} Mb
                                                 </span>
                                             </div>
                                         </div>
                                     </td>
 
                                     <td class="size-px whitespace-nowrap"> 
-                                        @if ($file->status == 0)
+                                        @if ($doc->status == 0)
                                         <div class="px-3 py-3 text-start">
                                             <div class="flex items-center gap-x-3">
                                                 <span
-                                                    class="text-sm font-medium text-gray-800 dark:text-neutral-200 ml-3 mr-32">
-                                                   Belum
-                                                </span>
+                                                class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-bold bg-yellow-100 text-yellow-800 rounded-full dark:bg-yellow-500/10 dark:text-yellow-500">
+                                                <svg class="size-2.5 text-neutral-700" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <circle cx="12" cy="12" r="10" class="fill-yellow-600" />
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" class="text-yellow-300"/>
+                                                  </svg>
+                                                                                                                                                
+                                               Belum
+                                            </span>
                                             </div>
                                         </div>
                                         @else
                                         <div class="px-3 py-3 text-start">
                                             <div class="flex items-center gap-x-3">
                                                 <span
-                                                    class="text-sm font-medium text-gray-800 dark:text-neutral-200 ml-3 mr-32">
+                                                    class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-bold bg-green-200 text-green-800 rounded-full dark:bg-green-500/10 dark:text-green-500">
+                                                    <svg class="size-2.5" xmlns="http://www.w3.org/2000/svg" width="16"
+                                                        height="16" fill="currentColor" viewBox="0 0 16 16">
+                                                        <path
+                                                            d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+                                                    </svg>
                                                    Sudah
                                                 </span>
                                             </div>
@@ -282,47 +314,42 @@
                                             <div class="flex items-center gap-x-3">
                                                 <span
                                                     class="text-sm font-medium text-gray-800 dark:text-neutral-200 ml-3 mr-32">
-                                                    {{$file->updated_at->diffForHumans()}}
+                                                    {{$doc->updated_at->diffForHumans()}}
                                                 </span>
                                             </div>
                                         </div>
                                     </td>
 
                                     <td class="size-px whitespace-nowrap">
-                                        <div class="px-3 py-1.5">
-                                            <button
-                                                class="bg-red-600 hover:bg-red-700 text-white p-1 rounded focus:outline-none focus:shadow-outline">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-                                                    viewBox="0 0 24 24"
-                                                    style="fill: rgba(255, 252, 252, 1);transform: ;msFilter:;">
-                                                    <path
-                                                        d="M5 20a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8h2V6h-4V4a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v2H3v2h2zM9 4h6v2H9zM8 8h9v12H7V8z">
-                                                    </path>
-                                                    <path d="M9 10h2v8H9zm4 0h2v8h-2z">
-                                                    </path>
-                                                </svg>
-                                            </button>
-
+                                        <div class="flex items-center space-x-2">
+                                            <form id="delete-form-{{$doc->id}}"
+                                                action="/administrasi/file/{{ $doc->id }}" method="POST">
+                                                    @csrf
+                                                    @method('delete')
+                                                    <input type="hidden" value="{{ $fungsi }}" name="fungsi">
+                                                    <input type="hidden" value="{{ $periode->slug }}" name="periode">
+                                                    <input type="hidden" value="{{ $kegiatan->id }}" name="kegiatan">
+                                                    <input type="hidden" value="{{ $akun->id }}" name="akun">
+                                                    <input type="hidden" value="{{ $transaksi->id }}" name="transaksi">
+                                                <button type="button"
+                                                    onclick="confirmDelete({{$doc->id}})"
+                                                    class="bg-red-600 hover:bg-red-700 text-white p-1 rounded focus:outline-none focus:shadow-outline">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                                        style="fill: rgba(255, 252, 252, 1);transform: ;msFilter:;">
+                                                        <path
+                                                            d="M5 20a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8h2V6h-4V4a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v2H3v2h2zM9 4h6v2H9zM8 8h9v12H7V8z">
+                                                        </path>
+                                                        <path d="M9 10h2v8H9zm4 0h2v8h-2z">
+                                                        </path>
+                                                    </svg>
+                                                </button>
+                                            </form>
+                                            @if ($doc->status == 1)
+                                            <a href="/download-file?nama_file={{ $doc->namaFile }}&transaksi={{ $transaksi->id }}&akun={{ $akun->id }}&kegiatan={{ $kegiatan->id }}&periode={{ $periode->slug }}&fungsi={{ $fungsi }}" class="text-blue-600 hover:underline">Download</a>
+                                            @endif
+                                            <a></a>
                                         </div>
-                                    </td>
-                                    <td class="size-px whitespace-nowrap">
-                                        <a href="/download-file?nama_file={{ $file->namaFile }}&transaksi={{ $transaksi->id }}&akun={{ $akun->id }}&kegiatan={{ $kegiatan->id }}&periode={{ $periode->slug }}&fungsi={{ $fungsi }}">{{ $file->namaFile }}
-                                        <div class="px-3 py-1.5">
-                                            <button
-                                                class="bg-red-600 hover:bg-red-700 text-white p-1 rounded focus:outline-none focus:shadow-outline">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-                                                    viewBox="0 0 24 24"
-                                                    style="fill: rgba(255, 252, 252, 1);transform: ;msFilter:;">
-                                                    <path
-                                                        d="M5 20a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8h2V6h-4V4a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v2H3v2h2zM9 4h6v2H9zM8 8h9v12H7V8z">
-                                                    </path>
-                                                    <path d="M9 10h2v8H9zm4 0h2v8h-2z">
-                                                    </path>
-                                                </svg>
-                                            </button>
-                                            </a>
-                                        </div>
-                                    </td>
+                                    </td>                                    
                                 </tr>
                                 @endforeach
                             </tbody>
@@ -352,6 +379,31 @@
                 }
             });
         }
+            function validatePDFFile() {
+            var fileInput = document.getElementById('file-input');
+            var filePath = fileInput.value;
+            var allowedExtensions = /(\.pdf)$/i;
+            if (!allowedExtensions.exec(filePath)) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Format file tidak valid',
+                    text: 'File harus berformat PDF!',
+                });
+                fileInput.value = '';
+                return false;
+            } else {
+                return true;
+            }
+        }
+            function showAlert(title, message, icon) {
+            Swal.fire({
+                title: title,
+                text: message,
+                icon: icon,
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'OK'
+            });
+        }
             @if(session('success'))
                 Swal.fire({
                     icon: 'success',
@@ -359,6 +411,10 @@
                     showConfirmButton: false,
                     timer: 2000
                 });
+            @endif
+
+            @if(session('error'))
+            showAlert('Error', '{{ session('error') }}', 'error');
             @endif
         </script>
     </div>

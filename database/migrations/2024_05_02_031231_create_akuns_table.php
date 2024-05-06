@@ -16,9 +16,9 @@ return new class extends Migration
             $table->string("nama", 50);
             $table->date('tgl_awal');
             $table->date('tgl_akhir');
-            $table->float('progres')->nullable();
-            $table->integer('amount_file')->nullable();
-            $table->integer('complete_file')->nullable();
+            $table->float('progres')->nullable()->default(0);
+            $table->integer('amount_file')->nullable()->default(0);
+            $table->integer('complete_file')->nullable()->default(0);
             $table->foreignId("kegiatan_id");
             $table->timestamps();
         });

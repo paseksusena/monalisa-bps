@@ -134,7 +134,7 @@ class TransaksiController extends Controller
         $periode = PeriodeAdministrasi::where('slug', $request->periode)->first();
         $kegiatan = KegiatanAdministrasi::where('id', $request->kegiatan)->first();
         $akun = Akun::where('id', $request->akun)->first();
-        $filePath = "administrasi/$fungsi/{$periode->nama}/{$kegiatan->nama}/{$akun->nama}/{$transaksi->nama}";
+        $filePath = "administrasis/$fungsi/{$periode->nama}/{$kegiatan->nama}/{$akun->nama}/{$transaksi->nama}";
         File::deleteDirectory($filePath);
 
         $transaksi->file()->delete();

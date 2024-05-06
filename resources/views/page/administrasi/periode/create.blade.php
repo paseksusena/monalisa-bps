@@ -5,6 +5,8 @@
         <form action="/administrasi/periode" method="POST">
             @csrf
             <div
+
+            
                 class="flex flex-col bg-white border shadow-sm rounded-xl pointer-events-auto dark:bg-gray-800 dark:border-gray-700 dark:shadow-slate-700/[.7]">
                 <div class="flex justify-between items-center py-3 px-4 border-b dark:border-gray-700">
                     <h3 class="font-bold text-gray-800 dark:text-white">

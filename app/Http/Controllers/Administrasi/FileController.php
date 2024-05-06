@@ -41,6 +41,9 @@ class FileController extends Controller
 
 
         $this->progres($transaksi->id);
+        $this->progresAkun();
+        $this->progresKegiatan();
+        $this->progresPeriode();
 
         // $files = File::where('transaksi_id', $transaksi_id)->get();
         return view('page.administrasi.file.index', [
@@ -107,6 +110,7 @@ class FileController extends Controller
             // Tangkap pengecualian dan tampilkan pesan kesalahan
             return redirect()->back()->with('error', 'Error saat input data: ' . $e->getMessage());
         }
+        $this->progres($request->transaksi_id);
         return redirect('/administrasi/file?transaksi=' . $transaksi_id . '&akun=' . $akun . '&kegiatan=' . $kegiatan . '&periode=' . $periode . '&fungsi=' . $fungsi)->with('success', 'Berhasil disimpan');
     }
 
@@ -213,62 +217,6 @@ class FileController extends Controller
     }
 
 
-    // public function addFile(StoreFileRequest $request)
-    // {
-    //     //Validasi pertama
-    //     $request->validate([
-    //         'file' => 'required|file|max:20480|mimes:pdf' // max:20480 untuk batas 20 MB (20 * 1024 = 20480 KB)
-    //     ]);
-    //     //Untuk membuat direktori penyimpanan file
-    //     $fungsi = (request('fungsi'));
-    //     $periode = PeriodeAdministrasi::where('slug', request('periode'))->first();
-    //     $kegiatan = KegiatanAdministrasi::where('id', request('kegiatan'))->first();
-    //     $akun = Akun::where('id', request('akun'))->first();
-    //     $transaksi = Transaksi::where('id', request('transaksi'))->first();
-
-
-    //     //Validasi kedua, cari nama judul pada laci administrasi berdasarkan nama file
-    //     $file = $request->file('file');
-    //     $fileInfo = pathinfo($request->file('file')->getClientOriginalName());
-    //     $file = File::where('transaksi_id', $transaksi->id)->get();
-    //     $namaFile = $fileInfo['filename'];
-
-    //     $updateFile = $file->where('judul', $namaFile)->first();
-
-    //     if ($updateFile) {
-    //         // dd('hola');
-    //         //nama file yang berisikan formatnya
-    //         $namaFile = $fileInfo['basename'];
-    //         $ukuranFile = $request->file('file')->getSize(); // Ukuran dalam byte
-    //         $ukuranFileMB = round($ukuranFile / 1024 / 1024, 2); // Ubah ke megabyte dan round to 2 desimal
-    //         $path = public_path('administrasi/' . $fungsi . '/' . $periode->nama . '/' . $kegiatan->nama . '/' . $akun->nama . '/' . $transaksi->nama);
-    //         $request->file('file')->move($path, $namaFile);
-    //         // dd($namaFile, $ukuranFileMB . ' MB');
-    //         $requestValidasi['namaFile'] = $namaFile;
-    //         $requestValidasi['file'] = $path;
-    //         $requestValidasi['ukuran_file'] = $ukuranFileMB;
-
-    //         $updateFile->namaFile = $requestValidasi['namaFile'];
-    //         $updateFile->file = $requestValidasi['file'];
-    //         $updateFile->ukuran_file = $requestValidasi['ukuran_file'];
-    //         $updateFile->status = true;
-    //         $updateFile->save();
-
-    //         return redirect('/administrasi/file?transaksi=' . $transaksi->id . '&akun= ' . $akun->id . '&kegiatan=' . $kegiatan->id . '&periode= ' . $periode->id . '&fungsi=Sosial');
-
-
-    //     } else {
-    //         return back()->with('error', 'Nama File ' . $namaFile . ' tidak dapat ditemukan dalam laci transaksi!');
-    //     }
-
-
-
-
-
-
-
-
-
     // }
 
 
@@ -282,9 +230,11 @@ class FileController extends Controller
                 'files.*' => 'required|file|max:20480|mimes:pdf'
             ], [
                 'files.*.mimes' => 'File harus PDF.',
+                'files.*.max' => 'Ukuran file maksimal 20 mb.',
+
             ]);
         } catch (\Throwable $e) {
-            return back()->with('error', 'File harus PDF.');
+            return back()->with('error', $e->getMessage());
         }
 
         foreach ($request->file('files') as $uploadedFile) {
@@ -304,7 +254,7 @@ class FileController extends Controller
                 $namaFile = $fileInfo['basename'];
                 $ukuranFile = $uploadedFile->getSize(); // Ukuran dalam byte
                 $ukuranFileMB = round($ukuranFile / 1024 / 1024, 2); // Ubah ke megabyte dan round to 2 desimal
-                $path = public_path('administrasi/' . $request->fungsi . '/' . $periode->nama . '/' . $kegiatan->nama . '/' . $akun->nama . '/' . $transaksi->nama);
+                $path = public_path('administrasis/' . $request->fungsi . '/' . $periode->nama . '/' . $kegiatan->nama . '/' . $akun->nama . '/' . $transaksi->nama);
                 $uploadedFile->move($path, $namaFile);
                 $file->namaFile = $namaFile;
                 $file->file = $path;
@@ -318,7 +268,7 @@ class FileController extends Controller
             }
         }
 
-        return redirect('/administrasi/file?transaksi=' . $transaksi->id . '&akun=' . $akun->id . '&kegiatan=' . $kegiatan->id . '&periode=' . $periode->slug . '&fungsi=' . $fungsi);
+        return redirect('/administrasi/file?transaksi=' . $transaksi->id . '&akun=' . $akun->id . '&kegiatan=' . $kegiatan->id . '&periode=' . $periode->slug . '&fungsi=' . $fungsi)->with('success', 'File ' . $namaFile . ' Berhasil Ditambahkan!');
     }
 
 
@@ -337,7 +287,7 @@ class FileController extends Controller
         $nama_file = request('nama_file');
 
         // Bentuk path file
-        $path = public_path("administrasi/$fungsi/{$periode->nama}/{$kegiatan->nama}/{$akun->nama}/{$transaksi->nama}/$nama_file");
+        $path = public_path("administrasis/$fungsi/{$periode->nama}/{$kegiatan->nama}/{$akun->nama}/{$transaksi->nama}/$nama_file");
 
         // Periksa apakah file ada
         if (!file_exists($path)) {
@@ -366,6 +316,104 @@ class FileController extends Controller
         $transaksi['amount_file'] = $totalFiles;
         $transaksi['complete_file'] = $completedFiles;
         $transaksi->save();
+
+        return 0;
+    }
+
+    public function progresPeriode()
+    {
+        $periodes = PeriodeAdministrasi::all();
+
+        foreach ($periodes as $periode) {
+            $kegiatans = KegiatanAdministrasi::where('periode_id', $periode->id)->get();
+
+            $totalFiles = 0;
+            $complete_file = 0;
+            foreach ($kegiatans as $kegiatan) {
+                // Pastikan nilai progres dalam rentang 0 hingga 100
+                $totalFiles += $kegiatan['amount_file'];
+                $complete_file += $kegiatan['complete_file'];
+            }
+            // dd($totalFiles);
+            $progres = $totalFiles > 0 ? ($complete_file / $totalFiles) * 100 : 0;
+
+            // dd($progres);
+
+            // Update nilai progres di tabel Akun
+            $periode = PeriodeAdministrasi::find($periode->id);
+            $periode->progres = $progres;
+            $periode['amount_file'] = $totalFiles;
+            $periode['complete_file'] = $complete_file;
+            $periode->save();
+        }
+
+
+        return 0;
+    }
+
+
+    public function progresAkun()
+    {
+        $akuns = Akun::all();
+        foreach ($akuns as $akun) {
+
+            $transaksis = Transaksi::where('akun_id', $akun->id)->get();
+
+            $totalFiles = 0;
+            $completeFile = 0;
+
+            foreach ($transaksis as $transaksi) {
+                $totalFiles += $transaksi->amount_file;
+                $completeFile += $transaksi->complete_file;
+            }
+
+            // Check for division by zero
+            $progres = $totalFiles > 0 ? ($completeFile / $totalFiles) * 100 : 0;
+
+            // Update progress in the KegiatanAdministrasi table
+            $kegiatan = Akun::find($akun->id);
+            if ($akun) {
+                $akun->progres = $progres;
+                $akun->amount_file = $totalFiles;
+                $akun->complete_file = $completeFile;
+                $akun->save();
+            }
+        }
+
+
+        return 0;
+    }
+    public function progresKegiatan()
+    {
+
+        $kegiatans = KegiatanAdministrasi::all();
+
+        foreach ($kegiatans as $kegiatan) {
+            $akuns = Akun::where('kegiatan_id', $kegiatan->id)->get();
+
+
+            $totalFiles = 0;
+            $completeFile = 0;
+
+            foreach ($akuns as $akun) {
+                $totalFiles += $akun->amount_file;
+                $completeFile += $akun->complete_file;
+            }
+
+            // Check for division by zero
+            $progres = $totalFiles > 0 ? ($completeFile / $totalFiles) * 100 : 0;
+
+            // Update progress in the KegiatanAdministrasi table
+            $kegiatan = KegiatanAdministrasi::find($kegiatan->id);
+            if ($kegiatan) {
+                $kegiatan->progres = $progres;
+                $kegiatan->amount_file = $totalFiles;
+                $kegiatan->complete_file = $completeFile;
+                $kegiatan->save();
+            }
+        }
+
+
 
         return 0;
     }

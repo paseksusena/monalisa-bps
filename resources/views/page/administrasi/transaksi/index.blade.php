@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Administrasi</title>
+    <title>Transaksi</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body>
@@ -37,8 +37,16 @@
                         <path d="m9 18 6-6-6-6"></path>
                     </svg>
                     <a class="flex items-center text-sm text-gray-500 hover:text-blue-600 focus:outline-none focus:text-blue-600 dark:text-neutral-500 dark:hover:text-blue-500 dark:focus:text-blue-500"
-                    href="#">
-                    Periode 1
+                    href="/administrasi/akun?kegiatan={{ $akun->id }}&kegiatan={{ $kegiatan->id }}&periode={{ $periode->slug }}&fungsi={{ $fungsi }}"> 
+                    {{ $kegiatan->nama }}
+                    </a>
+                    <svg class="flex-shrink-0 mx-2 overflow-visible size-4 text-gray-400 dark:text-neutral-600"
+                        xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="m9 18 6-6-6-6"></path>
+                    </svg>
+                    <a class="flex items-center text-sm text-gray-500 hover:text-blue-600 focus:outline-none focus:text-blue-600 dark:text-neutral-500 dark:hover:text-blue-500 dark:focus:text-blue-500">
+                    {{ $akun->nama }}
                     </a>
                 </li>
 
@@ -51,30 +59,35 @@
             <!-- Container for Button and Progress Indicators -->
             <div class="flex justify-between items-center w-full">
                 <!-- Button -->
-                <button type="button"
-                    class="py-2 px-2 pr-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-xl border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
-                    data-hs-overlay="#hs-slide-down-animation-modal-folder">
+                <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4">
+                    <button type="button"
+                        class="w-full sm:w-auto py-2 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-xl border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+                        data-hs-overlay="#hs-slide-down-animation-modal-folder">
                         <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg"
-                             width="24" height="24" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                            troke-linejoin="round">
+                        width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
                         <path d="M5 12h14" />
                         <path d="M12 5v14" />
                         </svg>
-                    Tambah Akun
-                </button>
-                <button type="button"
-                    class="py-2 px-2 pr-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-xl border border-transparent bg-green-600 text-white hover:bg-green-700 disabled:opacity-50 disabled:pointer-events-none"
-                    data-hs-overlay="#hs-sign-out-alert">
+                        <span class="hidden sm:inline-block">Tambah Transaksi</span>
+                    </button>
+                
+                    <button type="button"
+                        class="w-full sm:w-auto py-2 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-xl border border-transparent bg-green-600 text-white hover:bg-green-700 disabled:opacity-50 disabled:pointer-events-none"
+                        data-hs-overlay="#hs-sign-out-alert">
                         <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg"
-                            width="24" height="24" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round">
-                                <path d="M5 12h14" />
-                                <path d="M12 5v14" />
+                        width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M5 12h14" />
+                        <path d="M12 5v14" />
                         </svg>
-                Import Excel
-                 </button>
+                        <span class="hidden sm:inline-block">Import Transaksi</span>
+                    </button>
+                </div>
+                
+                
 
                 @include('page.administrasi.transaksi.create')
                 @include('page.administrasi.transaksi.create-excel')
@@ -93,7 +106,7 @@
                     <!-- Percentage Indicator -->
                     <div class="flex items-center bg-blue-100 rounded-full p-1">
                         <div class="py-1.5 px-1.5 bg-blue-500 text-white rounded-full text-sm mr-1">
-                            {{$akun->progres}}
+                            {{$akun->progres}}%
                         </div>
                         <span class="text-gray-800 dark:text-gray-400 text-sm mr-2">Progress</span>
                     </div>

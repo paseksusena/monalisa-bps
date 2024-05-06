@@ -72,42 +72,44 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::resource('/admin', UserController::class);
 });
 
+Route::middleware('auth')->group(function () {
+    // ADMINISTRASI
+    //index administrasi
+    Route::get('/administrasi',  [AdministrasiController::class, 'index_administrasi']);
 
-// ADMINISTRASI
-//index administrasi
-Route::get('/administrasi',  [AdministrasiController::class, 'index_administrasi']);
+    //periode
+    Route::delete('/administrasi/periode/{periodeAdministrasi}', [PeriodeAdministrasiController::class, 'destroy']);
+    Route::get('/administrasi/periode/{periodeAdministrasi}/edit', [PeriodeAdministrasiController::class, 'edit']);
+    Route::resource('/administrasi/periode', PeriodeAdministrasiController::class);
 
-//periode
-Route::delete('/administrasi/periode/{periodeAdministrasi}', [PeriodeAdministrasiController::class, 'destroy']);
-Route::get('/administrasi/periode/{periodeAdministrasi}/edit', [PeriodeAdministrasiController::class, 'edit']);
-Route::resource('/administrasi/periode', PeriodeAdministrasiController::class);
+    //kegiatan
+    Route::resource('/administrasi/kegiatan', KegiatanAdministrasiController::class);
+    Route::get('/administrasi/kegiatan/create-excel/{slug}', [KegiatanAdministrasiController::class, 'exportExcel']);
+    Route::post('/administrasi/kegiatan/store_excel', [KegiatanAdministrasiController::class, 'storeExcel']);
+
+    //akun
+    Route::resource('/administrasi/akun', AkunController::class);
+    Route::get('/administrasi/akun/create-excel/{slug}', [AkunController::class, 'exportExcel']);
+    Route::post('/administrasi/akun/destroy_excel', [AkunController::class, 'storeExcel']);
+
+    //transaksi
+    Route::resource('/administrasi/transaksi', TransaksiController::class);
+    Route::get('/administrasi/transaksi/create-excel/{id}', [TransaksiController::class, 'exportExcel']);
+    Route::post('/administrasi/transaksi/destroy_excel', [TransaksiController::class, 'storeExcel']);
+
+    //file
+    Route::resource('/administrasi/file', FileController::class);
+    Route::get('/administrasi/file/create-excel/{id}', [FileController::class, 'exportExcel']);
+    Route::post('/administrasi/file/store_excel', [FileController::class, 'stroreExcel']);
+    Route::post('/administrasi/file/addFile', [FileController::class, 'addFile']);
+
+    //download
+    Route::get('/download-file', [FileController::class, 'download']);
+
+    Route::get('/download-file', [FileController::class, 'download']);
+});
 
 
-//kegiatan
-Route::resource('/administrasi/kegiatan', KegiatanAdministrasiController::class);
-Route::get('/administrasi/kegiatan/create-excel/{slug}', [KegiatanAdministrasiController::class, 'exportExcel']);
-Route::post('/administrasi/kegiatan/store_excel', [KegiatanAdministrasiController::class, 'storeExcel']);
-
-//akun
-Route::resource('/administrasi/akun', AkunController::class);
-Route::get('/administrasi/akun/create-excel/{slug}', [AkunController::class, 'exportExcel']);
-Route::post('/administrasi/akun/destroy_excel', [AkunController::class, 'storeExcel']);
-
-//transaksi
-Route::resource('/administrasi/transaksi', TransaksiController::class);
-Route::get('/administrasi/transaksi/create-excel/{id}', [TransaksiController::class, 'exportExcel']);
-Route::post('/administrasi/transaksi/destroy_excel', [TransaksiController::class, 'storeExcel']);
-
-//file
-Route::resource('/administrasi/file', FileController::class);
-Route::get('/administrasi/file/create-excel/{id}', [FileController::class, 'exportExcel']);
-Route::post('/administrasi/file/store_excel', [FileController::class, 'stroreExcel']);
-Route::post('/administrasi/file/addFile', [FileController::class, 'addFile']);
-
-//download
-Route::get('/download-file', [FileController::class, 'download']);
-
-Route::get('/download-file', [FileController::class, 'download']);
 
 
 require __DIR__ . '/auth.php';

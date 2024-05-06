@@ -19,8 +19,9 @@
                 </button>
             </div>
             <div class="flex flex-col space-y-4 p-4 overflow-y-auto">
-                <input type="hidden" name="periode_id" value={{ $periodeAdministrasi->id }}>
+                <input type="hidden" name="periode_id"  id='periodeId'>
                 <input type="hidden" name="fungsi" value={{ $fungsi }}>
+                {{-- @dd($periodeAdministrasi->id) --}}
                 <!-- Nama Kegiatan -->
                 <div>
                     <label for="nama" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Nama Kegiatan</label>

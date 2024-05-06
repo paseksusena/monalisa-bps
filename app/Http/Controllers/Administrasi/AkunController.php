@@ -111,7 +111,7 @@ class AkunController extends Controller
         $periode = PeriodeAdministrasi::where('slug', $request->periode)->first();
         $kegiatan = KegiatanAdministrasi::where('id', $request->kegiatan)->first();
 
-        $filePath = "administrasi/$fungsi/{$periode->nama}/{$kegiatan->nama}/{$akun->nama}";
+        $filePath = "administrasis/$fungsi/{$periode->nama}/{$kegiatan->nama}/{$akun->nama}";
         File::deleteDirectory($filePath);
 
         $akun->transaksi()->each(function ($transaksi) {

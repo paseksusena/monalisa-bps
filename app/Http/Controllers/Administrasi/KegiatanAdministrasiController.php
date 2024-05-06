@@ -62,6 +62,9 @@ class KegiatanAdministrasiController extends Controller
     {
         try {
 
+
+            // $periode = PeriodeAdministrasi::where('id', $request->periode_id)->first();
+            // dd($periode->nama);
             $requestValidasi = $request->validate([
                 'nama' => 'required|max:50',
                 'tgl_awal' => 'required',
@@ -121,7 +124,7 @@ class KegiatanAdministrasiController extends Controller
         $periode = PeriodeAdministrasi::where('slug', $request->periode)->first();
         $kegiatan = KegiatanAdministrasi::where('id', $request->kegiatan)->first();
 
-        $filePath = "administrasi/$fungsi/{$periode->nama}/{$kegiatan->nama}";
+        $filePath = "administrasis/$fungsi/{$periode->nama}/{$kegiatan->nama}";
         File::deleteDirectory($filePath);
 
         $kegiatan->Akun()->each(function ($akun) {
@@ -195,7 +198,6 @@ class KegiatanAdministrasiController extends Controller
         }
         // dd($totalFiles);
         $progres = $totalFiles > 0 ? ($complete_file / $totalFiles) * 100 : 0;
-
 
         // Update nilai progres di tabel Akun
         $periode = PeriodeAdministrasi::find($periode_id);

@@ -27,18 +27,8 @@
             aria-label="Breadcrumb">
             <ol class="flex items-center whitespace-nowrap">
                 <li class="inline-flex items-center">
-                    <a class="flex items-center text-sm text-gray-500 hover:text-blue-600 focus:outline-none focus:text-blue-600 dark:text-neutral-500 dark:hover:text-blue-500 dark:focus:text-blue-500"
-                        href="#">
+                    <a class="flex items-center text-sm text-gray-500 hover:text-blue-600 focus:outline-none focus:text-blue-600 dark:text-neutral-500 dark:hover:text-blue-500 dark:focus:text-blue-500">
                         {{ $fungsi }}
-                    </a>
-                    <svg class="flex-shrink-0 mx-2 overflow-visible size-4 text-gray-400 dark:text-neutral-600"
-                        xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="m9 18 6-6-6-6"></path>
-                    </svg>
-                    <a class="flex items-center text-sm text-gray-500 hover:text-blue-600 focus:outline-none focus:text-blue-600 dark:text-neutral-500 dark:hover:text-blue-500 dark:focus:text-blue-500"
-                    href="#">
-                    Periode 1
                     </a>
                 </li>
 
@@ -59,7 +49,7 @@
 
                 @include('page.administrasi.periode.create')
 
-                <!-- Progress Indicators Container -->
+                {{-- <!-- Progress Indicators Container -->
                 @foreach ($periode as $periodeProgres)
                 <div class="flex items-center space-x-4">
                     @if ($periodeProgres->progres !== null)
@@ -83,7 +73,7 @@
                     <div></div>
                     @endif
                 </div>
-                @endforeach
+                @endforeach --}}
 
             </div>
 
@@ -111,10 +101,26 @@
                                 <h2 class="text-xl mt-2 font-normal text-blue-700 dark:text-neutral-200">
                                     {{$periodeAdministrasi->periode}}
                                 </h2>
-                            </div>
+                                
+                            </div>                                  
 
                             <div>
                                 <div class="inline-flex gap-x-2">
+                                    <div class="hs-dropdown relative inline-flex">
+                                        <button id="hs-dropdown-custom-icon-trigger" type="button" class="hs-dropdown-toggle flex justify-center items-center size-9 text-sm font-semibold rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800">
+                                          <svg class="flex-none size-4 text-gray-600 dark:text-neutral-500" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg>
+                                        </button>
+                                        <div class="hs-dropdown-menu transition-[opacity,margin] duration hs-dropdown-open:opacity-100 opacity-0 hidden min-w-20 bg-white shadow-md rounded-lg p-2 mt-2 dark:bg-neutral-800 dark:border dark:border-neutral-700" aria-labelledby="hs-dropdown-custom-icon-trigger">
+                                            <form id="delete-form-{{$periodeAdministrasi->id}}" action="/administrasi/periode/{{ $periodeAdministrasi->slug }}" method="POST">
+                                                @csrf
+                                                @method('delete')
+                                                <input type="hidden" value="{{ $fungsi }}" name="fungsi">
+                                                    <button  onclick="confirmDelete({{$periodeAdministrasi->id}})" type="button" class="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-base text-red-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-red-400 dark:hover:bg-delete-700 dark:hover:text-red-300 dark:focus:bg-red-700" href="#">
+                                                        Delete
+                                                    </button>
+                                            </form>
+                                        </div>
+                                      </div>
                                     <a class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border  border-blue-200 bg-slate-50 text-blue-500 hover:bg-slate-100 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800"
                                         href="#">
                                         {{$periodeAdministrasi->complete_file}}/{{$periodeAdministrasi->amount_file}}
@@ -123,7 +129,7 @@
                                         href="#">
                                         {{$periodeAdministrasi->progres}}%
                                     </a>
-                                    <button type="button"
+                                    <button type="button" value="{{$periodeAdministrasi->id}}" id="periode_id_excel_{{$periodeAdministrasi->id}}"
                                         class="py-2 px-2 pr-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-xl border border-transparent bg-green-600 text-white hover:bg-green-700 disabled:opacity-50 disabled:pointer-events-none"
                                         data-hs-overlay="#hs-sign-out-alert">
                                         <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg"
@@ -135,10 +141,7 @@
                                         </svg>
                                         Import
                                     </button>
-
-                                    @include('page.administrasi.kegiatan.create-excel')
-                                   
-                                    <button type="button"
+                                    <button type="button" value="{{$periodeAdministrasi->id}}" id="periode_id_{{$periodeAdministrasi->id}}"
                                         class="py-2 px-2 pr-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-xl border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
                                         data-hs-overlay="#hs-slide-down-animation-modal-folder">
                                         <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg"
@@ -150,9 +153,10 @@
                                         </svg>
                                         Kegiatan
                                     </button>
-
-                                    @include('page.administrasi.kegiatan.create')
-
+                                    
+                                    
+                                    
+                                    
                                 </div>
                             </div>
                         </div>
@@ -160,8 +164,13 @@
                     
                         <!-- Table -->
                         @foreach ($periodeAdministrasi->kegiatanAdministrasi as $kegiatanAdministrasi)
+                        @include('page.administrasi.kegiatan.create-excel')
+                        @include('page.administrasi.kegiatan.create')
+
+
                         <table class="min-w-full divide-y divide-gray-200 dark:divide-neutral-700">
                             <tbody class="divide-y divide-gray-200 dark:divide-neutral-700">
+                        {{-- <td>{{$periodeAdministrasi->nama}}</td> --}}
                                 <tr class="hover:bg-gray-100 dark:hover:bg-neutral-700">
                                     <td class="size-px whitespace-nowrap">
                                         <div class="ps-6 py-3 ml-1">
@@ -289,6 +298,37 @@
                     timer: 2000
                 });
             @endif
+
+
+
+            @foreach ($periode as $periodeAdministrasi)
+        document.getElementById('periode_id_{{$periodeAdministrasi->id}}').addEventListener('click', function () {
+            
+            
+            let periode = document.querySelector("#periodeId");
+            periode.value = {{$periodeAdministrasi->id}};
+            // console.log({{$periodeAdministrasi->id}}); 
+
+
+        });
+    @endforeach
+
+
+    @foreach ($periode as $periodeAdministrasi)
+        document.getElementById('periode_id_excel_{{$periodeAdministrasi->id}}').addEventListener('click', function () {
+            
+            
+            let periodeExcel = document.querySelector("#periodeIdExcel");
+            periodeExcel.value = {{$periodeAdministrasi->id}};
+            // console.log({{$periodeAdministrasi->id}}); 
+
+        });
+    @endforeach
+
+
+    
+
+        
         </script>
     </div>
 </div>

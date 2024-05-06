@@ -21,9 +21,9 @@ return new class extends Migration
             $table->string('nama_fungsi', 10);
             $table->string('slug');
             $table->timestamps();
-            $table->float('progres')->nullable();
-            $table->integer('amount_file')->nullable();
-            $table->integer('complete_file')->nullable();
+            $table->float('progres')->nullable()->default(0);
+            $table->integer('amount_file')->nullable()->default(0);
+            $table->integer('complete_file')->nullable()->default(0);
         });
     }
 
