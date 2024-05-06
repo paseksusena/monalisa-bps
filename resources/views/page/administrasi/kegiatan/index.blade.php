@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Administrasi</title>
+    <title>Akun</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body>
   <!-- ========== HEADER ========== -->
-  @include('page.administrasi.file.search')
+  @include('page.administrasi.kegiatan.search')
   <!-- ========== END HEADER ========== -->
 
   <!-- ========== Side Bar ========== -->
@@ -36,35 +36,8 @@
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="m9 18 6-6-6-6"></path>
                     </svg>
-                    <a class="flex items-center text-sm text-gray-500 hover:text-blue-600 focus:outline-none focus:text-blue-600 dark:text-neutral-500 dark:hover:text-blue-500 dark:focus:text-blue-500"
-                    href="/administrasi/kegiatan?periode={{ $periode->slug }}&fungsi={{ $fungsi }}">
-                    {{ $periode->nama }}
-                    </a>
-                    <svg class="flex-shrink-0 mx-2 overflow-visible size-4 text-gray-400 dark:text-neutral-600"
-                        xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="m9 18 6-6-6-6"></path>
-                    </svg>
-                    <a class="flex items-center text-sm text-gray-500 hover:text-blue-600 focus:outline-none focus:text-blue-600 dark:text-neutral-500 dark:hover:text-blue-500 dark:focus:text-blue-500"
-                    href="/administrasi/akun?kegiatan={{ $akun->id }}&kegiatan={{ $kegiatan->id }}&periode={{ $periode->slug }}&fungsi={{ $fungsi }}">
-                    {{ $kegiatan->nama }}
-                    </a>
-                    <svg class="flex-shrink-0 mx-2 overflow-visible size-4 text-gray-400 dark:text-neutral-600"
-                        xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="m9 18 6-6-6-6"></path>
-                    </svg>
-                    <a class="flex items-center text-sm text-gray-500 hover:text-blue-600 focus:outline-none focus:text-blue-600 dark:text-neutral-500 dark:hover:text-blue-500 dark:focus:text-blue-500"
-                    href="/administrasi/transaksi?akun={{ $akun->id }}&kegiatan={{ $kegiatan->id }}&periode={{ $periode->slug }}&fungsi={{ $fungsi }}">
-                    {{ $akun->nama }}
-                    </a>
-                    <svg class="flex-shrink-0 mx-2 overflow-visible size-4 text-gray-400 dark:text-neutral-600"
-                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="m9 18 6-6-6-6"></path>
-                    </svg>
                     <a class="flex items-center text-sm text-gray-500 hover:text-blue-600 focus:outline-none focus:text-blue-600 dark:text-neutral-500 dark:hover:text-blue-500 dark:focus:text-blue-500">
-                    {{ $transaksi->nama }}
+                    {{ $periode->nama }}
                     </a>
                 </li>
 
@@ -77,35 +50,63 @@
             <!-- Container for Button and Progress Indicators -->
             <div class="flex justify-between items-center w-full">
                 <!-- Button -->
-
-               <!-- Progress Indicators Container -->
-               <div class="flex items-center space-x-4">
-                <!-- Fraction Indicator -->
-                <div class="flex items-center bg-blue-100 rounded-full p-1">
-                    <div class="py-1.5 px-1.5 bg-blue-500 text-white rounded-full text-sm mr-1">
-                        {{$transaksi->complete_file}}/  {{$transaksi->amount_file}}
-                    </div>
-                    <span class="text-gray-800 dark:text-gray-400 text-sm mr-2">Uploaded</span>
+                <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4">
+                    <button type="button"
+                        class="w-full sm:w-auto py-2 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-xl border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+                        data-hs-overlay="#hs-slide-down-animation-modal-folder">
+                        <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg"
+                        width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M5 12h14" />
+                        <path d="M12 5v14" />
+                        </svg>
+                        <span class="hidden sm:inline-block">Tambah Kegiatan</span>
+                    </button>
+                
+                    <button type="button"
+                        class="w-full sm:w-auto py-2 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-xl border border-transparent bg-green-600 text-white hover:bg-green-700 disabled:opacity-50 disabled:pointer-events-none"
+                        data-hs-overlay="#hs-sign-out-alert">
+                        <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg"
+                        width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M5 12h14" />
+                        <path d="M12 5v14" />
+                        </svg>
+                        <span class="hidden sm:inline-block">Import Kegiatan</span>
+                    </button>
                 </div>
 
+                @include('page.administrasi.kegiatan.create')
+                @include('page.administrasi.kegiatan.create-excel')
+                
 
-                <!-- Percentage Indicator -->
-                <div class="flex items-center bg-blue-100 rounded-full p-1">
-                    <div class="py-1.5 px-1.5 bg-blue-500 text-white rounded-full text-sm mr-1">
-                        {{$transaksi->progres}}%
+                <!-- Progress Indicators Container -->
+                <div class="flex items-center space-x-4">
+                    <!-- Fraction Indicator -->
+                    <div class="flex items-center bg-blue-100 rounded-full p-1">
+                        <div class="py-1.5 px-1.5 bg-blue-500 text-white rounded-full text-sm mr-1">
+                            {{$periode->complete_file}}/  {{$periode->amount_file}}
+                        </div>
+                        <span class="text-gray-800 dark:text-gray-400 text-sm mr-2">Uploaded</span>
                     </div>
-                    <span class="text-gray-800 dark:text-gray-400 text-sm mr-2">Progress</span>
-                </div>
+
+
+                    <!-- Percentage Indicator -->
+                    <div class="flex items-center bg-blue-100 rounded-full p-1">
+                        <div class="py-1.5 px-1.5 bg-blue-500 text-white rounded-full text-sm mr-1">
+                            {{$periode->progres}}%
+                        </div>
+                        <span class="text-gray-800 dark:text-gray-400 text-sm mr-2">Progress</span>
+                    </div>
                 </div>
 
             </div>
 
         </div>
-        @include('page.administrasi.file.create-pdf')
 
         <!-- Card Tahunan -->
-        @include('page.administrasi.file.create-excel')
-
         <div class="flex flex-col">
             <div class="-m-1.5 overflow-x-auto">
                 <div class="p-1.5 min-w-full inline-block align-middle">
@@ -116,43 +117,11 @@
                             class="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-b border-gray-200 dark:border-neutral-700">
                             <div>
                                 <h2 class="text-xl font-semibold text-gray-800 dark:text-neutral-200">
-                                    {{$transaksi->nama}}
+                                    {{$periode->nama}}
                                 </h2>
                                 <p class="text-xs text-gray-600 dark:text-neutral-400">
-                                    {{$transaksi->tgl_awal}} -  {{$transaksi->tgl_akhir}}
+                                    {{$periode->tgl_awal}} -  {{$periode->tgl_akhir}}
                                 </p>
-                            </div>
-
-                            <div>
-                                <div class="inline-flex gap-x-2">
-                                    <button type="button"
-                                        class="py-2 px-2 pr-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-xl border border-transparent bg-green-600 text-white hover:bg-green-700 disabled:opacity-50 disabled:pointer-events-none"
-                                        data-hs-overlay="#hs-sign-out-alert">
-                                        <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg"
-                                            width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                            stroke-linejoin="round">
-                                            <path d="M5 12h14" />
-                                            <path d="M12 5v14" />
-                                        </svg>
-                                        Import Excel
-                                    </button>
-                                
-                                    <button type="button"
-                                        class="py-2 px-2 pr-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-xl border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
-                                        data-hs-overlay="#hs-slide-down-animation-modal-folder">
-                                        <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg"
-                                            width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                            stroke-linejoin="round">
-                                            <path d="M5 12h14" />
-                                            <path d="M12 5v14" />
-                                        </svg>
-                                        Tambah Laci
-                                    </button>
-                                    
-                                    @include('page.administrasi.file.create')
-                                </div>
                             </div>
                         </div>
                         <!-- End Header -->
@@ -177,7 +146,7 @@
                                             <div class="flex items-center gap-x-3">
                                                 <span
                                                     class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-2 mr-8">
-                                                    Judul File
+                                                    Nama Kegiatan
                                                 </span>
                                             </div>
                                          </div>
@@ -187,7 +156,7 @@
                                             <div class="flex items-center gap-x-3">
                                                 <span
                                                     class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-2 mr-8">
-                                                    Nama File
+                                                    Progress
                                                 </span>
                                             </div>
                                      </div>
@@ -197,7 +166,7 @@
                                             <div class="flex items-center gap-x-3">
                                                 <span
                                                     class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-2 mr-8">
-                                                    Ukuran File
+                                                    File Progress
                                                 </span>
                                             </div>
                                         </div>
@@ -207,17 +176,7 @@
                                             <div class="flex items-center gap-x-3">
                                                 <span
                                                     class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-2 mr-8">
-                                                    Status
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="size-px whitespace-nowrap"> 
-                                        <div class="px-1 py-3 text-start">
-                                            <div class="flex items-center gap-x-3">
-                                                <span
-                                                    class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-2 mr-8">
-                                                    Update
+                                                    Tgl Awal- Tgl Akhir
                                                 </span>
                                             </div>
                                         </div>
@@ -233,14 +192,14 @@
                                         </div>
                                     </td>
                                 </tr>
-                                @foreach ($files as $file => $doc)
+                                @foreach ($kegiatans as $kegiatanAdministrasi => $kgtn)
                                 <tr class="hover:bg-gray-100 dark:hover:bg-neutral-700">
                                     <td class="size-px whitespace-nowrap"> 
                                         <div class="px-1 py-3 text-start">
                                             <div class="flex items-center gap-x-3">
                                                 <span
                                                     class="text-sm font-medium text-gray-800 dark:text-neutral-200 ml-4 mr-8">
-                                                    {{$file + 1}}
+                                                    {{$kegiatanAdministrasi + 1}}
                                                 </span>
                                             </div>
                                         </div>
@@ -256,92 +215,68 @@
                                             </div>
                                             <div class="px-3 py-3 text-start">
                                                 <div class="flex items-center gap-x-3">
-                                                    <span class="text-sm font-medium text-gray-800 dark:text-neutral-200 ml-2 mr-8">
-                                                        {{$doc->judul}}
+                                                    <span class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-2 mr-8">
+                                                        <a href="/administrasi/akun?kegiatan={{ $kgtn->id }}&periode={{ $periode->slug }}&fungsi={{ $fungsi }}">
+                                                            {{$kgtn->nama}}</a>
                                                     </span>
                                                 </div>
                                             </div>
                                         </div>
                                     </td>
                                     
-                                    <td class="size-px whitespace-nowrap"> 
-                                        <div class="px-1 py-3 text-start">
-                                            <div class="flex items-center gap-x-3">
+                                    @if ($kgtn->progres !== null)
+                                        <td class="size-px whitespace-nowrap">
+                                            <div class="px-1 py-3 mr-10">
                                                 <span
-                                                    class="text-sm font-medium text-gray-800 dark:text-neutral-200 ml-2 mr-8">
-                                                    {{$doc->namaFile}}
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </td>
-
-                                    <td class="size-px whitespace-nowrap"> 
-                                        <div class="px-1 py-3 text-start">
-                                            <div class="flex items-center gap-x-3">
-                                                <span
-                                                    class="text-sm font-medium text-gray-800 dark:text-neutral-200 ml-2 mr-8">
-                                                    {{$doc->ukuran_file}} Mb
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </td>
-
-                                    <td class="size-px whitespace-nowrap"> 
-                                        @if ($doc->status == 0)
-                                        <div class="px-1 py-3 text-start">
-                                            <div class="flex items-center gap-x-3">
-                                                <span
-                                                class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-bold bg-yellow-100 text-yellow-800 rounded-full dark:bg-yellow-500/10 dark:text-yellow-500">
-                                                <svg class="size-2.5 text-neutral-700" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <circle cx="12" cy="12" r="10" class="fill-yellow-600" />
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" class="text-yellow-300"/>
-                                                  </svg>
-                                                                                                                                                
-                                               Belum
-                                            </span>
-                                            </div>
-                                        </div>
-                                        @else
-                                        <div class="px-1 py-3 text-start">
-                                            <div class="flex items-center gap-x-3">
-                                                <span
-                                                    class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-bold bg-green-200 text-green-800 rounded-full dark:bg-green-500/10 dark:text-green-500">
+                                                    class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-yellow-100 text-teal-800 rounded-full dark:bg-teal-500/10 dark:text-teal-500">
                                                     <svg class="size-2.5" xmlns="http://www.w3.org/2000/svg" width="16"
                                                         height="16" fill="currentColor" viewBox="0 0 16 16">
                                                         <path
                                                             d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
                                                     </svg>
-                                                   Sudah
+                                                    {{$kgtn->progres}}%
                                                 </span>
                                             </div>
-                                        </div>
-                                        @endif
-                                    </td>
+                                        </td>
+                                        <td class="size-px whitespace-nowrap">
+                                            <div class="px-1 py-3 mr-10">
+                                                <span
+                                                    class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-yellow-100 text-teal-800 rounded-full dark:bg-teal-500/10 dark:text-teal-500">
+                                                    <svg class="size-2.5" xmlns="http://www.w3.org/2000/svg" width="16"
+                                                        height="16" fill="currentColor" viewBox="0 0 16 16">
+                                                        <path
+                                                            d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+                                                    </svg>
+                                                    {{ $kgtn->complete_file }}/{{ $kgtn->amount_file }}
+                                                </span>
+                                            </div>
+                                        </td>
+                                    @else
+                                        <td></td>
+                                        <td></td>
+                                    @endif
 
                                     <td class="size-px whitespace-nowrap"> 
                                         <div class="px-1 py-3 text-start">
                                             <div class="flex items-center gap-x-3">
                                                 <span
                                                     class="text-sm font-medium text-gray-800 dark:text-neutral-200 ml-2 mr-8">
-                                                    {{$doc->updated_at->diffForHumans()}}
+                                                    {{$kgtn->tgl_awal}} - {{$kgtn->tgl_akhir}}
                                                 </span>
                                             </div>
                                         </div>
-                                    </td>
-
+                                    </td>                                  
                                     <td class="size-px whitespace-nowrap">
-                                        <div class="flex items-center space-x-2">
-                                            <form id="delete-form-{{$doc->id}}"
-                                                action="/administrasi/file/{{ $doc->id }}" method="POST">
-                                                    @csrf
-                                                    @method('delete')
-                                                    <input type="hidden" value="{{ $fungsi }}" name="fungsi">
-                                                    <input type="hidden" value="{{ $periode->slug }}" name="periode">
-                                                    <input type="hidden" value="{{ $kegiatan->id }}" name="kegiatan">
-                                                    <input type="hidden" value="{{ $akun->id }}" name="akun">
-                                                    <input type="hidden" value="{{ $transaksi->id }}" name="transaksi">
+                                        <div class="px-3 py-1.5">
+                                            <form id="delete-form-{{$kgtn->id}}"
+                                                action="/administrasi/kegiatan/{{ $kgtn->id }}" method="POST">
+                                                @csrf
+                                                @method('delete')
+                                                <input type="hidden" value="{{ $fungsi }}" name="fungsi">
+                                                <input type="hidden" value="{{ $periode->slug }}" name="periode">
+                                                <input type="hidden" value="{{ $kgtn->id }}" name="kegiatan">
                                                 <button type="button"
-                                                    onclick="confirmDelete({{$doc->id}})"
+                                                    onclick="confirmDelete({{$kgtn->id}})"
                                                     class="bg-red-600 hover:bg-red-700 text-white p-1 rounded focus:outline-none focus:shadow-outline">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
                                                         style="fill: rgba(255, 252, 252, 1);transform: ;msFilter:;">
@@ -353,24 +288,20 @@
                                                     </svg>
                                                 </button>
                                             </form>
-                                            @if ($doc->status == 1)
-                                            <a href="/download-file?nama_file={{ $doc->namaFile }}&transaksi={{ $transaksi->id }}&akun={{ $akun->id }}&kegiatan={{ $kegiatan->id }}&periode={{ $periode->slug }}&fungsi={{ $fungsi }}" class="text-blue-600 hover:underline">Download</a>
-                                            @endif
-                                            <a></a>
                                         </div>
-                                    </td>                                    
+                                    </td>                           
                                 </tr>
                                 @endforeach
                             </tbody>
                         </table>
-                       
+            
                     </div>
                 </div>
             </div>
         </div>
-
         <!-- End Card -->
-        
+
+
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
         <script>
             function confirmDelete(id) {
@@ -388,31 +319,6 @@
                 }
             });
         }
-            function validatePDFFile() {
-            var fileInput = document.getElementById('file-input');
-            var filePath = fileInput.value;
-            var allowedExtensions = /(\.pdf)$/i;
-            if (!allowedExtensions.exec(filePath)) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Format file tidak valid',
-                    text: 'File harus berformat PDF!',
-                });
-                fileInput.value = '';
-                return false;
-            } else {
-                return true;
-            }
-        }
-            function showAlert(title, message, icon) {
-            Swal.fire({
-                title: title,
-                text: message,
-                icon: icon,
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'OK'
-            });
-        }
             @if(session('success'))
                 Swal.fire({
                     icon: 'success',
@@ -420,10 +326,6 @@
                     showConfirmButton: false,
                     timer: 2000
                 });
-            @endif
-
-            @if(session('error'))
-            showAlert('Error', '{{ session('error') }}', 'error');
             @endif
         </script>
     </div>

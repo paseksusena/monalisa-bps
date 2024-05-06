@@ -9,7 +9,7 @@
 </head>
 <body>
   <!-- ========== HEADER ========== -->
-  @include('page.administrasi.partials.header')
+  @include('page.administrasi.akun.search')
   <!-- ========== END HEADER ========== -->
 
   <!-- ========== Side Bar ========== -->
@@ -77,9 +77,10 @@
                         <span class="hidden sm:inline-block">Import Akun</span>
                     </button>
                 </div>
-                
 
-                @include('page.administrasi.periode.create')
+                @include('page.administrasi.akun.create')
+                @include('page.administrasi.akun.create-excel')
+                
 
                 <!-- Progress Indicators Container -->
                 <div class="flex items-center space-x-4">
@@ -106,11 +107,9 @@
         </div>
 
         <!-- Card Tahunan -->
-
         <div class="flex flex-col">
             <div class="-m-1.5 overflow-x-auto">
                 <div class="p-1.5 min-w-full inline-block align-middle">
-                    
                     <div
                         class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden dark:bg-neutral-800 dark:border-neutral-700">
                         <!-- Header -->
@@ -121,50 +120,113 @@
                                     {{$kegiatan->nama}}
                                 </h2>
                                 <p class="text-xs text-gray-600 dark:text-neutral-400">
-                                    {{$kegiatan->tgl_awal}} -  {{$kegiatan->tgl_akhir}} 
+                                    {{$kegiatan->tgl_awal}} -  {{$kegiatan->tgl_akhir}}
                                 </p>
                             </div>
                         </div>
                         <!-- End Header -->
-                        @include('page.administrasi.akun.create-excel')
-
-                        @include('page.administrasi.akun.create')
 
                         <!-- Table -->
-                        @foreach ($akuns as $akun)
+                       
                         <table class="min-w-full divide-y divide-gray-200 dark:divide-neutral-700">
                             <tbody class="divide-y divide-gray-200 dark:divide-neutral-700">
+                                <tr class="hover:bg-gray-100 dark:hover:bg-neutral-700"> 
+                                    <td class="size-px whitespace-nowrap"> 
+                                            <div class="px-1 py-3 text-start">
+                                                <div class="flex items-center gap-x-3">
+                                                    <span
+                                                        class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-2 mr-8">
+                                                        Nomor
+                                                    </span>
+                                                </div>
+                                         </div>
+                                    </td>
+                                    <td class="size-px whitespace-nowrap"> 
+                                        <div class="px-1 py-3 text-start">
+                                            <div class="flex items-center gap-x-3">
+                                                <span
+                                                    class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-2 mr-8">
+                                                    Nama Akun
+                                                </span>
+                                            </div>
+                                         </div>
+                                    </td>
+                                    <td class="size-px whitespace-nowrap"> 
+                                        <div class="px-1 py-3 text-start">
+                                            <div class="flex items-center gap-x-3">
+                                                <span
+                                                    class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-2 mr-8">
+                                                    Progress
+                                                </span>
+                                            </div>
+                                     </div>
+                                    </td>
+                                    <td class="size-px whitespace-nowrap"> 
+                                        <div class="px-1 py-3 text-start">
+                                            <div class="flex items-center gap-x-3">
+                                                <span
+                                                    class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-2 mr-8">
+                                                    File Progress
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="size-px whitespace-nowrap"> 
+                                        <div class="px-1 py-3 text-start">
+                                            <div class="flex items-center gap-x-3">
+                                                <span
+                                                    class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-2 mr-8">
+                                                    Tgl Awal- Tgl Akhir
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="size-px whitespace-nowrap"> 
+                                        <div class="px-1 py-3 text-start">
+                                            <div class="flex items-center gap-x-3">
+                                                <span
+                                                    class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-2 mr-8">
+                                                    Action
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                @foreach ($akuns as $akun => $akn)
                                 <tr class="hover:bg-gray-100 dark:hover:bg-neutral-700">
-                                    <td class="size-px whitespace-nowrap">
-                                        <div class="ps-6 py-3 ml-1">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30"
-                                                viewBox="0 0 24 24"
-                                                style="fill: rgba(0, 0, 0, 1);transform: ;msFilter:;">
-                                                <path d="M13 9h-2v3H8v2h3v3h2v-3h3v-2h-3z">
-                                                </path>
-                                                <path
-                                                    d="M20 5h-8.586L9.707 3.293A.996.996 0 0 0 9 3H4c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2h16c1.103 0 2-.897 2-2V7c0-1.103-.897-2-2-2zM4 19V7h16l.002 12H4z">
-                                                </path>
-                                            </svg>
+                                    <td class="size-px whitespace-nowrap"> 
+                                        <div class="px-1 py-3 text-start">
+                                            <div class="flex items-center gap-x-3">
+                                                <span
+                                                    class="text-sm font-medium text-gray-800 dark:text-neutral-200 ml-4 mr-8">
+                                                    {{$akun + 1}}
+                                                </span>
+                                            </div>
                                         </div>
                                     </td>
 
-                                    <td class="size-px whitespace-nowrap"> 
-                                        <a href="/administrasi/transaksi?akun={{ $akun->id }}&kegiatan={{ $kegiatan->id }}&periode={{ $periode->slug }}&fungsi={{ $fungsi }}"> 
+                                    <td class="size-px whitespace-nowrap">
+                                        <div class="flex items-center space-x-2">
+                                            <div class="ps-4 py-3">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="currentColor">
+                                                    <path d="M13 9h-2v3H8v2h3v3h2v-3h3v-2h-3z"></path>
+                                                    <path d="M20 5h-8.586L9.707 3.293A.996.996 0 0 0 9 3H4c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2h16c1.103 0 2-.897 2-2V7c0-1.103-.897-2-2-2zM4 19V7h16l.002 12H4z"></path>
+                                                </svg>
+                                            </div>
                                             <div class="px-3 py-3 text-start">
                                                 <div class="flex items-center gap-x-3">
-                                                    <span
-                                                        class="text-sm font-medium text-gray-800 dark:text-neutral-200 ml-3 mr-32">
-                                                        {{$akun->nama}}
+                                                    <span class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-2 mr-8">
+                                                        <a href="/administrasi/transaksi?akun={{ $akn->id }}&kegiatan={{ $kegiatan->id }}&periode={{ $periode->slug }}&fungsi={{ $fungsi }}"> 
+                                                            {{$akn->nama}}</a>
                                                     </span>
                                                 </div>
                                             </div>
-                                         </a>
+                                        </div>
                                     </td>
-
-                                    @if ($akun->progres !== null)
+                                    
+                                    @if ($akn->progres !== null)
                                         <td class="size-px whitespace-nowrap">
-                                            <div class="px-6 py-3 mr-10">
+                                            <div class="px-1 py-3 mr-10">
                                                 <span
                                                     class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-yellow-100 text-teal-800 rounded-full dark:bg-teal-500/10 dark:text-teal-500">
                                                     <svg class="size-2.5" xmlns="http://www.w3.org/2000/svg" width="16"
@@ -172,12 +234,12 @@
                                                         <path
                                                             d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
                                                     </svg>
-                                                    {{$akun->progres}}%
+                                                    {{$akn->progres}}%
                                                 </span>
                                             </div>
                                         </td>
                                         <td class="size-px whitespace-nowrap">
-                                            <div class="px-6 py-3 mr-10">
+                                            <div class="px-1 py-3 mr-10">
                                                 <span
                                                     class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-yellow-100 text-teal-800 rounded-full dark:bg-teal-500/10 dark:text-teal-500">
                                                     <svg class="size-2.5" xmlns="http://www.w3.org/2000/svg" width="16"
@@ -185,7 +247,7 @@
                                                         <path
                                                             d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
                                                     </svg>
-                                                    {{ $akun->complete_file }}/{{ $akun->amount_file }}
+                                                    {{ $akn->complete_file }}/{{ $akn->amount_file }}
                                                 </span>
                                             </div>
                                         </td>
@@ -194,23 +256,27 @@
                                         <td></td>
                                     @endif
 
-                                    <td class="size-px whitespace-nowrap">
-                                        <div class="px-6 py-3 mr-10">
-                                            <span class="text-sm text-gray-500 dark:text-neutral-500">
-                                                {{$akun->tgl_awal}} - {{$akun->tgl_akhir}}</span>
+                                    <td class="size-px whitespace-nowrap"> 
+                                        <div class="px-1 py-3 text-start">
+                                            <div class="flex items-center gap-x-3">
+                                                <span
+                                                    class="text-sm font-medium text-gray-800 dark:text-neutral-200 ml-2 mr-8">
+                                                    {{$akn->tgl_awal}} - {{$akn->tgl_akhir}}
+                                                </span>
+                                            </div>
                                         </div>
-                                    </td>
+                                    </td>                                  
                                     <td class="size-px whitespace-nowrap">
                                         <div class="px-3 py-1.5">
-                                            <form id="delete-form-{{$akun->id}}"
-                                                action="/administrasi/akun/{{ $akun->id }}" method="POST">
+                                            <form id="delete-form-{{$akn->id}}"
+                                                action="/administrasi/akun/{{ $akn->id }}" method="POST">
                                                 @csrf
                                                 @method('delete')
                                                 <input type="hidden" value="{{ $fungsi }}" name="fungsi">
                                                 <input type="hidden" value="{{ $periode->slug }}" name="periode">
                                                 <input type="hidden" value="{{ $kegiatan->id }}" name="kegiatan">
                                                 <button type="button"
-                                                    onclick="confirmDelete({{$akun->id}})"
+                                                    onclick="confirmDelete({{$akn->id}})"
                                                     class="bg-red-600 hover:bg-red-700 text-white p-1 rounded focus:outline-none focus:shadow-outline">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
                                                         style="fill: rgba(255, 252, 252, 1);transform: ;msFilter:;">
@@ -223,16 +289,16 @@
                                                 </button>
                                             </form>
                                         </div>
-                                    </td> 
+                                    </td>                             
                                 </tr>
+                                @endforeach
                             </tbody>
                         </table>
-                        @endforeach
+            
                     </div>
                 </div>
             </div>
         </div>
-
         <!-- End Card -->
 
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>

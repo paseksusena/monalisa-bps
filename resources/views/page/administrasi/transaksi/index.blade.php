@@ -9,7 +9,7 @@
 </head>
 <body>
   <!-- ========== HEADER ========== -->
-  @include('page.administrasi.partials.header')
+  @include('page.administrasi.transaksi.search')
   <!-- ========== END HEADER ========== -->
 
   <!-- ========== Side Bar ========== -->
@@ -37,7 +37,16 @@
                         <path d="m9 18 6-6-6-6"></path>
                     </svg>
                     <a class="flex items-center text-sm text-gray-500 hover:text-blue-600 focus:outline-none focus:text-blue-600 dark:text-neutral-500 dark:hover:text-blue-500 dark:focus:text-blue-500"
-                    href="/administrasi/akun?kegiatan={{ $akun->id }}&kegiatan={{ $kegiatan->id }}&periode={{ $periode->slug }}&fungsi={{ $fungsi }}"> 
+                    href="/administrasi/kegiatan?periode={{ $periode->slug }}&fungsi={{ $fungsi }}">
+                    {{ $periode->nama }}
+                    </a>
+                    <svg class="flex-shrink-0 mx-2 overflow-visible size-4 text-gray-400 dark:text-neutral-600"
+                        xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="m9 18 6-6-6-6"></path>
+                    </svg>
+                    <a class="flex items-center text-sm text-gray-500 hover:text-blue-600 focus:outline-none focus:text-blue-600 dark:text-neutral-500 dark:hover:text-blue-500 dark:focus:text-blue-500"
+                    href="/administrasi/akun?kegiatan={{ $akun->id }}&kegiatan={{ $kegiatan->id }}&periode={{ $periode->slug }}&fungsi={{ $fungsi }}">
                     {{ $kegiatan->nama }}
                     </a>
                     <svg class="flex-shrink-0 mx-2 overflow-visible size-4 text-gray-400 dark:text-neutral-600"
@@ -45,7 +54,8 @@
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="m9 18 6-6-6-6"></path>
                     </svg>
-                    <a class="flex items-center text-sm text-gray-500 hover:text-blue-600 focus:outline-none focus:text-blue-600 dark:text-neutral-500 dark:hover:text-blue-500 dark:focus:text-blue-500">
+                    <a class="flex items-center text-sm text-gray-500 hover:text-blue-600 focus:outline-none focus:text-blue-600 dark:text-neutral-500 dark:hover:text-blue-500 dark:focus:text-blue-500"
+                    href="/administrasi/transaksi?akun={{ $akun->id }}&kegiatan={{ $kegiatan->id }}&periode={{ $periode->slug }}&fungsi={{ $fungsi }}">
                     {{ $akun->nama }}
                     </a>
                 </li>
@@ -117,7 +127,6 @@
         </div>
 
         <!-- Card Tahunan -->
-
         <div class="flex flex-col">
             <div class="-m-1.5 overflow-x-auto">
                 <div class="p-1.5 min-w-full inline-block align-middle">
@@ -134,119 +143,110 @@
                                     {{$akun->tgl_awal}} -  {{$akun->tgl_akhir}}
                                 </p>
                             </div>
-
-                            <div>
-                                <div class="inline-flex gap-x-2">
-                                    
-
-                                    <div id="hs-sign-out-alert"
-                                        class="hs-overlay hidden size-full fixed inset-0 z-[80] overflow-x-hidden overflow-y-auto bg-gray-900 bg-opacity-50">
-                                        <div class="flex items-center justify-center min-h-screen">
-                                            <div
-                                                class="hs-overlay-open:animate-scaleUp hs-overlay-open:opacity-100 hs-overlay-open:duration-500 opacity-0 transition transform-gpu scale-95 sm:max-w-lg sm:w-full mx-4">
-                                                <div
-                                                    class="relative bg-white shadow-xl rounded-2xl dark:bg-blue-800">
-                                                    <div
-                                                        class="flex justify-between items-center p-5 rounded-t-2xl border-b dark:border-gray-600">
-                                                        <h3 class="text-xl font-bold text-gray-800 dark:text-white">
-                                                            Import Excel
-                                                        </h3>
-                                                        <button type="button"
-                                                            class="flex justify-center items-center size-7 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-gray-700"
-                                                            data-hs-overlay="#hs-sign-out-alert">
-                                                            <span class="sr-only">Close</span>
-                                                            <svg class="flex-shrink-0 size-5"
-                                                                xmlns="http://www.w3.org/2000/svg" width="24"
-                                                                height="24" viewBox="0 0 24 24" fill="none"
-                                                                stroke="currentColor" stroke-width="2"
-                                                                stroke-linecap="round" stroke-linejoin="round">
-                                                                <path d="M18 6 6 18"></path>
-                                                                <path d="m6 6 12 12"></path>
-                                                            </svg>
-                                                        </button>
-                                                    </div>
-                                                    <div class="p-6 text-center">
-
-                                                        <form class="flex justify-center items-center mt-4">
-                                                            <label class="block w-full">
-                                                                <span class="sr-only">Choose file</span>
-                                                                <div
-                                                                    class="flex flex-col items-center justify-center w-full">
-                                                                    <div
-                                                                        class="border-2 border-dashed border-gray-300 rounded-lg text-sm leading-normal text-gray-500 bg-white py-10 px-4 w-full flex flex-col justify-center items-center">
-                                                                        <svg class="w-8 h-8  mb-3 text-gray-500"
-                                                                            fill="none" stroke="currentColor"
-                                                                            viewBox="0 0 24 24"
-                                                                            xmlns="http://www.w3.org/2000/svg">
-                                                                            <path stroke-linecap="round"
-                                                                                stroke-linejoin="round"
-                                                                                stroke-width="2" d="M12 4v16m8-8H4">
-                                                                            </path>
-                                                                        </svg>
-                                                                        <span class="mb-2">Drag and drop your
-                                                                            file here or click to upload</span>
-                                                                        <input type="file" class="hidden" />
-                                                                    </div>
-                                                                </div>
-                                                            </label>
-                                                        </form>
-
-                                                        <div class="mt-6 flex justify-center gap-x-4">
-                                                            <button type="button"
-                                                                class="inline-flex justify-center items-center px-4 py-2 text-sm font-medium rounded-md border border-transparent bg-red-600 text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-                                                                Batal
-                                                            </button>
-                                                            <button type="button"
-                                                                class="inline-flex justify-center items-center px-4 py-2 text-sm font-medium rounded-md border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                                                                Import
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                         <!-- End Header -->
 
-                       
                         <!-- Table -->
-                        @foreach ($transaksis as $transaksi)
+                       
                         <table class="min-w-full divide-y divide-gray-200 dark:divide-neutral-700">
                             <tbody class="divide-y divide-gray-200 dark:divide-neutral-700">
+                                <tr class="hover:bg-gray-100 dark:hover:bg-neutral-700"> 
+                                    <td class="size-px whitespace-nowrap"> 
+                                            <div class="px-1 py-3 text-start">
+                                                <div class="flex items-center gap-x-3">
+                                                    <span
+                                                        class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-2 mr-8">
+                                                        Nomor
+                                                    </span>
+                                                </div>
+                                         </div>
+                                    </td>
+                                    <td class="size-px whitespace-nowrap"> 
+                                        <div class="px-1 py-3 text-start">
+                                            <div class="flex items-center gap-x-3">
+                                                <span
+                                                    class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-2 mr-8">
+                                                    Nama Transaksi
+                                                </span>
+                                            </div>
+                                         </div>
+                                    </td>
+                                    <td class="size-px whitespace-nowrap"> 
+                                        <div class="px-1 py-3 text-start">
+                                            <div class="flex items-center gap-x-3">
+                                                <span
+                                                    class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-2 mr-8">
+                                                    Progress
+                                                </span>
+                                            </div>
+                                     </div>
+                                    </td>
+                                    <td class="size-px whitespace-nowrap"> 
+                                        <div class="px-1 py-3 text-start">
+                                            <div class="flex items-center gap-x-3">
+                                                <span
+                                                    class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-2 mr-8">
+                                                    File Progress
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="size-px whitespace-nowrap"> 
+                                        <div class="px-1 py-3 text-start">
+                                            <div class="flex items-center gap-x-3">
+                                                <span
+                                                    class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-2 mr-8">
+                                                    Tgl Awal- Tgl Akhir
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="size-px whitespace-nowrap"> 
+                                        <div class="px-1 py-3 text-start">
+                                            <div class="flex items-center gap-x-3">
+                                                <span
+                                                    class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-2 mr-8">
+                                                    Action
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                @foreach ($transaksis as $transaksi => $trans)
                                 <tr class="hover:bg-gray-100 dark:hover:bg-neutral-700">
-                                    <td class="size-px whitespace-nowrap">
-                                        <div class="ps-6 py-3 ml-1">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30"
-                                                viewBox="0 0 24 24"
-                                                style="fill: rgba(0, 0, 0, 1);transform: ;msFilter:;">
-                                                <path d="M13 9h-2v3H8v2h3v3h2v-3h3v-2h-3z">
-                                                </path>
-                                                <path
-                                                    d="M20 5h-8.586L9.707 3.293A.996.996 0 0 0 9 3H4c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2h16c1.103 0 2-.897 2-2V7c0-1.103-.897-2-2-2zM4 19V7h16l.002 12H4z">
-                                                </path>
-                                            </svg>
+                                    <td class="size-px whitespace-nowrap"> 
+                                        <div class="px-1 py-3 text-start">
+                                            <div class="flex items-center gap-x-3">
+                                                <span
+                                                    class="text-sm font-medium text-gray-800 dark:text-neutral-200 ml-4 mr-8">
+                                                    {{$transaksi + 1}}
+                                                </span>
+                                            </div>
                                         </div>
                                     </td>
 
-                                    <td class="size-px whitespace-nowrap"> 
-                                        <a href="/administrasi/file?transaksi={{ $transaksi->id }}&akun={{ $akun->id }}&kegiatan={{ $kegiatan->id }}&periode={{ $periode->slug }}&fungsi={{ $fungsi }}">
+                                    <td class="size-px whitespace-nowrap">
+                                        <div class="flex items-center space-x-2">
+                                            <div class="ps-4 py-3">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="currentColor">
+                                                    <path d="M13 9h-2v3H8v2h3v3h2v-3h3v-2h-3z"></path>
+                                                    <path d="M20 5h-8.586L9.707 3.293A.996.996 0 0 0 9 3H4c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2h16c1.103 0 2-.897 2-2V7c0-1.103-.897-2-2-2zM4 19V7h16l.002 12H4z"></path>
+                                                </svg>
+                                            </div>
                                             <div class="px-3 py-3 text-start">
                                                 <div class="flex items-center gap-x-3">
-                                                    <span
-                                                        class="text-sm font-medium text-gray-800 dark:text-neutral-200 ml-3 mr-32">
-                                                        {{$transaksi->nama}}
+                                                    <span class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-2 mr-8">
+                                                        <a href="/administrasi/file?transaksi={{ $trans->id }}&akun={{ $akun->id }}&kegiatan={{ $kegiatan->id }}&periode={{ $periode->slug }}&fungsi={{ $fungsi }}">
+                                                            {{$trans->nama}}</a>
                                                     </span>
                                                 </div>
                                             </div>
-                                        </a>
+                                        </div>
                                     </td>
-
-                                    @if ($akun->progres !== null)
+                                    
+                                    @if ($trans->progres !== null)
                                         <td class="size-px whitespace-nowrap">
-                                            <div class="px-6 py-3 mr-10">
+                                            <div class="px-1 py-3 mr-10">
                                                 <span
                                                     class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-yellow-100 text-teal-800 rounded-full dark:bg-teal-500/10 dark:text-teal-500">
                                                     <svg class="size-2.5" xmlns="http://www.w3.org/2000/svg" width="16"
@@ -254,12 +254,12 @@
                                                         <path
                                                             d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
                                                     </svg>
-                                                    {{$akun->progres}}%
+                                                    {{$trans->progres}}%
                                                 </span>
                                             </div>
                                         </td>
                                         <td class="size-px whitespace-nowrap">
-                                            <div class="px-6 py-3 mr-10">
+                                            <div class="px-1 py-3 mr-10">
                                                 <span
                                                     class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-yellow-100 text-teal-800 rounded-full dark:bg-teal-500/10 dark:text-teal-500">
                                                     <svg class="size-2.5" xmlns="http://www.w3.org/2000/svg" width="16"
@@ -267,7 +267,7 @@
                                                         <path
                                                             d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
                                                     </svg>
-                                                    {{ $akun->complete_file }}/{{ $akun->amount_file }}
+                                                    {{ $trans->complete_file }}/{{ $trans->amount_file }}
                                                 </span>
                                             </div>
                                         </td>
@@ -276,16 +276,20 @@
                                         <td></td>
                                     @endif
 
-                                    <td class="size-px whitespace-nowrap">
-                                        <div class="px-6 py-3 mr-10">
-                                            <span class="text-sm text-gray-500 dark:text-neutral-500">
-                                                {{$transaksi->tgl_awal}} - {{$transaksi->tgl_akhir}}</span>
+                                    <td class="size-px whitespace-nowrap"> 
+                                        <div class="px-1 py-3 text-start">
+                                            <div class="flex items-center gap-x-3">
+                                                <span
+                                                    class="text-sm font-medium text-gray-800 dark:text-neutral-200 ml-2 mr-8">
+                                                    {{$trans->tgl_awal}} - {{$trans->tgl_akhir}}
+                                                </span>
+                                            </div>
                                         </div>
-                                    </td>
+                                    </td>                                  
                                     <td class="size-px whitespace-nowrap">
                                         <div class="px-3 py-1.5">
-                                            <form id="delete-form-{{$transaksi->id}}"
-                                                action="/administrasi/transaksi/{{ $transaksi->id }}" method="POST">
+                                            <form id="delete-form-{{$trans->id}}"
+                                                action="/administrasi/transaksi/{{ $trans->id }}" method="POST">
                                                 @csrf
                                                 @method('delete')
                                                 <input type="hidden" value="{{ $fungsi }}" name="fungsi">
@@ -293,7 +297,7 @@
                                                 <input type="hidden" value="{{ $kegiatan->id }}" name="kegiatan">
                                                 <input type="hidden" value="{{ $akun->id }}" name="akun">
                                                 <button type="button"
-                                                    onclick="confirmDelete({{$transaksi->id}})"
+                                                    onclick="confirmDelete({{$trans->id}})"
                                                     class="bg-red-600 hover:bg-red-700 text-white p-1 rounded focus:outline-none focus:shadow-outline">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
                                                         style="fill: rgba(255, 252, 252, 1);transform: ;msFilter:;">
@@ -306,16 +310,16 @@
                                                 </button>
                                             </form>
                                         </div>
-                                    </td> 
+                                    </td>                                
                                 </tr>
+                                @endforeach
                             </tbody>
                         </table>
-                        @endforeach
+            
                     </div>
                 </div>
             </div>
         </div>
-
         <!-- End Card -->
         
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>

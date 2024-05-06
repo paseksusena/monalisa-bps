@@ -56,7 +56,7 @@ class="hs-overlay hidden size-full fixed top-0 start-0 z-[80] overflow-x-hidden 
             </div>
         </div>
         <div class="flex items-center justify-center h-full p-4 overflow-y-auto">
-            <p class="text-gray-800 dark:text-gray-400 text-center">Apakah Anda sudah yakin dengan kegiatan yang akan dibuat?</p>
+            <p class="text-gray-800 dark:text-gray-400 text-center">Apakah Anda sudah yakin dengan transaksi yang akan dibuat?</p>
         </div>
         <div class="flex justify-end items-center gap-x-2 py-3 px-4 border-t dark:border-gray-700">
             <button type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-gray-200 bg-red-600 text-white shadow-sm hover:bg-red-700 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800" data-hs-overlay="#hs-slide-down-animation-modal-folder">Batal</button>

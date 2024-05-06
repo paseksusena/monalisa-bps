@@ -29,7 +29,7 @@ class KegiatanAdministrasiController extends Controller
         $previousQuery = request()->except(['search']);
         $query = array_merge($previousQuery, ['search' => $search]);
 
-        $this->progres($periode->id);
+        // $this->progres($periode->id);
         return view('page.administrasi.kegiatan.index', [
             'periode' => $periode,
             'fungsi' => $fungsi,
@@ -88,7 +88,7 @@ class KegiatanAdministrasiController extends Controller
             // Tangkap pengecualian dan tampilkan pesan kesalahan
             return redirect()->back()->with('error', 'Error saat input data:  ' . $e->getMessage());
         }
-        return redirect('/administrasi/periode?fungsi=' . $fungsi)->with('success', 'Kegiatan ' . $request->nama . ' berhasil ditambahkan!');
+        return redirect('/administrasi/kegiatan?periode=' . $periode->slug . '&fungsi=' . $fungsi)->with('success', 'Kegiatan ' . $request->nama . ' berhasil ditambahkan!');
     }
 
     /**
@@ -171,7 +171,7 @@ class KegiatanAdministrasiController extends Controller
             // Tangkap pengecualian dan tampilkan pesan kesalahan
             return redirect()->back()->with('error', 'Error saat mengimpor file: ' . $e->getMessage());
         }
-        return redirect('/administrasi/periode?fungsi=' . $fungsi)->with('success', 'Data Excel berhasil diimpor!');
+        return redirect('/administrasi/kegiatan?periode=' . $periode->slug . '&fungsi=' . $fungsi)->with('success', 'Data Excel berhasil diimpor!');
     }
 
     public function getPeriode()
@@ -185,27 +185,41 @@ class KegiatanAdministrasiController extends Controller
         return $fungsi;
     }
 
-    public function progres($periode_id)
-    {
-        $kegiatans = KegiatanAdministrasi::where('periode_id', $periode_id)->get();
+    // public function progres($periode_id)
+    // {
+    //     $kegiatans = KegiatanAdministrasi::where('periode_id', $periode_id)->get();
 
-        $totalFiles = 0;
-        $complete_file = 0;
-        foreach ($kegiatans as $kegiatan) {
-            // Pastikan nilai progres dalam rentang 0 hingga 100
-            $totalFiles += $kegiatan['amount_file'];
-            $complete_file += $kegiatan['complete_file'];
-        }
-        // dd($totalFiles);
-        $progres = $totalFiles > 0 ? ($complete_file / $totalFiles) * 100 : 0;
+    //     $totalFiles = 0;
+    //     $complete_file = 0;
+    //     foreach ($kegiatans as $kegiatan) {
+    //         // Pastikan nilai progres dalam rentang 0 hingga 100
+    //         $totalFiles += $kegiatan['amount_file'];
+    //         $complete_file += $kegiatan['complete_file'];
+    //     }
+    //     // dd($totalFiles);
+    //     $progres = $totalFiles > 0 ? ($complete_file / $totalFiles) * 100 : 0;
 
-        // Update nilai progres di tabel Akun
-        $periode = PeriodeAdministrasi::find($periode_id);
-        $periode->progres = $progres;
-        $periode['amount_file'] = $totalFiles;
-        $periode['complete_file'] = $complete_file;
-        $periode->save();
+    //     // Update nilai progres di tabel Akun
+    //     $periode = PeriodeAdministrasi::find($periode_id);
+    //     $periode->progres = $progres;
+    //     $periode['amount_file'] = $totalFiles;
+    //     $periode['complete_file'] = $complete_file;
+    //     $periode->save();
 
-        return 0;
-    }
+    //     return 0;
+    // }
+
+    // public function search($fungsi, $search)
+    // {
+    //     //melakukan penambahan parameter
+    //     $previousQuery = request()->except(['search']);
+    //     $query = array_merge($previousQuery, ['search' => $search]);
+
+    //     return view('page.administrasi.partials.search', [
+    //         'fungsi' => $fungsi,
+    //         'kegiatans' => KegiatanAdministrasi::filter($query)
+    //             ->paginate(10)
+    //             ->appends(['search' => $search]),
+    //     ]);
+    // }
 }

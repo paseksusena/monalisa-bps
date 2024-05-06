@@ -28,12 +28,14 @@ class PeriodeAdministrasiController extends Controller
         $search = request('search');
         $fungsi = request('fungsi');
 
-        // Mendapatkan query string yang ada sebelumnya
+
+
+        // Mendapatkan query str    ing yang ada sebelumnya
         $previousQuery = request()->except(['search']);
 
         // Menggabungkan query string lama dengan parameter search baru
         $query = array_merge($previousQuery, ['search' => $search]);
-        $this->progres();
+        // $this->progres();
 
         return view('page.administrasi.periode.index', [
             'periode' => PeriodeAdministrasi::where('nama_fungsi', $fungsi)
@@ -150,34 +152,34 @@ class PeriodeAdministrasiController extends Controller
 
 
 
-    public function progres()
-    {
-        $periodes = PeriodeAdministrasi::all();
+    // public function progres()
+    // {
+    //     $periodes = PeriodeAdministrasi::all();
 
-        foreach ($periodes as $periode) {
-            $kegiatans = KegiatanAdministrasi::where('periode_id', $periode->id)->get();
+    //     foreach ($periodes as $periode) {
+    //         $kegiatans = KegiatanAdministrasi::where('periode_id', $periode->id)->get();
 
-            $totalFiles = 0;
-            $complete_file = 0;
-            foreach ($kegiatans as $kegiatan) {
-                // Pastikan nilai progres dalam rentang 0 hingga 100
-                $totalFiles += $kegiatan['amount_file'];
-                $complete_file += $kegiatan['complete_file'];
-            }
-            // dd($totalFiles);
-            $progres = $totalFiles > 0 ? ($complete_file / $totalFiles) * 100 : 0;
+    //         $totalFiles = 0;
+    //         $complete_file = 0;
+    //         foreach ($kegiatans as $kegiatan) {
+    //             // Pastikan nilai progres dalam rentang 0 hingga 100
+    //             $totalFiles += $kegiatan['amount_file'];
+    //             $complete_file += $kegiatan['complete_file'];
+    //         }
+    //         // dd($totalFiles);
+    //         $progres = $totalFiles > 0 ? ($complete_file / $totalFiles) * 100 : 0;
 
-            // dd($progres);
+    //         // dd($progres);
 
-            // Update nilai progres di tabel Akun
-            $periode = PeriodeAdministrasi::find($periode->id);
-            $periode->progres = $progres;
-            $periode['amount_file'] = $totalFiles;
-            $periode['complete_file'] = $complete_file;
-            $periode->save();
-        }
+    //         // Update nilai progres di tabel Akun
+    //         $periode = PeriodeAdministrasi::find($periode->id);
+    //         $periode->progres = $progres;
+    //         $periode['amount_file'] = $totalFiles;
+    //         $periode['complete_file'] = $complete_file;
+    //         $periode->save();
+    //     }
 
 
-        return 0;
-    }
+    //     return 0;
+    // }
 }

@@ -27,15 +27,12 @@ class TransaksiController extends Controller
         $periode = $this->getPeriode();
         $kegiatan = $this->getKegiatan();
         $akun = $this->getAkun();
-        // $transaksis = Transaksi::where('akun_id', $akun_id)->get();
 
         //melakukan penambahan parameter
         $previousQuery = request()->except(['search']);
         $query = array_merge($previousQuery, ['search' => $search]);
 
-
-
-        $this->progres($akun->id);
+        // $this->progres($akun->id);
         return view('page.administrasi.transaksi.index', [
             'akun' => $akun,
             'transaksis' => Transaksi::where('akun_id', $akun->id)
@@ -88,9 +85,12 @@ class TransaksiController extends Controller
             $periode = $request->periode;
             $kegiatan = $request->kegiatan;
             $akun_id = $request->akun_id;
-
-
-
+            $akun = Akun::where('id', $akun_id)->first();
+            $transaksi = Transaksi::where('akun_id', $akun->id)->get();
+            $find = $transaksi->where('nama', $request->nama)->first();
+            if ($find) {
+                return back()->with('error', 'Nama transaksi ' . $request->nama . ' telah tersedia!');
+            }
             Transaksi::create($requestValidasi);
         } catch (\Throwable $e) {
             // Tangkap pengecualian dan tampilkan pesan kesalahan
@@ -173,7 +173,6 @@ class TransaksiController extends Controller
             $fileName = $file->getClientOriginalName();
             // Excel::import(new PemutakhiranSusenasImport($request->id_periode, $tgl_awal, $tgl_akhir), public_path('/DataPemuktahiranSusenas/' . $fileName));
             Excel::import(new TransaksiImport($akun_id), public_path('/DataTransaksi/' . $fileName));
-            $this->progres($akun_id);
         } catch (\Throwable $e) {
             // Tangkap pengecualian dan tampilkan pesan kesalahan
             return redirect()->back()->with('error', 'Error saat mengimpor file: ' . $e->getMessage());
@@ -207,29 +206,4 @@ class TransaksiController extends Controller
 
     //menghitung progres
 
-    public function progres($akun_id)
-    {
-        $transaksis = Transaksi::where('akun_id', $akun_id)->get();
-
-
-        $totalFiles = 0;
-        $complete_file = 0;
-        foreach ($transaksis as $transaksi) {
-            // Pastikan nilai progres dalam rentang 0 hingga 100
-            $totalFiles += $transaksi['amount_file'];
-            $complete_file += $transaksi['complete_file'];
-        }
-
-        $progres = $totalFiles > 0 ? ($complete_file / $totalFiles) * 100 : 0;
-
-
-        // Update nilai progres di tabel Akun
-        $akun = Akun::find($akun_id);
-        $akun->progres = $progres;
-        $akun['amount_file'] = $totalFiles;
-        $akun['complete_file'] = $complete_file;
-        $akun->save();
-
-        return 0;
-    }
 }

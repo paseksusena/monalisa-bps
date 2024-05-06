@@ -19,7 +19,7 @@
                 </button>
             </div>
             <div class="flex flex-col space-y-4 p-4 overflow-y-auto">
-                <input type="hidden" name="periode_id"  id='periodeId'>
+                <input type="hidden" name="periode_id"  id='periodeId' value="{{$periode->id}}">
                 <input type="hidden" name="fungsi" value={{ $fungsi }}>
                 {{-- @dd($periodeAdministrasi->id) --}}
                 <!-- Nama Kegiatan -->

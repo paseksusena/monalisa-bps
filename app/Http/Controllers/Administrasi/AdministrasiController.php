@@ -28,6 +28,7 @@ class AdministrasiController extends Controller
         if (request('search')) {
             $search = request('search');
 
+
             $files = File::where('judul', 'like', '%' . $search . '%')->get();
             $transaksis = Transaksi::where('nama', 'like', '%' . $search . '%')->get();
             $akuns = Akun::where('nama', 'like', '%' . $search . '%')->get();

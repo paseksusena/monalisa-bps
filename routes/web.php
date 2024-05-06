@@ -25,6 +25,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('home');
 });
+// Route::get('/administrasi/search', function () {
+//     return view('page.administrasi.partials.search');
+// });
 
 
 Route::get('/dashboard', function () {

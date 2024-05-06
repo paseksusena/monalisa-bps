@@ -29,7 +29,7 @@ class AkunController extends Controller
         $previousQuery = request()->except(['search']);
         $query = array_merge($previousQuery, ['search' => $search]);
 
-        $this->progres($kegiatan->id);
+        // $this->progres($kegiatan->id);
         return view('page.administrasi.akun.index', [
             'kegiatan' => $kegiatan,
             'akuns' => Akun::where('kegiatan_id', $kegiatan->id)
@@ -178,30 +178,30 @@ class AkunController extends Controller
         $fungsi = request('fungsi');
         return $fungsi;
     }
-    public function progres($kegiatan_id)
-    {
-        $akuns = Akun::where('kegiatan_id', $kegiatan_id)->get();
+    // public function progres($kegiatan_id)
+    // {
+    //     $akuns = Akun::where('kegiatan_id', $kegiatan_id)->get();
 
-        $totalFiles = 0;
-        $completeFile = 0;
+    //     $totalFiles = 0;
+    //     $completeFile = 0;
 
-        foreach ($akuns as $akun) {
-            $totalFiles += $akun->amount_file;
-            $completeFile += $akun->complete_file;
-        }
+    //     foreach ($akuns as $akun) {
+    //         $totalFiles += $akun->amount_file;
+    //         $completeFile += $akun->complete_file;
+    //     }
 
-        // Check for division by zero
-        $progres = $totalFiles > 0 ? ($completeFile / $totalFiles) * 100 : 0;
+    //     // Check for division by zero
+    //     $progres = $totalFiles > 0 ? ($completeFile / $totalFiles) * 100 : 0;
 
-        // Update progress in the KegiatanAdministrasi table
-        $kegiatan = KegiatanAdministrasi::find($kegiatan_id);
-        if ($kegiatan) {
-            $kegiatan->progres = $progres;
-            $kegiatan->amount_file = $totalFiles;
-            $kegiatan->complete_file = $completeFile;
-            $kegiatan->save();
-        }
+    //     // Update progress in the KegiatanAdministrasi table
+    //     $kegiatan = KegiatanAdministrasi::find($kegiatan_id);
+    //     if ($kegiatan) {
+    //         $kegiatan->progres = $progres;
+    //         $kegiatan->amount_file = $totalFiles;
+    //         $kegiatan->complete_file = $completeFile;
+    //         $kegiatan->save();
+    //     }
 
-        return 0;
-    }
+    //     return 0;
+    // }
 }
