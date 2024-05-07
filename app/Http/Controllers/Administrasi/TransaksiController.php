@@ -32,7 +32,9 @@ class TransaksiController extends Controller
         $previousQuery = request()->except(['search']);
         $query = array_merge($previousQuery, ['search' => $search]);
 
-        // $this->progres($akun->id);
+        $this->progresAkun();
+        $this->progresKegiatan();
+        $this->progresPeriode();
         return view('page.administrasi.transaksi.index', [
             'akun' => $akun,
             'transaksis' => Transaksi::where('akun_id', $akun->id)
@@ -204,6 +206,103 @@ class TransaksiController extends Controller
     }
 
 
-    //menghitung progres
 
+    public function progresAkun()
+    {
+        $akuns = Akun::all();
+        foreach ($akuns as $akun) {
+
+            $transaksis = Transaksi::where('akun_id', $akun->id)->get();
+
+            $totalFiles = 0;
+            $completeFile = 0;
+
+            foreach ($transaksis as $transaksi) {
+                $totalFiles += $transaksi->amount_file;
+                $completeFile += $transaksi->complete_file;
+            }
+
+            // Check for division by zero
+            $progres = $totalFiles > 0 ? ($completeFile / $totalFiles) * 100 : 0;
+
+            // Update progress in the KegiatanAdministrasi table
+            $kegiatan = Akun::find($akun->id);
+            if ($akun) {
+                $akun->progres = $progres;
+                $akun->amount_file = $totalFiles;
+                $akun->complete_file = $completeFile;
+                $akun->save();
+            }
+        }
+
+
+        return 0;
+    }
+
+    public function progresPeriode()
+    {
+        $periodes = PeriodeAdministrasi::all();
+
+        foreach ($periodes as $periode) {
+            $kegiatans = KegiatanAdministrasi::where('periode_id', $periode->id)->get();
+
+            $totalFiles = 0;
+            $complete_file = 0;
+            foreach ($kegiatans as $kegiatan) {
+                // Pastikan nilai progres dalam rentang 0 hingga 100
+                $totalFiles += $kegiatan['amount_file'];
+                $complete_file += $kegiatan['complete_file'];
+            }
+            // dd($totalFiles);
+            $progres = $totalFiles > 0 ? ($complete_file / $totalFiles) * 100 : 0;
+
+            // dd($progres);
+
+            // Update nilai progres di tabel Akun
+            $periode = PeriodeAdministrasi::find($periode->id);
+            $periode->progres = $progres;
+            $periode['amount_file'] = $totalFiles;
+            $periode['complete_file'] = $complete_file;
+            $periode->save();
+        }
+
+
+        return 0;
+    }
+
+
+    public function progresKegiatan()
+    {
+
+        $kegiatans = KegiatanAdministrasi::all();
+
+        foreach ($kegiatans as $kegiatan) {
+            $akuns = Akun::where('kegiatan_id', $kegiatan->id)->get();
+
+
+            $totalFiles = 0;
+            $completeFile = 0;
+
+            foreach ($akuns as $akun) {
+                $totalFiles += $akun->amount_file;
+                $completeFile += $akun->complete_file;
+            }
+
+            // Check for division by zero
+            $progres = $totalFiles > 0 ? ($completeFile / $totalFiles) * 100 : 0;
+
+            // Update progress in the KegiatanAdministrasi table
+            $kegiatan = KegiatanAdministrasi::find($kegiatan->id);
+            if ($kegiatan) {
+                $kegiatan->progres = $progres;
+                $kegiatan->amount_file = $totalFiles;
+                $kegiatan->complete_file = $completeFile;
+                $kegiatan->save();
+            }
+        }
+
+
+
+        return 0;
+    }
 }

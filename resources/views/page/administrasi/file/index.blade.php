@@ -119,7 +119,7 @@
                                     {{$transaksi->nama}}
                                 </h2>
                                 <p class="text-xs text-gray-600 dark:text-neutral-400">
-                                    {{$transaksi->tgl_awal}} -  {{$transaksi->tgl_akhir}}
+                                    {{\Carbon\Carbon::parse($transaksi->tgl_awal)->format('d/m/Y')}} -  {{\Carbon\Carbon::parse($transaksi->tgl_akhir)->format('d/m/Y')}}
                                 </p>
                             </div>
 
@@ -166,7 +166,7 @@
                                             <div class="px-1 py-3 text-start">
                                                 <div class="flex items-center gap-x-3">
                                                     <span
-                                                        class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-2 mr-8">
+                                                        class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-2">
                                                         Nomor
                                                     </span>
                                                 </div>

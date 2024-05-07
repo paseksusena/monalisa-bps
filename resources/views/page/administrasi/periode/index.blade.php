@@ -75,7 +75,7 @@
                                     </h2>
                                     
                                     <p class="text-xs text-gray-600 dark:text-neutral-400">
-                                        {{$periodeAdministrasi->tgl_awal}} -  {{$periodeAdministrasi->tgl_akhir}}
+                                        {{\Carbon\Carbon::parse($periodeAdministrasi->tgl_awal)->format('d/m/Y')}} -  {{\Carbon\Carbon::parse($periodeAdministrasi->tgl_akhir)->format('d/m/Y')}}
                                     </p>
                                     <h2 class="text-xl mt-2 font-normal text-blue-700 dark:text-neutral-200">
                                         {{$periodeAdministrasi->periode}}
@@ -100,14 +100,28 @@
                                                 </form>
                                             </div>
                                           </div>
-                                        <a class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border  border-blue-200 bg-slate-50 text-blue-500 hover:bg-slate-100 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800"
+                                        
+                                        @if ($periodeAdministrasi->progres == 100)
+                                        <a class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border  border-green-500 bg-green-600 text-white hover:bg-slate-100 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800"
                                             href="#">
                                             {{$periodeAdministrasi->complete_file}}/{{$periodeAdministrasi->amount_file}}
                                         </a>
+                                        <a class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border  border-green-500  bg-green-600 text-white hover:bg-slate-100 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800"
+                                        href="#">
+                                        {{$periodeAdministrasi->progres}}%
+                                    </a>
+                                            
+                                        @else
+                                        <a class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border  border-blue-200 bg-slate-50 text-blue-500 hover:bg-slate-100 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800"
+                                        href="#">
+                                        {{$periodeAdministrasi->complete_file}}/{{$periodeAdministrasi->amount_file}}
+                                    </a>
                                         <a class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border  border-blue-200 bg-slate-50 text-blue-500 hover:bg-slate-100 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800"
                                             href="#">
                                             {{$periodeAdministrasi->progres}}%
                                         </a>
+                                        @endif
+
                                     </div>
                                 </div>
                             </div>

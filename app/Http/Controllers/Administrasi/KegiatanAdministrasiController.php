@@ -29,7 +29,7 @@ class KegiatanAdministrasiController extends Controller
         $previousQuery = request()->except(['search']);
         $query = array_merge($previousQuery, ['search' => $search]);
 
-        // $this->progres($periode->id);
+        $this->progresPeriode();
         return view('page.administrasi.kegiatan.index', [
             'periode' => $periode,
             'fungsi' => $fungsi,
@@ -133,6 +133,7 @@ class KegiatanAdministrasiController extends Controller
                 $transaksi->delete();
             });
             $akun->delete();
+            $this->progresPeriode();
         });
 
 
@@ -183,5 +184,36 @@ class KegiatanAdministrasiController extends Controller
     {
         $fungsi = request('fungsi');
         return $fungsi;
+    }
+
+    public function progresPeriode()
+    {
+        $periodes = PeriodeAdministrasi::all();
+
+        foreach ($periodes as $periode) {
+            $kegiatans = KegiatanAdministrasi::where('periode_id', $periode->id)->get();
+
+            $totalFiles = 0;
+            $complete_file = 0;
+            foreach ($kegiatans as $kegiatan) {
+                // Pastikan nilai progres dalam rentang 0 hingga 100
+                $totalFiles += $kegiatan['amount_file'];
+                $complete_file += $kegiatan['complete_file'];
+            }
+            // dd($totalFiles);
+            $progres = $totalFiles > 0 ? ($complete_file / $totalFiles) * 100 : 0;
+
+            // dd($progres);
+
+            // Update nilai progres di tabel Akun
+            $periode = PeriodeAdministrasi::find($periode->id);
+            $periode->progres = $progres;
+            $periode['amount_file'] = $totalFiles;
+            $periode['complete_file'] = $complete_file;
+            $periode->save();
+        }
+
+
+        return 0;
     }
 }

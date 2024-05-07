@@ -120,7 +120,7 @@
                                     {{$periode->nama}}
                                 </h2>
                                 <p class="text-xs text-gray-600 dark:text-neutral-400">
-                                    {{$periode->tgl_awal}} -  {{$periode->tgl_akhir}}
+                                    {{\Carbon\Carbon::parse($periode->tgl_awal)->format('d/m/Y')}} -  {{\Carbon\Carbon::parse($periode->tgl_akhir)->format('d/m/Y')}}
                                 </p>
                             </div>
                         </div>
@@ -135,7 +135,7 @@
                                             <div class="px-1 py-3 text-start">
                                                 <div class="flex items-center gap-x-3">
                                                     <span
-                                                        class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-2 mr-8">
+                                                        class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-2">
                                                         Nomor
                                                     </span>
                                                 </div>
@@ -285,7 +285,7 @@
                                             <div class="flex items-center gap-x-3">
                                                 <span
                                                     class="text-sm font-medium text-gray-800 dark:text-neutral-200 ml-2 mr-8">
-                                                    {{$kgtn->tgl_awal}} - {{$kgtn->tgl_akhir}}
+                                                    {{\Carbon\Carbon::parse($kgtn->tgl_awal)->format('d/m/Y')}} - {{\Carbon\Carbon::parse($kgtn->tgl_akhir)->format('d/m/Y')}}
                                                 </span>
                                             </div>
                                         </div>
