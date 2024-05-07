@@ -9,7 +9,10 @@ use App\Http\Controllers\Administrasi\KegiatanAdministrasiController;
 use App\Http\Controllers\Administrasi\PeriodeAdministrasiController;
 use App\Http\Controllers\Administrasi\TransaksiController;
 use App\Http\Controllers\ProfileController;
+use Dompdf\Dompdf;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,9 +28,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('home');
 });
-// Route::get('/administrasi/search', function () {
-//     return view('page.administrasi.partials.search');
-// });
+Route::get('/administrasi/preview', function () {
+    return view('page.administrasi.partials.preview');
+});
 
 
 Route::get('/dashboard', function () {
@@ -77,6 +80,10 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
 Route::middleware('auth')->group(function () {
     // ADMINISTRASI
+
+    // set session
+    Route::post('/set-year-session', [AdministrasiController::class, 'setYearSession']);
+
     //index administrasi
     Route::get('/administrasi',  [AdministrasiController::class, 'index_administrasi']);
 
@@ -105,14 +112,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/administrasi/file/create-excel/{id}', [FileController::class, 'exportExcel']);
     Route::post('/administrasi/file/store_excel', [FileController::class, 'stroreExcel']);
     Route::post('/administrasi/file/addFile', [FileController::class, 'addFile']);
+    // Route::get('/administrasi/file/{filename}', [FileController::class, 'show'])->name('pdf.show');
+    // Route::get('/administrasi/file/{fungsi}/{periode}/{kegiatan}/{akun}/{transaksi}/{filename}', [FileController::class, 'show'])->name('pdf.show');
 
     //download
     Route::get('/download-file', [FileController::class, 'download']);
 
-    Route::get('/download-file', [FileController::class, 'download']);
+    Route::get('/view-file', [FileController::class, 'viewFile'])->name('view-file');
 });
-
-
 
 
 require __DIR__ . '/auth.php';

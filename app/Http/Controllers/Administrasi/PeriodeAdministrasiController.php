@@ -23,6 +23,20 @@ class PeriodeAdministrasiController extends Controller
      */
     public function index()
     {
+        $startYear = Carbon::createFromFormat('Y', '2023')->year;
+        $currentYear = Carbon::now()->year;
+        $years = range($startYear, $currentYear);
+        //jika tidak ada session selected_year pakai tahun sekarang
+        $startYear = Carbon::createFromFormat('Y', '2023')->year;
+
+
+        $currentYear = Carbon::now()->year;
+        $years = range($startYear, $currentYear);
+        //jika tidak ada session selected_year pakai tahun sekarang
+        if (!session('selected_year')) {
+            session()->put('selected_year', $currentYear);
+        }
+
 
         $selected_year = session('selected_year');
         $search = request('search');
@@ -37,13 +51,15 @@ class PeriodeAdministrasiController extends Controller
         $query = array_merge($previousQuery, ['search' => $search]);
         // $this->progres();
 
+
         return view('page.administrasi.periode.index', [
             'periode' => PeriodeAdministrasi::where('nama_fungsi', $fungsi)
                 ->where('tahun', $selected_year)
                 ->filter($query)
-                ->paginate(10)
+                ->paginate(200)
                 ->appends(['search' => $search]),
-            'fungsi' => $fungsi
+            'fungsi' => $fungsi,
+            'years' => $years,
         ]);
     }
 
@@ -78,6 +94,9 @@ class PeriodeAdministrasiController extends Controller
                 'nama_fungsi' => 'required',
             ]);
 
+            // Set the timezone
+            date_default_timezone_set('Asia/Jakarta');
+
             //membuat slug
             $judulKegiatan = Str::slug($request->nama, '-');
             $periode = Str::slug($request->periode, '-');
@@ -86,8 +105,7 @@ class PeriodeAdministrasiController extends Controller
 
             $validationPeriode['slug'] = $slug;
             //mengambil tahun
-            $tahun = Carbon::parse($request->tahun)->year;
-            $validationPeriode['tahun'] = $tahun;
+            $validationPeriode['tahun'] = $request->tahun_session;
 
             PeriodeAdministrasi::create($validationPeriode);
         } catch (\Throwable $e) {

@@ -12,8 +12,11 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\FileImport;
 use App\Models\KegiatanAdministrasi;
 use App\Models\PeriodeAdministrasi;
+use Dompdf\Dompdf;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File as File2;
+use Illuminate\Http\Request;
+
 
 
 class FileController extends Controller
@@ -51,7 +54,7 @@ class FileController extends Controller
             'fungsi' => $fungsi,
             'files' => File::where('transaksi_id', $transaksi->id)
                 ->filter($query)
-                ->paginate(10)
+                ->paginate(200)
                 ->appends(['search' => $search]),
             'periode' => $periode,
             'kegiatan' => $kegiatan,
@@ -117,9 +120,18 @@ class FileController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(File $file)
+    public function show($fungsi, $periode, $kegiatan, $akun, $transaksi, $filename)
     {
-        //
+        // Path ke file PDF
+        $path = public_path("administrasis/{$fungsi}/{$periode}/{$kegiatan}/{$akun}/{$transaksi}/{$filename}");
+
+        // Cek apakah file PDF ada
+        if (!file_exists($path)) {
+            dd('File not found');
+        }
+
+        // Tampilkan file PDF
+        return response()->file($path, ['Content-Type' => 'application/pdf']);
     }
 
     /**
@@ -416,5 +428,29 @@ class FileController extends Controller
 
 
         return 0;
+    }
+
+    public function viewFile(Request $request)
+    {
+        $fungsi = $request->query('fungsi');
+        $periode = PeriodeAdministrasi::where('slug', $request->query('periode'))->first();
+        $kegiatan = KegiatanAdministrasi::find($request->query('kegiatan'));
+        $akun = Akun::find($request->query('akun'));
+        $transaksi = Transaksi::find($request->query('transaksi'));
+
+        if (!$periode || !$kegiatan || !$akun || !$transaksi) {
+            return response()->json(['error' => 'Invalid parameters.'], 400);
+        }
+
+        $nama_file = $request->query('nama_file');
+
+        // Bentuk path file
+        $path = public_path("administrasis/{$fungsi}/{$periode->nama}/{$kegiatan->nama}/{$akun->nama}/{$transaksi->nama}/{$nama_file}");
+
+        // Periksa apakah file ada
+        if (!file_exists($path)) {
+            return response()->json(['error' => 'File not found.'], 404);
+        }
+        return response()->file($path);
     }
 }

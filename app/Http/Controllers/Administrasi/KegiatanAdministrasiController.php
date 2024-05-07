@@ -35,7 +35,7 @@ class KegiatanAdministrasiController extends Controller
             'fungsi' => $fungsi,
             'kegiatans' => KegiatanAdministrasi::where('periode_id', $periode->id)
                 ->filter($query)
-                ->paginate(10)
+                ->paginate(200)
                 ->appends(['search' => $search]),
         ]);
     }
@@ -184,42 +184,4 @@ class KegiatanAdministrasiController extends Controller
         $fungsi = request('fungsi');
         return $fungsi;
     }
-
-    // public function progres($periode_id)
-    // {
-    //     $kegiatans = KegiatanAdministrasi::where('periode_id', $periode_id)->get();
-
-    //     $totalFiles = 0;
-    //     $complete_file = 0;
-    //     foreach ($kegiatans as $kegiatan) {
-    //         // Pastikan nilai progres dalam rentang 0 hingga 100
-    //         $totalFiles += $kegiatan['amount_file'];
-    //         $complete_file += $kegiatan['complete_file'];
-    //     }
-    //     // dd($totalFiles);
-    //     $progres = $totalFiles > 0 ? ($complete_file / $totalFiles) * 100 : 0;
-
-    //     // Update nilai progres di tabel Akun
-    //     $periode = PeriodeAdministrasi::find($periode_id);
-    //     $periode->progres = $progres;
-    //     $periode['amount_file'] = $totalFiles;
-    //     $periode['complete_file'] = $complete_file;
-    //     $periode->save();
-
-    //     return 0;
-    // }
-
-    // public function search($fungsi, $search)
-    // {
-    //     //melakukan penambahan parameter
-    //     $previousQuery = request()->except(['search']);
-    //     $query = array_merge($previousQuery, ['search' => $search]);
-
-    //     return view('page.administrasi.partials.search', [
-    //         'fungsi' => $fungsi,
-    //         'kegiatans' => KegiatanAdministrasi::filter($query)
-    //             ->paginate(10)
-    //             ->appends(['search' => $search]),
-    //     ]);
-    // }
 }

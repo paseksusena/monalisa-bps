@@ -25,6 +25,8 @@ class AdministrasiController extends Controller
         $searchLinks[] = null;
 
 
+        $session = session('selected_year');
+
         if (request('search')) {
             $search = request('search');
 
@@ -42,11 +44,12 @@ class AdministrasiController extends Controller
                 $kegiatanFile = $akunFile->kegiatanAdministrasi;
                 $periodeFile = $kegiatanFile->periodeAdministrasi;
                 $fungsi = $periodeFile->nama_fungsi;
-
-                $searchLink = "/administrasi/file?transaksi=$transaksiFile->id&akun=$akunFile->id&kegiatan=$kegiatanFile->id&periode=$periodeFile->slug&fungsi=$fungsi";
-                $searchLinks[] = $searchLink; // Tetapkan nilai $fileLink ke dalam array
-                $searchNames[] = $file->judul;
-                $searchUrls[] =  $fungsi . '/' . $periodeFile->nama . '/' . $kegiatanFile->nama . '/' . $akunFile->nama . '/' . $transaksiFile->nama . '/' . $file->namaFile;
+                if ($periodeFile->tahun === $session) {
+                    $searchLink = "/administrasi/file?transaksi=$transaksiFile->id&akun=$akunFile->id&kegiatan=$kegiatanFile->id&periode=$periodeFile->slug&fungsi=$fungsi";
+                    $searchLinks[] = $searchLink; // Tetapkan nilai $fileLink ke dalam array
+                    $searchNames[] = $file->judul;
+                    $searchUrls[] =  $fungsi . '/' . $periodeFile->nama . '/' . $kegiatanFile->nama . '/' . $akunFile->nama . '/' . $transaksiFile->nama . '/' . $file->namaFile;
+                }
             }
 
             foreach ($transaksis as $transaksi) {
@@ -55,11 +58,12 @@ class AdministrasiController extends Controller
                 $kegiatanTransaksi = $akunTranskasi->kegiatanAdministrasi;
                 $periodeTransaksi = $kegiatanTransaksi->periodeAdministrasi;
                 $fungsi = $periodeTransaksi->nama_fungsi;
-
-                $searchLink = "/administrasi/file?transaksi=$transaksi->id&akun=$akunTranskasi->id&kegiatan=$kegiatanTransaksi->id&periode=$periodeTransaksi->slug&fungsi=$fungsi";
-                $searchLinks[] = $searchLink; // Tetapkan nilai $fileLink ke dalam array
-                $searchNames[] = $transaksi->nama;
-                $searchUrls[] = $fungsi . '/' .  $periodeTransaksi->nama . '/' . $kegiatanTransaksi->nama . '/' . $akunTranskasi->nama . '/' . $transaksi->nama;
+                if ($periodeTransaksi->tahun === $session) {
+                    $searchLink = "/administrasi/file?transaksi=$transaksi->id&akun=$akunTranskasi->id&kegiatan=$kegiatanTransaksi->id&periode=$periodeTransaksi->slug&fungsi=$fungsi";
+                    $searchLinks[] = $searchLink; // Tetapkan nilai $fileLink ke dalam array
+                    $searchNames[] = $transaksi->nama;
+                    $searchUrls[] = $fungsi . '/' .  $periodeTransaksi->nama . '/' . $kegiatanTransaksi->nama . '/' . $akunTranskasi->nama . '/' . $transaksi->nama;
+                }
             }
 
             foreach ($akuns as $akun) {
@@ -68,10 +72,12 @@ class AdministrasiController extends Controller
                 $periodeAkun = $kegiatanAkun->periodeAdministrasi;
                 $fungsi = $periodeAkun->nama_fungsi;
 
-                $searchLink = "/administrasi/transaksi?akun=$akun->id&kegiatan=$kegiatanAkun->id&periode=$periodeAkun->slug&fungsi=$fungsi";
-                $searchLinks[] = $searchLink; // Tetapkan nilai $fileLink ke dalam array
-                $searchNames[] = $akun->nama;
-                $searchUrls[] = $fungsi . '/' . $periodeAkun->nama . '/' . $kegiatanAkun->nama . '/' . $akun->nama;
+                if ($periodeAkun->tahun === $session) {
+                    $searchLink = "/administrasi/transaksi?akun=$akun->id&kegiatan=$kegiatanAkun->id&periode=$periodeAkun->slug&fungsi=$fungsi";
+                    $searchLinks[] = $searchLink; // Tetapkan nilai $fileLink ke dalam array
+                    $searchNames[] = $akun->nama;
+                    $searchUrls[] = $fungsi . '/' . $periodeAkun->nama . '/' . $kegiatanAkun->nama . '/' . $akun->nama;
+                }
             }
 
             // /administrasi/akun?kegiatan=44&periode=tahun-2024-tahunan-wB67t-1714014341&fungsi=Sosial
@@ -81,10 +87,13 @@ class AdministrasiController extends Controller
                 $periodeKegiatan = $kegiatan->periodeAdministrasi;
                 $fungsi = $periodeKegiatan->nama_fungsi;
 
-                $searchLink = "/administrasi/akun?kegiatan=$kegiatan->id&periode=$periodeKegiatan->slug&fungsi=$fungsi";
-                $searchLinks[] = $searchLink; // Tetapkan nilai $fileLink ke dalam array
-                $searchNames[] = $kegiatan->nama;
-                $searchUrls[] = $fungsi . '/' . $periodeKegiatan->nama . '/' . $kegiatan->nama;
+                if ($periodeKegiatan->tahun === $session) {
+
+                    $searchLink = "/administrasi/akun?kegiatan=$kegiatan->id&periode=$periodeKegiatan->slug&fungsi=$fungsi";
+                    $searchLinks[] = $searchLink; // Tetapkan nilai $fileLink ke dalam array
+                    $searchNames[] = $kegiatan->nama;
+                    $searchUrls[] = $fungsi . '/' . $periodeKegiatan->nama . '/' . $kegiatan->nama;
+                }
             }
 
 
@@ -92,13 +101,22 @@ class AdministrasiController extends Controller
 
                 $fungsi = $periode->nama_fungsi;
 
+                if ($periode->tahun === $session) {
+                    $searchLink = "/administrasi/kegiatan?periode=$periode->slug&fungsi=$fungsi";
+                    $searchLinks[] = $searchLink; // Tetapkan nilai $fileLink ke dalam array
+                    $searchNames[] = $periode->nama;
+                    $searchUrls[] = $fungsi . '/' . $periode->nama;
+                }
                 // http://127.0.0.1:8000/administrasi/kegiatan?periode=tahun-2024-tahunan-wB67t-1714014341&fungsi=Sosial
-                $searchLink = "/administrasi/kegiatan?periode=$periode->slug&fungsi=$fungsi";
-                $searchLinks[] = $searchLink; // Tetapkan nilai $fileLink ke dalam array
-                $searchNames[] = $periode->nama;
-                $searchUrls[] = $fungsi . '/' . $periode->nama;
+
             }
         }
+
+        $currentYear = Carbon::now()->year;
+        $years = range($startYear, $currentYear);
+        //jika tidak ada session selected_year pakai tahun sekarang
+        $startYear = Carbon::createFromFormat('Y', '2023')->year;
+
 
         $currentYear = Carbon::now()->year;
         $years = range($startYear, $currentYear);
@@ -162,5 +180,13 @@ class AdministrasiController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+
+    public function setYearSession(Request $request)
+    {
+        $year = $request->input('year');
+        $request->session()->put('selected_year', $year);
+        return response()->json(['success' => true]);
     }
 }

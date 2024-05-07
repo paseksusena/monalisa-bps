@@ -37,7 +37,7 @@ class TransaksiController extends Controller
             'akun' => $akun,
             'transaksis' => Transaksi::where('akun_id', $akun->id)
                 ->filter($query)
-                ->paginate(10)
+                ->paginate(200)
                 ->appends(['search' => $search]),
             'fungsi' => $fungsi,
             'periode' => $periode,

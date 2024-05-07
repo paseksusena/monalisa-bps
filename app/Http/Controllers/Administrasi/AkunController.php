@@ -34,7 +34,7 @@ class AkunController extends Controller
             'kegiatan' => $kegiatan,
             'akuns' => Akun::where('kegiatan_id', $kegiatan->id)
                 ->filter($query)
-                ->paginate(10)
+                ->paginate(200)
                 ->appends(['search' => $search]),
 
             'periode' => $periode,
