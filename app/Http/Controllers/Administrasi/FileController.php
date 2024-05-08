@@ -167,6 +167,7 @@ class FileController extends Controller
             $filePath = "administrasi/$fungsi/{$periode->nama}/{$kegiatan->nama}/{$akun->nama}/{$transaksi->nama}/{$file->namaFile}";
 
             File2::delete(public_path($filePath));
+
             $fileOld = $file->namaFile;
             //upadate di tabel file
             $file->file = null;
@@ -178,6 +179,7 @@ class FileController extends Controller
             return back()->with('success', 'File ' . $fileOld . ' berhasi dihapus!');
         } else {
             $file->delete();
+
             $transaksi = Transaksi::where('id', $request->transaksi)->first();
             $this->progres($transaksi->id);
             return back()->with('success', 'Laci ' . $file->judul . ' berhasil dihapus!');
