@@ -87,7 +87,7 @@ class PeriodeAdministrasiController extends Controller
     {
         try {
             $validationPeriode = $request->validate([
-                'nama' => 'required|max:50',
+                'nama' => 'required|max:550',
                 'tgl_awal' => 'required',
                 'tgl_akhir' => 'required',
                 'periode' => 'required',

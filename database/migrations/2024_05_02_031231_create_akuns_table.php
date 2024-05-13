@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('akuns', function (Blueprint $table) {
             $table->id();
-            $table->string("nama", 50);
+            $table->string("nama", 550);
             $table->date('tgl_awal');
             $table->date('tgl_akhir');
             $table->float('progres')->nullable()->default(0);

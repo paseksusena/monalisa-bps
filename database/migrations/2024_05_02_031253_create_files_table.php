@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('files', function (Blueprint $table) {
             $table->id();
-            $table->string("judul", 50);
+            $table->string("judul", 550);
             $table->string("namaFile")->nullable();
             $table->string("file")->nullable();
             $table->float('ukuran_file')->default(0); // Kolom untuk menyimpan ukuran file dalam byte

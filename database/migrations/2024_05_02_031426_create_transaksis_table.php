@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('transaksis', function (Blueprint $table) {
             $table->id();
-            $table->string("nama", 50);
+            $table->string("nama", 550);
             $table->foreignId("akun_id");
             $table->float('progres')->nullable()->default(0);
             $table->integer('amount_file')->nullable()->default(0);

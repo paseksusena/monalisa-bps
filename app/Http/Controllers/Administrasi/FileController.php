@@ -92,7 +92,7 @@ class FileController extends Controller
     {
         try {
             $requestValidasi = $request->validate([
-                'judul' => 'required|max:50',
+                'judul' => 'required|max:550',
                 'transaksi_id' => 'required'
 
             ]);

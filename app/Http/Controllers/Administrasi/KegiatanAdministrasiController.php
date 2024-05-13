@@ -66,7 +66,7 @@ class KegiatanAdministrasiController extends Controller
             // $periode = PeriodeAdministrasi::where('id', $request->periode_id)->first();
             // dd($periode->nama);
             $requestValidasi = $request->validate([
-                'nama' => 'required|max:50',
+                'nama' => 'required|max:550',
                 'tgl_awal' => 'required',
                 'tgl_akhir' => 'required',
                 'periode_id' => 'required'

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('periode_administrasis', function (Blueprint $table) {
             $table->id();
-            $table->string('nama', 50);
+            $table->string('nama', 550);
             $table->string('periode', 20);
             $table->year('tahun');
             $table->date('tgl_awal');
