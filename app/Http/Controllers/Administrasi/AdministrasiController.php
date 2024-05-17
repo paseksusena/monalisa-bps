@@ -35,20 +35,18 @@ class AdministrasiController extends Controller
             $transaksis = Transaksi::where('nama', 'like', '%' . $search . '%')->get();
             $akuns = Akun::where('nama', 'like', '%' . $search . '%')->get();
             $kegiatans = KegiatanAdministrasi::where('nama', 'like', '%' . $search . '%')->get();
-            $periodes = PeriodeAdministrasi::where('nama', 'like', '%' . $search . '%')->get();
 
 
             foreach ($files as $file) {
                 $transaksiFile = $file->transaksi;
                 $akunFile = $transaksiFile->akun;
                 $kegiatanFile = $akunFile->kegiatanAdministrasi;
-                $periodeFile = $kegiatanFile->periodeAdministrasi;
-                $fungsi = $periodeFile->nama_fungsi;
-                if ($periodeFile->tahun === $session) {
-                    $searchLink = "/administrasi/file?transaksi=$transaksiFile->id&akun=$akunFile->id&kegiatan=$kegiatanFile->id&periode=$periodeFile->slug&fungsi=$fungsi";
+                $fungsi = $kegiatanFile->fungsi;
+                if ($kegiatanFile->tahun === $session) {
+                    $searchLink = "/administrasi/file?transaksi=$transaksiFile->id&akun=$akunFile->id&kegiatan=$kegiatanFile->id&fungsi=$fungsi";
                     $searchLinks[] = $searchLink; // Tetapkan nilai $fileLink ke dalam array
                     $searchNames[] = $file->judul;
-                    $searchUrls[] =  $fungsi . '/' . $periodeFile->nama . '/' . $kegiatanFile->nama . '/' . $akunFile->nama . '/' . $transaksiFile->nama . '/' . $file->namaFile;
+                    $searchUrls[] =  $fungsi . '/' . '/' . $kegiatanFile->nama . '/' . $akunFile->nama . '/' . $transaksiFile->nama . '/' . $file->namaFile;
                 }
             }
 
@@ -56,59 +54,39 @@ class AdministrasiController extends Controller
 
                 $akunTranskasi = $transaksi->akun;
                 $kegiatanTransaksi = $akunTranskasi->kegiatanAdministrasi;
-                $periodeTransaksi = $kegiatanTransaksi->periodeAdministrasi;
-                $fungsi = $periodeTransaksi->nama_fungsi;
-                if ($periodeTransaksi->tahun === $session) {
-                    $searchLink = "/administrasi/file?transaksi=$transaksi->id&akun=$akunTranskasi->id&kegiatan=$kegiatanTransaksi->id&periode=$periodeTransaksi->slug&fungsi=$fungsi";
+                $fungsi = $kegiatanTransaksi->fungsi;
+                if ($kegiatanTransaksi->tahun === $session) {
+                    $searchLink = "/administrasi/file?transaksi=$transaksi->id&akun=$akunTranskasi->id&kegiatan=$kegiatanTransaksi->id&fungsi=$fungsi";
                     $searchLinks[] = $searchLink; // Tetapkan nilai $fileLink ke dalam array
                     $searchNames[] = $transaksi->nama;
-                    $searchUrls[] = $fungsi . '/' .  $periodeTransaksi->nama . '/' . $kegiatanTransaksi->nama . '/' . $akunTranskasi->nama . '/' . $transaksi->nama;
+                    $searchUrls[] = $fungsi . '/' . $kegiatanTransaksi->nama . '/' . $akunTranskasi->nama . '/' . $transaksi->nama;
                 }
             }
 
             foreach ($akuns as $akun) {
 
                 $kegiatanAkun = $akun->kegiatanAdministrasi;
-                $periodeAkun = $kegiatanAkun->periodeAdministrasi;
-                $fungsi = $periodeAkun->nama_fungsi;
+                $fungsi = $kegiatanAkun->fungsi;
 
-                if ($periodeAkun->tahun === $session) {
-                    $searchLink = "/administrasi/transaksi?akun=$akun->id&kegiatan=$kegiatanAkun->id&periode=$periodeAkun->slug&fungsi=$fungsi";
+                if ($kegiatanAkun->tahun === $session) {
+                    $searchLink = "/administrasi/transaksi?akun=$akun->id&kegiatan=$kegiatanAkun->id&fungsi=$fungsi";
                     $searchLinks[] = $searchLink; // Tetapkan nilai $fileLink ke dalam array
                     $searchNames[] = $akun->nama;
-                    $searchUrls[] = $fungsi . '/' . $periodeAkun->nama . '/' . $kegiatanAkun->nama . '/' . $akun->nama;
+                    $searchUrls[] = $fungsi . '/' . $kegiatanAkun->nama . '/' . $akun->nama;
                 }
             }
 
             // /administrasi/akun?kegiatan=44&periode=tahun-2024-tahunan-wB67t-1714014341&fungsi=Sosial
 
             foreach ($kegiatans as $kegiatan) {
+                $fungsi = $kegiatan->fungsi;
+                if ($kegiatan->tahun === $session) {
 
-                $periodeKegiatan = $kegiatan->periodeAdministrasi;
-                $fungsi = $periodeKegiatan->nama_fungsi;
-
-                if ($periodeKegiatan->tahun === $session) {
-
-                    $searchLink = "/administrasi/akun?kegiatan=$kegiatan->id&periode=$periodeKegiatan->slug&fungsi=$fungsi";
+                    $searchLink = "/administrasi/akun?kegiatan=$kegiatan->id&fungsi=$fungsi";
                     $searchLinks[] = $searchLink; // Tetapkan nilai $fileLink ke dalam array
                     $searchNames[] = $kegiatan->nama;
-                    $searchUrls[] = $fungsi . '/' . $periodeKegiatan->nama . '/' . $kegiatan->nama;
+                    $searchUrls[] = $fungsi . '/'  . $kegiatan->nama;
                 }
-            }
-
-
-            foreach ($periodes as $periode) {
-
-                $fungsi = $periode->nama_fungsi;
-
-                if ($periode->tahun === $session) {
-                    $searchLink = "/administrasi/kegiatan?periode=$periode->slug&fungsi=$fungsi";
-                    $searchLinks[] = $searchLink; // Tetapkan nilai $fileLink ke dalam array
-                    $searchNames[] = $periode->nama;
-                    $searchUrls[] = $fungsi . '/' . $periode->nama;
-                }
-                // http://127.0.0.1:8000/administrasi/kegiatan?periode=tahun-2024-tahunan-wB67t-1714014341&fungsi=Sosial
-
             }
         }
 

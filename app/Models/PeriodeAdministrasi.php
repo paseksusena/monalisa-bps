@@ -19,10 +19,10 @@ class PeriodeAdministrasi extends Model
 
 
 
-    public function KegiatanAdministrasi()
-    {
-        return $this->hasMany(KegiatanAdministrasi::class, 'periode_id');
-    }
+    // public function KegiatanAdministrasi()
+    // {
+    //     return $this->hasMany(KegiatanAdministrasi::class, 'periode_id');
+    // }
 
     public function scopeFilter($query, array $filters)
     {
