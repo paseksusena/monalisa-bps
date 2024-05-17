@@ -8,7 +8,6 @@ use App\Http\Requests\UpdateAkunRequest;
 use App\Http\Controllers\Controller;
 use App\Models\KegiatanAdministrasi;
 use App\Imports\AkunImport;
-use App\Models\PeriodeAdministrasi;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\File;
 
@@ -22,7 +21,6 @@ class AkunController extends Controller
     {
         $search = request('search');
         $fungsi = $this->getFungsi();
-        $periode = $this->getPeriode();
 
         $kegiatan = $this->getKegiatan();
         //melakukan penambahan parameter
@@ -30,7 +28,6 @@ class AkunController extends Controller
         $query = array_merge($previousQuery, ['search' => $search]);
 
         $this->progresKegiatan();
-        $this->progresPeriode();
         return view('page.administrasi.akun.index', [
             'kegiatan' => $kegiatan,
             'akuns' => Akun::where('kegiatan_id', $kegiatan->id)
@@ -38,7 +35,6 @@ class AkunController extends Controller
                 ->paginate(200)
                 ->appends(['search' => $search]),
 
-            'periode' => $periode,
             'fungsi' => $fungsi,
         ]);
     }
@@ -57,13 +53,10 @@ class AkunController extends Controller
 
             $requestValidasi = $request->validate([
                 'nama' => 'required|max:550',
-                'tgl_awal' => 'required',
-                'tgl_akhir' => 'required',
                 'kegiatan_id' => 'required'
 
             ]);
             $fungsi = $request->fungsi;
-            $periode = $request->periode;
             $kegiatan_id = $request->kegiatan_id;
 
             $file = Akun::where('kegiatan_id', $kegiatan_id)->get();
@@ -76,7 +69,7 @@ class AkunController extends Controller
             // Tangkap pengecualian dan tampilkan pesan kesalahan
             return redirect()->back()->with('error', 'Error saat input data: ' . $e->getMessage());
         }
-        return redirect('/administrasi/akun?kegiatan=' . $kegiatan_id . '&periode=' . $periode . '&fungsi=' . $fungsi)->with('success', 'Akun berhasil ditambahkan!');
+        return redirect('/administrasi/akun?kegiatan=' . $kegiatan_id . '&fungsi=' . $fungsi)->with('success', 'Akun berhasil ditambahkan!');
     }
 
     /**
@@ -109,10 +102,9 @@ class AkunController extends Controller
     public function destroy(Akun $akun, StoreAkunRequest $request)
     {
         $fungsi = $request->fungsi;
-        $periode = PeriodeAdministrasi::where('slug', $request->periode)->first();
         $kegiatan = KegiatanAdministrasi::where('id', $request->kegiatan)->first();
 
-        $filePath = "administrasis/$fungsi/{$periode->nama}/{$kegiatan->nama}/{$akun->nama}";
+        $filePath = "storage/administrasis/$fungsi/{$kegiatan->nama}/{$akun->nama}";
         File::deleteDirectory($filePath);
 
         $akun->transaksi()->each(function ($transaksi) {
@@ -127,13 +119,11 @@ class AkunController extends Controller
     public function exportExcel($id)
     {
         $fungsi = $this->getFungsi();
-        $periode = $this->getPeriode();
         $kegiatan = $id;
 
         $kegiatan = KegiatanAdministrasi::where('id', $kegiatan)->first();
         return view('administrasi.akun.create-excel', [
             'kegiatan' => $kegiatan,
-            'periode' => $periode,
             'fungsi' => $fungsi,
 
         ]);
@@ -142,9 +132,7 @@ class AkunController extends Controller
     public function storeExcel(StoreAkunRequest $request)
     {
         try {
-            //ambil req fungsi, periode, kegiatan
             $fungsi = $this->getFungsi();
-            $periode = $this->getPeriode();
             $kegiatan_id = $request->kegiatan_id;
 
 
@@ -154,14 +142,13 @@ class AkunController extends Controller
 
             // Move uploaded file to storage
             $fileName = $file->getClientOriginalName();
-            // Excel::import(new PemutakhiranSusenasImport($request->id_periode, $tgl_awal, $tgl_akhir), public_path('/DataPemuktahiranSusenas/' . $fileName));
             Excel::import(new AkunImport($kegiatan_id), public_path('/DataAkunAdministrasi/' . $fileName));
         } catch (\Throwable $e) {
             // Tangkap pengecualian dan tampilkan pesan kesalahan
             return redirect()->back()->with('error', 'Error saat mengimpor file: ' . $e->getMessage());
         }
 
-        return redirect('/administrasi/akun?kegiatan=' . $kegiatan_id . '&periode=' . $periode->slug . '&fungsi=' . $fungsi)->with('success', 'Akun berhasil diimpor!');
+        return redirect('/administrasi/akun?kegiatan=' . $kegiatan_id .  '&fungsi=' . $fungsi)->with('success', 'Akun berhasil diimpor!');
     }
 
     public function getKegiatan()
@@ -169,11 +156,7 @@ class AkunController extends Controller
         $kegiatan = KegiatanAdministrasi::where('id', request('kegiatan'))->first();
         return $kegiatan;
     }
-    public function getPeriode()
-    {
-        $periode = PeriodeAdministrasi::where('slug', request('periode'))->first();
-        return $periode;
-    }
+
     public function getFungsi()
     {
         $fungsi = request('fungsi');
@@ -237,39 +220,6 @@ class AkunController extends Controller
         }
 
 
-
-
-        return 0;
-    }
-
-
-
-    public function progresPeriode()
-    {
-        $periodes = PeriodeAdministrasi::all();
-
-        foreach ($periodes as $periode) {
-            $kegiatans = KegiatanAdministrasi::where('periode_id', $periode->id)->get();
-
-            $totalFiles = 0;
-            $complete_file = 0;
-            foreach ($kegiatans as $kegiatan) {
-                // Pastikan nilai progres dalam rentang 0 hingga 100
-                $totalFiles += $kegiatan['amount_file'];
-                $complete_file += $kegiatan['complete_file'];
-            }
-            // dd($totalFiles);
-            $progres = $totalFiles > 0 ? ($complete_file / $totalFiles) * 100 : 0;
-
-            // dd($progres);
-
-            // Update nilai progres di tabel Akun
-            $periode = PeriodeAdministrasi::find($periode->id);
-            $periode->progres = $progres;
-            $periode['amount_file'] = $totalFiles;
-            $periode['complete_file'] = $complete_file;
-            $periode->save();
-        }
 
 
         return 0;

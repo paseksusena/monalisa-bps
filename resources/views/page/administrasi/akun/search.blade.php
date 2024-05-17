@@ -21,7 +21,6 @@
             <div class="relative min-w-72 md:min-w-80">
                 <form  action="/administrasi/akun" class="flex">
                     <input type="hidden" name="fungsi" value="{{ $fungsi }}">
-                    <input type="hidden" name="periode" value="{{ $periode->slug }}">
                     <input type="hidden" name="kegiatan" value="{{ $kegiatan->id }}">
                     <input type="text" id="search" value="{{request('search')}}" name="search" class="py-2 px-4 block w-full border-gray-200 rounded-l-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="Search Akun" required>
                     <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-r-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Search</button>

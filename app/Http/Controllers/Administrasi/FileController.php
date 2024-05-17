@@ -11,11 +11,9 @@ use App\Models\Transaksi;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\FileImport;
 use App\Models\KegiatanAdministrasi;
-use App\Models\PeriodeAdministrasi;
-use Dompdf\Dompdf;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File as File2;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 
 
@@ -33,7 +31,6 @@ class FileController extends Controller
         // $kegiatan = request('kegiatan');
         // $akun = request('akun');
 
-        $periode = PeriodeAdministrasi::where('slug', request('periode'))->first();
         $kegiatan = KegiatanAdministrasi::where('id', request('kegiatan'))->first();
         $akun = Akun::where('id', request('akun'))->first();
         $transaksi = Transaksi::where('id', request('transaksi'))->first();
@@ -46,7 +43,6 @@ class FileController extends Controller
         $this->progres($transaksi->id);
         $this->progresAkun();
         $this->progresKegiatan();
-        $this->progresPeriode();
 
         // $files = File::where('transaksi_id', $transaksi_id)->get();
         return view('page.administrasi.file.index', [
@@ -56,7 +52,6 @@ class FileController extends Controller
                 ->filter($query)
                 ->paginate(200)
                 ->appends(['search' => $search]),
-            'periode' => $periode,
             'kegiatan' => $kegiatan,
             'akun' => $akun,
 
@@ -71,7 +66,6 @@ class FileController extends Controller
         $transaksi = request('transaksi');
         $akun = request('akun');
         $kegiatan = request('kegiatan');
-        $periode = request('periode');
         $fungsi = request('fungsi');
         // dd( $akun, $kegiatan, $periode, $fungsi);
 
@@ -79,7 +73,6 @@ class FileController extends Controller
             'transaksi' => $transaksi,
             'akun' => $akun,
             'kegiatan' => $kegiatan,
-            'periode' => $periode,
             'fungsi' => $fungsi,
 
         ]);
@@ -93,11 +86,11 @@ class FileController extends Controller
         try {
             $requestValidasi = $request->validate([
                 'judul' => 'required|max:550',
-                'transaksi_id' => 'required'
+                'transaksi_id' => 'required',
+                'penanggung_jwb' => 'required'
 
             ]);
             $fungsi = $request->fungsi;
-            $periode = $request->periode;
             $kegiatan = $request->kegiatan;
             $akun = $request->akun;
             $transaksi_id = $request->transaksi_id;
@@ -114,16 +107,16 @@ class FileController extends Controller
             return redirect()->back()->with('error', 'Error saat input data: ' . $e->getMessage());
         }
         $this->progres($request->transaksi_id);
-        return redirect('/administrasi/file?transaksi=' . $transaksi_id . '&akun=' . $akun . '&kegiatan=' . $kegiatan . '&periode=' . $periode . '&fungsi=' . $fungsi)->with('success', 'Berhasil disimpan');
+        return redirect('/administrasi/file?transaksi=' . $transaksi_id . '&akun=' . $akun . '&kegiatan=' . $kegiatan . '&fungsi=' . $fungsi)->with('success', 'Berhasil disimpan');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show($fungsi, $periode, $kegiatan, $akun, $transaksi, $filename)
+    public function show($fungsi, $kegiatan, $akun, $transaksi, $filename)
     {
         // Path ke file PDF
-        $path = public_path("administrasis/{$fungsi}/{$periode}/{$kegiatan}/{$akun}/{$transaksi}/{$filename}");
+        $path = public_path("administrasis/{$fungsi}/{$kegiatan}/{$akun}/{$transaksi}/{$filename}");
 
         // Cek apakah file PDF ada
         if (!file_exists($path)) {
@@ -160,11 +153,10 @@ class FileController extends Controller
 
             //menghapus di folder
             $fungsi = $request->fungsi;
-            $periode = PeriodeAdministrasi::where('slug', $request->periode)->first();
             $kegiatan = KegiatanAdministrasi::where('id', $request->kegiatan)->first();
             $akun = Akun::where('id', $request->akun)->first();
             $transaksi = Transaksi::where('id', $request->transaksi)->first();
-            $filePath = "administrasi/$fungsi/{$periode->nama}/{$kegiatan->nama}/{$akun->nama}/{$transaksi->nama}/{$file->namaFile}";
+            $filePath = "storage/administrasi/$fungsi/{$kegiatan->nama}/{$akun->nama}/{$transaksi->nama}/{$file->namaFile}";
 
             File2::delete(public_path($filePath));
 
@@ -174,6 +166,7 @@ class FileController extends Controller
             $file->ukuran_file = 0;
             $file->namaFile = null;
             $file->status = false;
+            $file->update = null;
             $file->save();
             $this->progres($transaksi->id);
             return back()->with('success', 'File ' . $fileOld . ' berhasi dihapus!');
@@ -189,14 +182,12 @@ class FileController extends Controller
     public function exportExcel($id)
     {
         $fungsi = request('fungsi');
-        $periode = request('periode');
         $kegiatan = request('kegiatan');
         $akun_id = request('akun');
         $transaksi_id = request('transaksi');
         return view('administrasi.file.create-excel', [
             'transaksi_id' => $id,
             'fungsi' => $fungsi,
-            'periode' => $periode,
             'kegiatan' => $kegiatan,
             'akun' => $akun_id,
 
@@ -214,7 +205,6 @@ class FileController extends Controller
 
             // Ambil data dari permintaan
             $fungsi = $request->fungsi;
-            $periode = $request->periode;
             $kegiatan = $request->kegiatan;
             $akun = $request->akun;
             $transaksi_id = $request->transaksi_id;
@@ -223,7 +213,7 @@ class FileController extends Controller
 
 
             // Redirect kembali dengan pesan sukses
-            return redirect('/administrasi/file?transaksi=' . $transaksi_id . '&akun=' . $akun . '&kegiatan=' . $kegiatan . '&periode=' . $periode . '&fungsi=' . $fungsi)->with('success', 'Berhasil diimport');
+            return redirect('/administrasi/file?transaksi=' . $transaksi_id . '&akun=' . $akun . '&kegiatan=' . $kegiatan . '&fungsi=' . $fungsi)->with('success', 'Berhasil diimport');
         } catch (\Throwable $e) {
             // Tangkap pengecualian dan tampilkan pesan kesalahan
             return redirect()->back()->with('error', 'Error saat mengimpor file: ' . $e->getMessage());
@@ -258,7 +248,6 @@ class FileController extends Controller
 
             //  Untuk membuat direktori penyimpanan file
             $fungsi = request('fungsi');
-            $periode = PeriodeAdministrasi::where('slug', request('periode'))->first();
             $kegiatan = KegiatanAdministrasi::where('id', request('kegiatan'))->first();
             $akun = Akun::where('id', request('akun'))->first();
             $transaksi = Transaksi::where('id', request('transaksi'))->first();
@@ -268,12 +257,13 @@ class FileController extends Controller
                 $namaFile = $fileInfo['basename'];
                 $ukuranFile = $uploadedFile->getSize(); // Ukuran dalam byte
                 $ukuranFileMB = round($ukuranFile / 1024 / 1024, 2); // Ubah ke megabyte dan round to 2 desimal
-                $path = public_path('administrasis/' . $request->fungsi . '/' . $periode->nama . '/' . $kegiatan->nama . '/' . $akun->nama . '/' . $transaksi->nama);
+                $path = public_path('storage/administrasis/' . $request->fungsi . '/' . $kegiatan->nama . '/' . $akun->nama . '/' . $transaksi->nama);
                 $uploadedFile->move($path, $namaFile);
                 $file->namaFile = $namaFile;
                 $file->file = $path;
                 $file->ukuran_file = $ukuranFileMB;
                 $file->status = true;
+                $file->update = Carbon::now()->toDateString();
                 $file->save();
 
                 $this->progres($transaksi->id);
@@ -282,26 +272,25 @@ class FileController extends Controller
             }
         }
 
-        return redirect('/administrasi/file?transaksi=' . $transaksi->id . '&akun=' . $akun->id . '&kegiatan=' . $kegiatan->id . '&periode=' . $periode->slug . '&fungsi=' . $fungsi)->with('success', 'File ' . $namaFile . ' Berhasil Ditambahkan!');
+        return redirect('/administrasi/file?transaksi=' . $transaksi->id . '&akun=' . $akun->id . '&kegiatan=' . $kegiatan->id . '&fungsi=' . $fungsi)->with('success', 'File ' . $namaFile . ' Berhasil Ditambahkan!');
     }
 
 
     public function download()
     {
         $fungsi = request('fungsi');
-        $periode = PeriodeAdministrasi::where('slug', request('periode'))->first();
         $kegiatan = KegiatanAdministrasi::where('id', request('kegiatan'))->first();
         $akun = Akun::where('id', request('akun'))->first();
         $transaksi = Transaksi::where('id', request('transaksi'))->first();
 
-        if (!$periode || !$kegiatan || !$akun || !$transaksi) {
+        if (!$kegiatan || !$akun || !$transaksi) {
             return response()->json(['error' => 'Invalid parameters.'], 400);
         }
 
         $nama_file = request('nama_file');
 
         // Bentuk path file
-        $path = public_path("administrasis/$fungsi/{$periode->nama}/{$kegiatan->nama}/{$akun->nama}/{$transaksi->nama}/$nama_file");
+        $path = public_path("storage/administrasis/$fungsi/{$kegiatan->nama}/{$akun->nama}/{$transaksi->nama}/$nama_file");
 
         // Periksa apakah file ada
         if (!file_exists($path)) {
@@ -330,37 +319,6 @@ class FileController extends Controller
         $transaksi['amount_file'] = $totalFiles;
         $transaksi['complete_file'] = $completedFiles;
         $transaksi->save();
-
-        return 0;
-    }
-
-    public function progresPeriode()
-    {
-        $periodes = PeriodeAdministrasi::all();
-
-        foreach ($periodes as $periode) {
-            $kegiatans = KegiatanAdministrasi::where('periode_id', $periode->id)->get();
-
-            $totalFiles = 0;
-            $complete_file = 0;
-            foreach ($kegiatans as $kegiatan) {
-                // Pastikan nilai progres dalam rentang 0 hingga 100
-                $totalFiles += $kegiatan['amount_file'];
-                $complete_file += $kegiatan['complete_file'];
-            }
-            // dd($totalFiles);
-            $progres = $totalFiles > 0 ? ($complete_file / $totalFiles) * 100 : 0;
-
-            // dd($progres);
-
-            // Update nilai progres di tabel Akun
-            $periode = PeriodeAdministrasi::find($periode->id);
-            $periode->progres = $progres;
-            $periode['amount_file'] = $totalFiles;
-            $periode['complete_file'] = $complete_file;
-            $periode->save();
-        }
-
 
         return 0;
     }
@@ -435,24 +393,43 @@ class FileController extends Controller
     public function viewFile(Request $request)
     {
         $fungsi = $request->query('fungsi');
-        $periode = PeriodeAdministrasi::where('slug', $request->query('periode'))->first();
         $kegiatan = KegiatanAdministrasi::find($request->query('kegiatan'));
         $akun = Akun::find($request->query('akun'));
         $transaksi = Transaksi::find($request->query('transaksi'));
 
-        if (!$periode || !$kegiatan || !$akun || !$transaksi) {
+        if (!$kegiatan || !$akun || !$transaksi) {
             return response()->json(['error' => 'Invalid parameters.'], 400);
         }
 
         $nama_file = $request->query('nama_file');
 
         // Bentuk path file
-        $path = public_path("administrasis/{$fungsi}/{$periode->nama}/{$kegiatan->nama}/{$akun->nama}/{$transaksi->nama}/{$nama_file}");
+        $path = public_path("storage/administrasis/{$fungsi}/{$kegiatan->nama}/{$akun->nama}/{$transaksi->nama}/{$nama_file}");
 
         // Periksa apakah file ada
         if (!file_exists($path)) {
             return response()->json(['error' => 'File not found.'], 404);
         }
         return response()->file($path);
+    }
+    public function ceklist(Request $request, $id)
+    {
+        // $request->validate([
+        //     'isChecked' => 'required|boolean',
+        // ], [
+        //     'isChecked.required' => 'The isChecked field is required.',
+        //     'isChecked.boolean' => 'The isChecked field must be true or false.',
+        // ]);
+
+        $isChecked = $request->isChecked;
+        $file = File::find($id);
+        if ($file['ceklist'] === 1) {
+            $file['ceklist'] = 0;
+        } else {
+            $file['ceklist'] = 1;
+        }
+        $file->save();
+
+        return response()->json(['message' => $id, 'isChecked' => $isChecked]);
     }
 }

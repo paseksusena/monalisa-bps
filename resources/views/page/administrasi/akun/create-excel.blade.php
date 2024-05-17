@@ -7,7 +7,6 @@
 <form action="/administrasi/akun/destroy_excel" method="POST" enctype="multipart/form-data">
     @csrf
     <input type="hidden" name="fungsi" value="{{ $fungsi }}">
-    <input type="hidden" name="periode" value="{{ $periode->slug }}">
     <input type="hidden" name="kegiatan_id" value="{{ $kegiatan->id }}">
     <div id="hs-sign-out-alert" class="hs-overlay hidden size-full fixed inset-0 z-[80] overflow-x-hidden overflow-y-auto bg-gray-900 bg-opacity-50">
         <div class="flex items-center justify-center min-h-screen">

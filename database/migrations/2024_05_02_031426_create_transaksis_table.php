@@ -14,12 +14,13 @@ return new class extends Migration
         Schema::create('transaksis', function (Blueprint $table) {
             $table->id();
             $table->string("nama", 550);
+            $table->string("no_kwt");
             $table->foreignId("akun_id");
             $table->float('progres')->nullable()->default(0);
             $table->integer('amount_file')->nullable()->default(0);
             $table->integer('complete_file')->nullable()->default(0);
-            $table->date('tgl_awal');
             $table->date('tgl_akhir');
+            $table->string('bln_arsip');
             $table->timestamps();
         });
     }

@@ -88,9 +88,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/administrasi',  [AdministrasiController::class, 'index_administrasi']);
 
     //periode
-    Route::delete('/administrasi/periode/{periodeAdministrasi}', [PeriodeAdministrasiController::class, 'destroy']);
-    Route::get('/administrasi/periode/{periodeAdministrasi}/edit', [PeriodeAdministrasiController::class, 'edit']);
-    Route::resource('/administrasi/periode', PeriodeAdministrasiController::class);
+    // Route::delete('/administrasi/periode/{periodeAdministrasi}', [PeriodeAdministrasiController::class, 'destroy']);
+    // Route::get('/administrasi/periode/{periodeAdministrasi}/edit', [PeriodeAdministrasiController::class, 'edit']);
+    // Route::resource('/administrasi/periode', PeriodeAdministrasiController::class);
 
     //kegiatan
     Route::resource('/administrasi/kegiatan', KegiatanAdministrasiController::class);
@@ -109,6 +109,7 @@ Route::middleware('auth')->group(function () {
 
     //file
     Route::resource('/administrasi/file', FileController::class);
+    Route::post('/administrasi/file/ceklist/{id}', [FileController::class, 'ceklist']);
     Route::get('/administrasi/file/create-excel/{id}', [FileController::class, 'exportExcel']);
     Route::post('/administrasi/file/store_excel', [FileController::class, 'stroreExcel']);
     Route::post('/administrasi/file/addFile', [FileController::class, 'addFile']);

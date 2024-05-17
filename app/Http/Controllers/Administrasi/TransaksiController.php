@@ -9,7 +9,6 @@ use App\Http\Requests\UpdateTransaksiRequest;
 use App\Http\Controllers\Controller;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\TransaksiImport;
-use App\Models\PeriodeAdministrasi;
 use App\Models\KegiatanAdministrasi;
 use Illuminate\Support\Facades\File;
 
@@ -24,7 +23,6 @@ class TransaksiController extends Controller
     {
         $search = request('search');
         $fungsi = $this->getFungsi();
-        $periode = $this->getPeriode();
         $kegiatan = $this->getKegiatan();
         $akun = $this->getAkun();
 
@@ -34,7 +32,6 @@ class TransaksiController extends Controller
 
         $this->progresAkun();
         $this->progresKegiatan();
-        $this->progresPeriode();
         return view('page.administrasi.transaksi.index', [
             'akun' => $akun,
             'transaksis' => Transaksi::where('akun_id', $akun->id)
@@ -42,7 +39,6 @@ class TransaksiController extends Controller
                 ->paginate(200)
                 ->appends(['search' => $search]),
             'fungsi' => $fungsi,
-            'periode' => $periode,
             'kegiatan' => $kegiatan,
 
 
@@ -57,14 +53,12 @@ class TransaksiController extends Controller
 
         $akun = request('akun');
         $kegiatan = request('kegiatan');
-        $periode = request('periode');
         $fungsi = request('fungsi');
         // dd( $akun, $kegiatan, $periode, $fungsi);
 
         return view('administrasi.transaksi.create', [
             'akun' => $akun,
             'kegiatan' => $kegiatan,
-            'periode' => $periode,
             'fungsi' => $fungsi,
 
         ]);
@@ -78,13 +72,13 @@ class TransaksiController extends Controller
         try {
             $requestValidasi = $request->validate([
                 'nama' => 'required|max:550',
-                'tgl_awal' => 'required',
                 'tgl_akhir' => 'required',
+                'bln_arsip' => 'required',
+                'no_kwt' => 'required',
                 'akun_id' => 'required'
 
             ]);
             $fungsi = $request->fungsi;
-            $periode = $request->periode;
             $kegiatan = $request->kegiatan;
             $akun_id = $request->akun_id;
             $akun = Akun::where('id', $akun_id)->first();
@@ -99,7 +93,7 @@ class TransaksiController extends Controller
             return redirect()->back()->with('error', 'Error saat input data: ' . $e->getMessage());
         }
 
-        return redirect('/administrasi/transaksi?akun=' . $akun_id . '&kegiatan=' . $kegiatan . '&periode=' . $periode . '&fungsi=' . $fungsi)->with('success', 'Transaksi berhasil disimpan!');
+        return redirect('/administrasi/transaksi?akun=' . $akun_id . '&kegiatan=' . $kegiatan .  '&fungsi=' . $fungsi)->with('success', 'Transaksi berhasil disimpan!');
     }
 
     /**
@@ -133,10 +127,9 @@ class TransaksiController extends Controller
     {
         $fungsi = $request->fungsi;
 
-        $periode = PeriodeAdministrasi::where('slug', $request->periode)->first();
         $kegiatan = KegiatanAdministrasi::where('id', $request->kegiatan)->first();
         $akun = Akun::where('id', $request->akun)->first();
-        $filePath = "administrasis/$fungsi/{$periode->nama}/{$kegiatan->nama}/{$akun->nama}/{$transaksi->nama}";
+        $filePath = "storage/administrasis/$fungsi/{$kegiatan->nama}/{$akun->nama}/{$transaksi->nama}";
         File::deleteDirectory($filePath);
 
         $transaksi->file()->delete();
@@ -148,13 +141,11 @@ class TransaksiController extends Controller
     {
 
         $fungsi = $this->getFungsi();
-        $periode = $this->getPeriode();
         $kegiatan = $this->getKegiatan();
         $akun = $this->getAkun();
         return view('administrasi.transaksi.create-excel', [
             'akun_id' => $akun->id,
             'fungsi' => $fungsi,
-            'periode' => $periode,
             'kegiatan' => $kegiatan,
 
         ]);
@@ -164,7 +155,6 @@ class TransaksiController extends Controller
         try {
 
             $fungsi = $request->fungsi;
-            $periode = $request->periode;
             $kegiatan = $request->kegiatan;
             $akun_id = $request->akun_id;
             $file = $request->file('excel_file');
@@ -180,7 +170,7 @@ class TransaksiController extends Controller
             return redirect()->back()->with('error', 'Error saat mengimpor file: ' . $e->getMessage());
         }
 
-        return redirect('/administrasi/transaksi?akun=' . $akun_id . '&kegiatan=' . $kegiatan . '&periode=' . $periode . '&fungsi=' . $fungsi)->with('success', 'Data excel berhasil diimpor!');
+        return redirect('/administrasi/transaksi?akun=' . $akun_id . '&kegiatan=' . $kegiatan  . '&fungsi=' . $fungsi)->with('success', 'Data excel berhasil diimpor!');
     }
 
     public function getAkun()
@@ -194,11 +184,7 @@ class TransaksiController extends Controller
         $kegiatan = KegiatanAdministrasi::where('id', request('kegiatan'))->first();
         return $kegiatan;
     }
-    public function getPeriode()
-    {
-        $periode = PeriodeAdministrasi::where('slug', request('periode'))->first();
-        return $periode;
-    }
+
     public function getFungsi()
     {
         $fungsi = request('fungsi');
@@ -233,37 +219,6 @@ class TransaksiController extends Controller
                 $akun->complete_file = $completeFile;
                 $akun->save();
             }
-        }
-
-
-        return 0;
-    }
-
-    public function progresPeriode()
-    {
-        $periodes = PeriodeAdministrasi::all();
-
-        foreach ($periodes as $periode) {
-            $kegiatans = KegiatanAdministrasi::where('periode_id', $periode->id)->get();
-
-            $totalFiles = 0;
-            $complete_file = 0;
-            foreach ($kegiatans as $kegiatan) {
-                // Pastikan nilai progres dalam rentang 0 hingga 100
-                $totalFiles += $kegiatan['amount_file'];
-                $complete_file += $kegiatan['complete_file'];
-            }
-            // dd($totalFiles);
-            $progres = $totalFiles > 0 ? ($complete_file / $totalFiles) * 100 : 0;
-
-            // dd($progres);
-
-            // Update nilai progres di tabel Akun
-            $periode = PeriodeAdministrasi::find($periode->id);
-            $periode->progres = $progres;
-            $periode['amount_file'] = $totalFiles;
-            $periode['complete_file'] = $complete_file;
-            $periode->save();
         }
 
 

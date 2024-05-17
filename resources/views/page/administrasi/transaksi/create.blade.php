@@ -22,7 +22,6 @@ class="hs-overlay hidden size-full fixed top-0 start-0 z-[80] overflow-x-hidden 
         <div class="flex flex-col space-y-4 p-4 overflow-y-auto">
             <input type="hidden" name="akun_id" value={{ $akun->id }}>
             <input type="hidden" name="kegiatan" value={{ $kegiatan->id }}>
-            <input type="hidden" name="periode" value={{ $periode->slug }}>
             <input type="hidden" name="fungsi" value={{ $fungsi }}>
             <!-- Nama Kegiatan -->
             <div>
@@ -34,11 +33,10 @@ class="hs-overlay hidden size-full fixed top-0 start-0 z-[80] overflow-x-hidden 
                 </div>
                 @enderror
             </div>
-            <!-- Tanggal Mulai -->
             <div>
-                <label for="tgl_awal" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Tanggal Mulai</label>
-                <input type="date" id="tgl_awal" name="tgl_awal" value="{{ old('tgl_awal') }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" required>
-                @error('tgl_awal')
+                <label for="no_kwt" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">No Kuitansi</label>
+                <input type="text" id="no_kwt" name="no_kwt" value="{{ old('no_kwt') }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" required>
+                @error('no_kwt')
                 <div class="invalid-feedback">
                     {{ $message }}
                 </div>
@@ -49,6 +47,15 @@ class="hs-overlay hidden size-full fixed top-0 start-0 z-[80] overflow-x-hidden 
                 <label for="tgl_akhir" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Tanggal Selesai</label>
                 <input type="date" id="tgl_akhir" name="tgl_akhir" value="{{ old('tgl_akhir') }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" required>
                 @error('tgl_akhir')
+                <div class="invalid-feedback">
+                    {{ $message }}
+                </div>
+                @enderror
+            </div>
+            <div>
+                <label for="bln_arsip" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Bulan Pengarsipan</label>
+                <input type="text" id="bln_arsip" name="bln_arsip" value="{{ old('bln_arsip') }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" required>
+                @error('bln_arsip')
                 <div class="invalid-feedback">
                     {{ $message }}
                 </div>

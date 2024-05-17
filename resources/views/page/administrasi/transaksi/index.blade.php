@@ -28,7 +28,7 @@
             <ol class="flex items-center whitespace-nowrap">
                 <li class="inline-flex items-center">
                     <a class="flex items-center text-sm text-gray-500 hover:text-blue-600 focus:outline-none focus:text-blue-600 dark:text-neutral-500 dark:hover:text-blue-500 dark:focus:text-blue-500"
-                    href="/administrasi/periode?fungsi={{$fungsi}}">
+                        href="/administrasi/kegiatan?fungsi={{$fungsi}}">
                         {{ $fungsi }}
                     </a>
                     <svg class="flex-shrink-0 mx-2 overflow-visible size-4 text-gray-400 dark:text-neutral-600"
@@ -37,16 +37,7 @@
                         <path d="m9 18 6-6-6-6"></path>
                     </svg>
                     <a class="flex items-center text-sm text-gray-500 hover:text-blue-600 focus:outline-none focus:text-blue-600 dark:text-neutral-500 dark:hover:text-blue-500 dark:focus:text-blue-500"
-                    href="/administrasi/kegiatan?periode={{ $periode->slug }}&fungsi={{ $fungsi }}">
-                    {{ $periode->nama }}
-                    </a>
-                    <svg class="flex-shrink-0 mx-2 overflow-visible size-4 text-gray-400 dark:text-neutral-600"
-                        xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="m9 18 6-6-6-6"></path>
-                    </svg>
-                    <a class="flex items-center text-sm text-gray-500 hover:text-blue-600 focus:outline-none focus:text-blue-600 dark:text-neutral-500 dark:hover:text-blue-500 dark:focus:text-blue-500"
-                    href="/administrasi/akun?kegiatan={{ $akun->id }}&kegiatan={{ $kegiatan->id }}&periode={{ $periode->slug }}&fungsi={{ $fungsi }}">
+                    href="/administrasi/akun?kegiatan={{ $akun->id }}&kegiatan={{ $kegiatan->id }}&fungsi={{ $fungsi }}">
                     {{ $kegiatan->nama }}
                     </a>
                     <svg class="flex-shrink-0 mx-2 overflow-visible size-4 text-gray-400 dark:text-neutral-600"
@@ -164,7 +155,17 @@
                                         <div class="px-1 py-3 text-start">
                                             <div class="flex items-center gap-x-3">
                                                 <span
-                                                    class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-2 mr-8">
+                                                    class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-1 mr-1">
+                                                    No Kuitansi
+                                                </span>
+                                            </div>
+                                         </div>
+                                    </td>
+                                    <td class="size-px whitespace-nowrap"> 
+                                        <div class="px-1 py-3 text-start">
+                                            <div class="flex items-center gap-x-3">
+                                                <span
+                                                    class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-4 mr-1">
                                                     Nama Transaksi
                                                 </span>
                                             </div>
@@ -174,7 +175,7 @@
                                         <div class="px-1 py-3 text-start">
                                             <div class="flex items-center gap-x-3">
                                                 <span
-                                                    class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-2 mr-8">
+                                                    class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-1 mr-1">
                                                     Progress
                                                 </span>
                                             </div>
@@ -184,7 +185,7 @@
                                         <div class="px-1 py-3 text-start">
                                             <div class="flex items-center gap-x-3">
                                                 <span
-                                                    class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-2 mr-8">
+                                                    class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-1 mr-1">
                                                     File Progress
                                                 </span>
                                             </div>
@@ -194,8 +195,8 @@
                                         <div class="px-1 py-3 text-start">
                                             <div class="flex items-center gap-x-3">
                                                 <span
-                                                    class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-2 mr-8">
-                                                    Tgl Awal- Tgl Akhir
+                                                    class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-4 mr-4">
+                                                    Tgl Akhir
                                                 </span>
                                             </div>
                                         </div>
@@ -204,12 +205,22 @@
                                         <div class="px-1 py-3 text-start">
                                             <div class="flex items-center gap-x-3">
                                                 <span
-                                                    class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-2 mr-8">
-                                                    Action
+                                                    class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-4 mr-4">
+                                                    Bulan Arsip
                                                 </span>
                                             </div>
                                         </div>
                                     </td>
+                                    <td class="size-px whitespace-nowrap"> 
+                                        <div class="px-1 py-3 text-start">
+                                            <div class="flex items-center gap-x-3">
+                                                <span
+                                                    class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-4 mr-4">
+                                                    Action
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </td>  
                                 </tr>
                                 @foreach ($transaksis as $transaksi => $trans)
                                 <tr class="hover:bg-gray-100 dark:hover:bg-neutral-700">
@@ -217,8 +228,19 @@
                                         <div class="px-1 py-3 text-start">
                                             <div class="flex items-center gap-x-3">
                                                 <span
-                                                    class="text-sm font-medium text-gray-800 dark:text-neutral-200 ml-4 mr-8">
+                                                    class="text-sm font-medium text-gray-800 dark:text-neutral-200 ml-4 mr-4">
                                                     {{$transaksi + 1}}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </td>
+
+                                    <td class="size-px whitespace-nowrap"> 
+                                        <div class="px-1 py-3 text-start">
+                                            <div class="flex items-center gap-x-3">
+                                                <span
+                                                    class="text-sm font-medium text-gray-800 dark:text-neutral-200 ml-1 mr-1">
+                                                    {{$trans->no_kwt}}
                                                 </span>
                                             </div>
                                         </div>
@@ -234,8 +256,8 @@
                                             </div>
                                             <div class="px-3 py-3 text-start">
                                                 <div class="flex items-center gap-x-3">
-                                                    <span class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-2 mr-8">
-                                                        <a href="/administrasi/file?transaksi={{ $trans->id }}&akun={{ $akun->id }}&kegiatan={{ $kegiatan->id }}&periode={{ $periode->slug }}&fungsi={{ $fungsi }}">
+                                                    <span class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-4 mr-4">
+                                                        <a href="/administrasi/file?transaksi={{ $trans->id }}&akun={{ $akun->id }}&kegiatan={{ $kegiatan->id }}&fungsi={{ $fungsi }}">
                                                             {{$trans->nama}}</a>
                                                     </span>
                                                 </div>
@@ -298,18 +320,28 @@
                                             <td></td>
                                             <td></td>
                                     @endif
-                                
 
                                     <td class="size-px whitespace-nowrap"> 
                                         <div class="px-1 py-3 text-start">
                                             <div class="flex items-center gap-x-3">
                                                 <span
-                                                    class="text-sm font-medium text-gray-800 dark:text-neutral-200 ml-2 mr-8">
-                                                    {{\Carbon\Carbon::parse($trans->tgl_awal)->format('d/m/Y')}} - {{\Carbon\Carbon::parse($trans->tgl_akhir)->format('d/m/Y')}}
+                                                    class="text-sm font-medium text-gray-800 dark:text-neutral-200 ml-4 mr-4">
+                                                    {{\Carbon\Carbon::parse($trans->tgl_akhir)->format('d/m/Y')}}
                                                 </span>
                                             </div>
                                         </div>
-                                    </td>                                  
+                                    </td>    
+                                    
+                                      <td class="size-px whitespace-nowrap"> 
+                                        <div class="px-1 py-3 text-start">
+                                            <div class="flex items-center gap-x-3">
+                                                <span
+                                                    class="text-sm font-medium text-gray-800 dark:text-neutral-200 ml-4 mr-4">
+                                                    {{$trans->bln_arsip}}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </td>
                                     <td class="size-px whitespace-nowrap">
                                         <div class="px-3 py-1.5">
                                             <form id="delete-form-{{$trans->id}}"
@@ -317,7 +349,6 @@
                                                 @csrf
                                                 @method('delete')
                                                 <input type="hidden" value="{{ $fungsi }}" name="fungsi">
-                                                <input type="hidden" value="{{ $periode->slug }}" name="periode">
                                                 <input type="hidden" value="{{ $kegiatan->id }}" name="kegiatan">
                                                 <input type="hidden" value="{{ $akun->id }}" name="akun">
                                                 <button type="button"

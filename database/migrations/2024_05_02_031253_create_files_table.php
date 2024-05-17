@@ -16,9 +16,12 @@ return new class extends Migration
             $table->string("judul", 550);
             $table->string("namaFile")->nullable();
             $table->string("file")->nullable();
+            $table->date("update")->nullable();
             $table->float('ukuran_file')->default(0); // Kolom untuk menyimpan ukuran file dalam byte
             $table->foreignId("transaksi_id");
             $table->boolean('status')->default(false);
+            $table->string('penanggung_jwb');
+            $table->boolean('ceklist')->default(false);
             $table->timestamps();
         });
     }

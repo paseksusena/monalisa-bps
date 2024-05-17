@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="csrf-token" content="{{csrf_token()}}">
     <title>Akun</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
@@ -28,16 +29,8 @@
             <ol class="flex items-center whitespace-nowrap">
                 <li class="inline-flex items-center">
                     <a class="flex items-center text-sm text-gray-500 hover:text-blue-600 focus:outline-none focus:text-blue-600 dark:text-neutral-500 dark:hover:text-blue-500 dark:focus:text-blue-500"
-                    href="/administrasi/periode?fungsi={{$fungsi}}">
+                    href="/administrasi/kegiatan?fungsi={{$fungsi}}">
                         {{ $fungsi }}
-                    </a>
-                    <svg class="flex-shrink-0 mx-2 overflow-visible size-4 text-gray-400 dark:text-neutral-600"
-                        xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="m9 18 6-6-6-6"></path>
-                    </svg>
-                    <a class="flex items-center text-sm text-gray-500 hover:text-blue-600 focus:outline-none focus:text-blue-600 dark:text-neutral-500 dark:hover:text-blue-500 dark:focus:text-blue-500">
-                    {{ $periode->nama }}
                     </a>
                 </li>
 
@@ -82,26 +75,6 @@
                 @include('page.administrasi.kegiatan.create-excel')
                 
 
-                <!-- Progress Indicators Container -->
-                <div class="flex items-center space-x-4">
-                    <!-- Fraction Indicator -->
-                    <div class="flex items-center bg-blue-100 rounded-full p-1">
-                        <div class="py-1.5 px-1.5 bg-blue-500 text-white rounded-full text-sm mr-1">
-                            {{$periode->complete_file}}/  {{$periode->amount_file}}
-                        </div>
-                        <span class="text-gray-800 dark:text-gray-400 text-sm mr-2">Uploaded</span>
-                    </div>
-
-
-                    <!-- Percentage Indicator -->
-                    <div class="flex items-center bg-blue-100 rounded-full p-1">
-                        <div class="py-1.5 px-1.5 bg-blue-500 text-white rounded-full text-sm mr-1">
-                            {{$periode->progres}}%
-                        </div>
-                        <span class="text-gray-800 dark:text-gray-400 text-sm mr-2">Progress</span>
-                    </div>
-                </div>
-
             </div>
 
         </div>
@@ -117,11 +90,8 @@
                             class="px-6 py-4 grid gap-3 md:flex md:justify-between md:items-center border-b border-gray-200 dark:border-neutral-700">
                             <div>
                                 <h2 class="text-xl font-semibold text-gray-800 dark:text-neutral-200">
-                                    {{$periode->nama}}
+                                    {{$fungsi}}
                                 </h2>
-                                <p class="text-xs text-gray-600 dark:text-neutral-400">
-                                    {{\Carbon\Carbon::parse($periode->tgl_awal)->format('d/m/Y')}} -  {{\Carbon\Carbon::parse($periode->tgl_akhir)->format('d/m/Y')}}
-                                </p>
                             </div>
                         </div>
                         <!-- End Header -->
@@ -176,16 +146,6 @@
                                             <div class="flex items-center gap-x-3">
                                                 <span
                                                     class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-2 mr-8">
-                                                    Tgl Awal- Tgl Akhir
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="size-px whitespace-nowrap"> 
-                                        <div class="px-1 py-3 text-start">
-                                            <div class="flex items-center gap-x-3">
-                                                <span
-                                                    class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-2 mr-8">
                                                     Action
                                                 </span>
                                             </div>
@@ -216,7 +176,7 @@
                                             <div class="px-3 py-3 text-start">
                                                 <div class="flex items-center gap-x-3">
                                                     <span class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-2 mr-8">
-                                                        <a href="/administrasi/akun?kegiatan={{ $kgtn->id }}&periode={{ $periode->slug }}&fungsi={{ $fungsi }}">
+                                                        <a href="/administrasi/akun?kegiatan={{ $kgtn->id }}&fungsi={{ $fungsi }}">
                                                             {{$kgtn->nama}}</a>
                                                     </span>
                                                 </div>
@@ -279,17 +239,7 @@
                                             <td></td>
                                             <td></td>
                                     @endif
-
-                                    <td class="size-px whitespace-nowrap"> 
-                                        <div class="px-1 py-3 text-start">
-                                            <div class="flex items-center gap-x-3">
-                                                <span
-                                                    class="text-sm font-medium text-gray-800 dark:text-neutral-200 ml-2 mr-8">
-                                                    {{\Carbon\Carbon::parse($kgtn->tgl_awal)->format('d/m/Y')}} - {{\Carbon\Carbon::parse($kgtn->tgl_akhir)->format('d/m/Y')}}
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </td>                                  
+                                 
                                     <td class="size-px whitespace-nowrap">
                                         <div class="px-3 py-1.5">
                                             <form id="delete-form-{{$kgtn->id}}"
@@ -297,7 +247,6 @@
                                                 @csrf
                                                 @method('delete')
                                                 <input type="hidden" value="{{ $fungsi }}" name="fungsi">
-                                                <input type="hidden" value="{{ $periode->slug }}" name="periode">
                                                 <input type="hidden" value="{{ $kgtn->id }}" name="kegiatan">
                                                 <button type="button"
                                                     onclick="confirmDelete({{$kgtn->id}})"
@@ -324,8 +273,8 @@
             </div>
         </div>
         <!-- End Card -->
-
-
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="{{asset('js/setSession.js')}}"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
         <script>
             function confirmDelete(id) {

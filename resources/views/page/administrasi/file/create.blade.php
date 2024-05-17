@@ -23,13 +23,22 @@ class="hs-overlay hidden size-full fixed top-0 start-0 z-[80] overflow-x-hidden 
             <input type="hidden" name="transaksi_id" value={{ $transaksi->id }}>
             <input type="hidden" name="akun" value={{ $akun->id}}>
             <input type="hidden" name="kegiatan" value={{ $kegiatan->id}}>
-            <input type="hidden" name="periode" value={{ $periode->slug}}>
             <input type="hidden" name="fungsi" value={{ $fungsi }}>
             <!-- Nama Kegiatan -->
             <div>
                 <label for="judul" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Nama Laci</label>
                 <input type="text" id="judul" name="judul" value="{{ old('judul') }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" required>
                 @error('judul')
+                <div class="invalid-feedback">
+                    {{ $message }}
+                </div>
+                @enderror
+            </div>
+
+            <div>
+                <label for="penanggung_jwb" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Penanggung Jawab</label>
+                <input type="text" id="penanggung_jwb" name="penanggung_jwb" value="{{ old('penanggung_jwb') }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" required>
+                @error('penanggung_jwb')
                 <div class="invalid-feedback">
                     {{ $message }}
                 </div>

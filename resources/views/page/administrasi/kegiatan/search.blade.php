@@ -21,7 +21,6 @@
             <div class="relative min-w-72 md:min-w-80">
                 <form action="/administrasi/kegiatan" class="flex">
                     <input type="hidden" name="fungsi" value="{{ $fungsi }}">
-                    <input type="hidden" name="periode" value="{{ $periode->slug }}">
                     <input type="text" id="search" value="{{request('search')}}" name="search" class="py-2 px-4 block w-full border-gray-200 rounded-l-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" placeholder="Search Kegiatan" required>
                     <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-r-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Search</button>
                 </form>
@@ -31,6 +30,7 @@
         
         <div class="flex">
             <!-- Tombol Home -->
+            
             <div class="hs-dropdown relative inline-flex mr-4">
                 <a href="/">
                     <button id="hs-dropdown-default" type="button"
@@ -44,6 +44,43 @@
                     </button>
                 </a>
             </div>
+            <div class="flex">
+           
+              <!-- Tombol Tahun -->
+              <div class="hs-dropdown relative inline-flex">
+                  <button id="hs-dropdown-default" type="button"
+                      class="hs-dropdown-toggle py-2 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-300 bg-white text-gray-800 shadow-sm hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800">
+                      {{session('selected_year')}}
+                      <svg
+                          class="hs-dropdown-open:rotate-180 size-4"
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                      >
+                          <path d="m6 9 6 6 6-6" />
+                      </svg>
+                  </button>
+              <div
+                      class="hs-dropdown-menu transition-[opacity,margin] duration hs-dropdown-open:opacity-100 opacity-0 hidden min-w-20 bg-white shadow-md rounded-lg p-2 mt-2 dark:bg-neutral-800 dark:border dark:border-neutral-700 dark:divide-neutral-700 after:h-4 after:absolute after:-bottom-4 after:start-0 after:w-full before:h-4 before:absolute before:-top-4 before:start-0 before:w-full"
+                      aria-labelledby="hs-dropdown-default"
+                  >
+                  @foreach ($years as $tahun)
+                  <a
+                  class="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700"
+                  href="" data-year="{{ $tahun }}">{{ $tahun }}
+                  
+              </a>      
+                  @endforeach   
+                 
+                     
+                          
+          </div>
         </div>
 
       </div>

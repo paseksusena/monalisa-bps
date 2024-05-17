@@ -14,9 +14,8 @@ return new class extends Migration
         Schema::create('kegiatan_administrasis', function (Blueprint $table) {
             $table->id();
             $table->string("nama", 550);
-            $table->foreignId('periode_id');
-            $table->date('tgl_awal');
-            $table->date('tgl_akhir');
+            $table->year('tahun');
+            $table->string('fungsi');
             $table->float('progres')->nullable()->default(0);
             $table->integer('amount_file')->nullable()->default(0);
             $table->integer('complete_file')->nullable()->default(0);

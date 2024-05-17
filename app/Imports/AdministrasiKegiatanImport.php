@@ -2,54 +2,43 @@
 
 namespace App\Imports;
 
+
 use App\Models\KegiatanAdministrasi;
-use App\Models\PeriodeAdministrasi;
-use Error;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithStartRow;
-use PhpOffice\PhpSpreadsheet\Shared\Date;
-
+use Exception;
 
 class AdministrasiKegiatanImport implements ToModel, WithStartRow
 {
-    protected $periode_id;
+    protected $fungsi, $tahun;
 
-    public function __construct($periode_id)
+    public function __construct($fungsi, $tahun)
     {
-        $this->periode_id = $periode_id;
+        $this->fungsi = $fungsi;
+        $this->tahun = $tahun;
     }
 
     public function model(array $row)
     {
+        // Ensure you have a valid fungsi property
 
-        $periode = PeriodeAdministrasi::where('id', $this->periode_id)->first();
-        $kegiatan = KegiatanAdministrasi::where('periode_id', $periode->id)->where('nama', $row[1])->first();
+
+        $kegiatan = KegiatanAdministrasi::where('fungsi', $this->fungsi)->where('nama', $row[1])->first();
         if ($kegiatan) {
-            throw new \Exception("Nama kegiatan : '{$row[1]}' sudah ada untuk dalam periode ini.");
+            throw new Exception("Nama kegiatan : '{$row[1]}' sudah ada.");
         }
 
-        if (empty($row[2])) {
-            throw new \Exception("Terdapat kolom tanggal awal kosong.");
-        } elseif (empty($row[3])) {
-            throw new \Exception("Terdapat kolom tanggal awal kosong.");
-        } else {
-
-            $tgl_awal = Date::excelToDateTimeObject($row[2])->format('Y-m-d');
-            $tgl_akhir = Date::excelToDateTimeObject($row[3])->format('Y-m-d');
-
-            return new KegiatanAdministrasi([
-                'periode_id' => $this->periode_id,
-                'nama' => $row[1],
-                'tgl_awal' => $tgl_awal,
-                'tgl_akhir' => $tgl_akhir,
-            ]);
-        }
-        // Ubah menjadi format Y-m-d
-
+        // Return the model or perform any action you need here
+        return new KegiatanAdministrasi([
+            'fungsi' => $this->fungsi,
+            'tahun' => $this->tahun,
+            'nama' => $row[1],
+            // Map other columns as needed
+        ]);
     }
 
     public function startRow(): int
     {
-        return 2; // Mulai membaca dari baris pertama
+        return 2; // Start reading from the second row
     }
 }

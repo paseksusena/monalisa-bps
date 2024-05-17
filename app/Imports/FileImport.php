@@ -29,6 +29,7 @@ class FileImport implements ToModel, WithStartRow
         return new File([
             'transaksi_id' => $this->transaksi_id,
             'judul' => $row[1],
+            'penanggung_jwb' => $row[2],
         ]);
     }
 

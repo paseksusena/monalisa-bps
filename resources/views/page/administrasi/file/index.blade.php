@@ -28,7 +28,7 @@
             <ol class="flex items-center whitespace-nowrap">
                 <li class="inline-flex items-center">
                     <a class="flex items-center text-sm text-gray-500 hover:text-blue-600 focus:outline-none focus:text-blue-600 dark:text-neutral-500 dark:hover:text-blue-500 dark:focus:text-blue-500"
-                    href="/administrasi/periode?fungsi={{$fungsi}}">
+                    href="/administrasi/kegiatan?fungsi={{$fungsi}}">
                         {{ $fungsi }}
                     </a>
                     <svg class="flex-shrink-0 mx-2 overflow-visible size-4 text-gray-400 dark:text-neutral-600"
@@ -36,17 +36,9 @@
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="m9 18 6-6-6-6"></path>
                     </svg>
+                   
                     <a class="flex items-center text-sm text-gray-500 hover:text-blue-600 focus:outline-none focus:text-blue-600 dark:text-neutral-500 dark:hover:text-blue-500 dark:focus:text-blue-500"
-                    href="/administrasi/kegiatan?periode={{ $periode->slug }}&fungsi={{ $fungsi }}">
-                    {{ $periode->nama }}
-                    </a>
-                    <svg class="flex-shrink-0 mx-2 overflow-visible size-4 text-gray-400 dark:text-neutral-600"
-                        xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="m9 18 6-6-6-6"></path>
-                    </svg>
-                    <a class="flex items-center text-sm text-gray-500 hover:text-blue-600 focus:outline-none focus:text-blue-600 dark:text-neutral-500 dark:hover:text-blue-500 dark:focus:text-blue-500"
-                    href="/administrasi/akun?kegiatan={{ $akun->id }}&kegiatan={{ $kegiatan->id }}&periode={{ $periode->slug }}&fungsi={{ $fungsi }}">
+                    href="/administrasi/akun?kegiatan={{ $akun->id }}&kegiatan={{ $kegiatan->id }}&fungsi={{ $fungsi }}">
                     {{ $kegiatan->nama }}
                     </a>
                     <svg class="flex-shrink-0 mx-2 overflow-visible size-4 text-gray-400 dark:text-neutral-600"
@@ -55,7 +47,7 @@
                         <path d="m9 18 6-6-6-6"></path>
                     </svg>
                     <a class="flex items-center text-sm text-gray-500 hover:text-blue-600 focus:outline-none focus:text-blue-600 dark:text-neutral-500 dark:hover:text-blue-500 dark:focus:text-blue-500"
-                    href="/administrasi/transaksi?akun={{ $akun->id }}&kegiatan={{ $kegiatan->id }}&periode={{ $periode->slug }}&fungsi={{ $fungsi }}">
+                    href="/administrasi/transaksi?akun={{ $akun->id }}&kegiatan={{ $kegiatan->id }}&fungsi={{ $fungsi }}">
                     {{ $akun->nama }}
                     </a>
                     <svg class="flex-shrink-0 mx-2 overflow-visible size-4 text-gray-400 dark:text-neutral-600"
@@ -197,6 +189,16 @@
                                             <div class="flex items-center gap-x-3">
                                                 <span
                                                     class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-2 mr-8">
+                                                    Penanggung Jawab
+                                                </span>
+                                            </div>
+                                     </div>
+                                    </td>
+                                    <td class="size-px whitespace-nowrap"> 
+                                        <div class="px-1 py-3 text-start">
+                                            <div class="flex items-center gap-x-3">
+                                                <span
+                                                    class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-2 mr-8">
                                                     Ukuran File
                                                 </span>
                                             </div>
@@ -228,6 +230,16 @@
                                                 <span
                                                     class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-2 mr-8">
                                                     Action
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="size-px whitespace-nowrap"> 
+                                        <div class="px-1 py-3 text-start">
+                                            <div class="flex items-center gap-x-3">
+                                                <span
+                                                    class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-2 mr-8">
+                                                    Verifikasi
                                                 </span>
                                             </div>
                                         </div>
@@ -274,6 +286,16 @@
                                                 <span
                                                     class="text-sm font-medium text-gray-800 dark:text-neutral-200 ml-2 mr-8">
                                                     {{$doc->namaFile}}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="size-px whitespace-nowrap"> 
+                                        <div class="px-1 py-3 text-start">
+                                            <div class="flex items-center gap-x-3">
+                                                <span
+                                                    class="text-sm font-medium text-gray-800 dark:text-neutral-200 ml-2 mr-8">
+                                                    {{$doc->penanggung_jwb}}
                                                 </span>
                                             </div>
                                         </div>
@@ -327,7 +349,12 @@
                                             <div class="flex items-center gap-x-3">
                                                 <span
                                                     class="text-sm font-medium text-gray-800 dark:text-neutral-200 ml-2 mr-8">
-                                                    {{$doc->updated_at->diffForHumans()}}
+                                                   @if ($doc->status == 1)
+                                                   {{$doc->update}}
+
+                                                       @else 
+
+                                                   @endif
                                                 </span>
                                             </div>
                                         </div>
@@ -340,7 +367,6 @@
                                                     @csrf
                                                     @method('delete')
                                                     <input type="hidden" value="{{ $fungsi }}" name="fungsi">
-                                                    <input type="hidden" value="{{ $periode->slug }}" name="periode">
                                                     <input type="hidden" value="{{ $kegiatan->id }}" name="kegiatan">
                                                     <input type="hidden" value="{{ $akun->id }}" name="akun">
                                                     <input type="hidden" value="{{ $transaksi->id }}" name="transaksi">
@@ -358,7 +384,7 @@
                                                 </button>
                                             </form>
                                             @if ($doc->status == 1)
-                                            <a href="/download-file?nama_file={{ $doc->namaFile }}&transaksi={{ $transaksi->id }}&akun={{ $akun->id }}&kegiatan={{ $kegiatan->id }}&periode={{ $periode->slug }}&fungsi={{ $fungsi }}" class="text-blue-600 hover:underline">
+                                            <a href="/download-file?nama_file={{ $doc->namaFile }}&transaksi={{ $transaksi->id }}&akun={{ $akun->id }}&kegiatan={{ $kegiatan->id }}&fungsi={{ $fungsi }}" class="text-blue-600 hover:underline">
                                                 <button type="button"
                                                         class="bg-blue-600 hover:bg-blue-700 text-white p-1 rounded focus:outline-none focus:shadow-outline">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" style="fill: rgba(255, 255, 255, 1);transform: ;msFilter:;"><path d="M19 9h-4V3H9v6H5l7 8zM4 19h16v2H4z"></path></svg>
@@ -370,7 +396,6 @@
                                                 'transaksi' => $transaksi->id,
                                                 'akun' => $akun->id,
                                                 'kegiatan' => $kegiatan->id,
-                                                'periode' => $periode->slug,
                                                 'fungsi' => $fungsi
                                             ]) }}" class="text-gray-600 hover:underline">
                                                 <button type="button" class="bg-cyan-700 hover:bg-cyan-700 text-white p-1 rounded focus:outline-none focus:shadow-outline">
@@ -384,7 +409,51 @@
                                             @endif
                                             <a></a> 
                                         </div>
-                                    </td>                                    
+                                    </td> 
+                                    {{-- <td class="size-px whitespace-nowrap"> 
+                                        <div class="px-1 py-3 text-start">
+                                            <div class="relative flex items-start">
+                                                <div class="flex items-center h-5">
+                                                  <input id="hs-checkbox-delete" name="hs-checkbox-delete" type="checkbox" class="border-gray-200 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800" aria-describedby="hs-checkbox-delete-description" checked="">
+                                                </div>
+                                                <label for="hs-checkbox-delete" class="ms-3">
+                                                  <span class="block text-sm font-semibold text-gray-800 dark:text-neutral-300">Delete</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </td>    
+                                                                    --}}
+                                    <td class="size-px whitespace-nowrap"> 
+                                        @if(auth()->check() && auth()->user()->isOrganik())
+                                        <div class="px-1 py-3 text-start">
+                                        @if ($doc->ceklist == 1)
+                                            <div class="flex items-center">
+                                                <input disabled checked id="disabled-checked-checkbox" type="checkbox" value="" class="w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                            </div>
+                                        @else
+                                            <div class="flex items-center">
+                                                <input disabled id="disabled-checkbox" type="checkbox" value="" class="w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                            </div>
+                                        @endiF
+                                        </div>  
+                                        @endif
+
+                                        @if(auth()->check() && auth()->user()->isAdmin())
+                                        @if ($doc->ceklist == 0)  
+                                        <div class="flex items-center">
+                                            <input type="hidden" value="{{$doc->id}}" name="id" class="ceklist_id">
+                                            <input class="link-checkbox w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" type="checkbox" value="">
+                                            <label for="link-checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Verifikasi</label>
+                                        </div>
+                                        @else
+                                        <div class="flex items-center">
+                                            <input type="hidden" value="{{$doc->id}}" name="id" class="ceklist_id">
+                                            <input class="link-checkbox w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" type="checkbox" value="" checked>
+                                            <label for="link-checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Verifikasi</label>
+                                        </div>                                        
+                                        @endif
+                                        @endif
+                                    </td>
                                 </tr>
                                 @endforeach
                             </tbody>
@@ -398,8 +467,39 @@
         <!-- End Card -->
         
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script>
-            function confirmDelete(id) {
+   $(document).ready(function() {
+    $('.link-checkbox').on('change', function() {
+        const id = $(this).siblings('.ceklist_id').val();
+        const isChecked = $(this).prop('checked');
+        console.log(isChecked);
+        $.ajax({
+            url: `/administrasi/file/ceklist/${id}`, 
+            type: 'POST',
+            data: {
+                _token: '{{ csrf_token() }}',
+                isChecked: isChecked
+
+                // isChecked: isChecked ? true : false  // Ubah nilai menjadi boolean
+            },
+            success: function(response) {
+                console.log(response.message);
+                // Tambahkan tindakan lebih lanjut di sini jika sukses
+            },
+            error: function(xhr) {
+                console.error(xhr.responseText);
+                // Tangani kesalahan di sini
+            }
+        });
+    });
+});
+
+
+// Ini adalah tanda penutup untuk fungsi jQuery $(document).ready()
+
+
+          function confirmDelete(id) {
             Swal.fire({
                 title: 'Apakah Anda yakin menghapus?',
                 icon: 'warning',

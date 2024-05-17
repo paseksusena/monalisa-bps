@@ -7,7 +7,8 @@
 <form id="import-form" action="/administrasi/kegiatan/store_excel" method="POST" enctype="multipart/form-data">
     @csrf
     <input type="hidden" name="fungsi" value="{{ $fungsi }}">
-    <input type="hidden" name="periode_id" value="{{ $periode->id }}" id="periode">
+    <input type="hidden" name="tahun" value={{ session('selected_year') }}>
+
     <div id="hs-sign-out-alert" class="hs-overlay hidden size-full fixed inset-0 z-[80] overflow-x-hidden overflow-y-auto bg-gray-900 bg-opacity-50">
         <div class="flex items-center justify-center min-h-screen">
             <div class="hs-overlay-open:animate-scaleUp hs-overlay-open:opacity-100 hs-overlay-open:duration-500 opacity-0 transition transform-gpu scale-95 sm:max-w-lg sm:w-full mx-4">

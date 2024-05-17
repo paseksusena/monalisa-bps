@@ -14,8 +14,6 @@ return new class extends Migration
         Schema::create('akuns', function (Blueprint $table) {
             $table->id();
             $table->string("nama", 550);
-            $table->date('tgl_awal');
-            $table->date('tgl_akhir');
             $table->float('progres')->nullable()->default(0);
             $table->integer('amount_file')->nullable()->default(0);
             $table->integer('complete_file')->nullable()->default(0);

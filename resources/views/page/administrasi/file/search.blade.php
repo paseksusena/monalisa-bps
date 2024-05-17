@@ -21,7 +21,6 @@
             <div class="relative min-w-72 md:min-w-80">
                 <form action="/administrasi/file" class="flex">
                     <input type="hidden" name="fungsi" value="{{ $fungsi }}">
-                    <input type="hidden" name="periode" value="{{ $periode->slug }}">
                     <input type="hidden" name="kegiatan" value="{{ $kegiatan->id }}">
                     <input type="hidden" name="akun" value="{{ $akun->id }}">
                     <input type="hidden" name="transaksi" value="{{ $transaksi->id }}">
