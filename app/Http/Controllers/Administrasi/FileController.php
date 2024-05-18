@@ -179,21 +179,6 @@ class FileController extends Controller
         }
     }
 
-    public function exportExcel($id)
-    {
-        $fungsi = request('fungsi');
-        $kegiatan = request('kegiatan');
-        $akun_id = request('akun');
-        $transaksi_id = request('transaksi');
-        return view('administrasi.file.create-excel', [
-            'transaksi_id' => $id,
-            'fungsi' => $fungsi,
-            'kegiatan' => $kegiatan,
-            'akun' => $akun_id,
-
-
-        ]);
-    }
 
     public function stroreExcel(StoreFileRequest $request)
     {
