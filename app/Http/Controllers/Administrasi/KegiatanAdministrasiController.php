@@ -8,9 +8,12 @@ use App\Http\Requests\UpdateKegiatanAdministrasiRequest;
 use App\Http\Controllers\Controller;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\AdministrasiKegiatanImport;
+use App\Models\Akun;
 use Illuminate\Support\Facades\File;
 use Carbon\Carbon;
-
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 
 class KegiatanAdministrasiController extends Controller
@@ -106,9 +109,69 @@ class KegiatanAdministrasiController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(KegiatanAdministrasi $kegiatanAdministrasi)
+    public function edit($id)
     {
-        //
+        $kegiatan = KegiatanAdministrasi::find($id);
+        return response()->json($kegiatan);
+    }
+
+    public function update(Request $request)
+    {
+        $requestValidasi = $request->validate([
+            'nama' => 'required|max:550',
+        ]);
+
+        $fungsi = $request->fungsi;
+
+
+        $existingKegiatan = KegiatanAdministrasi::where('fungsi', $fungsi)
+            ->where('nama', $requestValidasi['nama'])
+            ->where('id', '!=', $request->id)
+            ->first();
+
+        if ($existingKegiatan) {
+            return back()->with('error', 'Nama kegiatan ' . $requestValidasi['nama'] . ' telah tersedia!');
+        }
+
+
+        $kegiatan = KegiatanAdministrasi::findOrFail($request->id);
+        $oldFolderPath = 'public/administrasis/' . $fungsi . '/'  . $request->oldNama;
+        $newFolderPath = 'public/administrasis/' . $fungsi . '/'  . $request->nama;
+        // dd($request->oldNama);
+        // Rename the folder
+        if ($request->nama !== $request->oldNama) {
+
+            $akuns = Akun::where('kegiatan_id', $request->id)->get();
+
+            foreach ($akuns as $akun) {
+                $transaksis = $akun->transaksi;
+                foreach ($transaksis as $transaksi) {
+                    $pathOld = ($oldFolderPath . '/' . $akun->nama . '/' . $transaksi->nama);
+                    $files = Storage::files($pathOld);
+
+                    foreach ($files as $file) {
+                        // Mengganti jalur lama dengan jalur baru
+                        $file = Str::of($file)->replace(
+                            'storage/administrasis/' . $fungsi . '/' . $request->oldNama,
+                            'storage/administrasis/' . $fungsi . '/'  . $request->oldNama
+                        );
+                        $file_content = Storage::get($file);
+                        $file_name_parts = explode("/", $file);
+                        if (count($file_name_parts) > 0) {
+                            $file_name = $file_name_parts[count($file_name_parts) - 1];
+                            $file_path = ($newFolderPath . '/' . $akun->nama . '/' . $transaksi->nama . '/' . $file_name);
+                            $storage = Storage::put($file_path, $file_content);
+                            $delete = Storage::deleteDirectory($oldFolderPath);
+                        }
+                    }
+                }
+            }
+        }
+        $kegiatan->update($requestValidasi);
+
+
+
+        return redirect('/administrasi/kegiatan?fungsi=' . $fungsi)->with('success', 'Kegiatan ' . $requestValidasi['nama'] . ' berhasil diubah!');
     }
 
     /**

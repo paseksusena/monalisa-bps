@@ -9,6 +9,7 @@ use App\Http\Controllers\Administrasi\KegiatanAdministrasiController;
 use App\Http\Controllers\Administrasi\PeriodeAdministrasiController;
 use App\Http\Controllers\Administrasi\TransaksiController;
 use App\Http\Controllers\ProfileController;
+use App\Models\Transaksi;
 use Dompdf\Dompdf;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
@@ -93,16 +94,22 @@ Route::middleware('auth')->group(function () {
     // Route::resource('/administrasi/periode', PeriodeAdministrasiController::class);
 
     //kegiatan
+    Route::get('/administrasi/kegiatan/{id}', [KegiatanAdministrasiController::class, 'edit']);
+    Route::put('/administrasi/kegiatan', [KegiatanAdministrasiController::class, 'update']);
     Route::resource('/administrasi/kegiatan', KegiatanAdministrasiController::class);
     Route::get('/administrasi/kegiatan/create-excel/{slug}', [KegiatanAdministrasiController::class, 'exportExcel']);
     Route::post('/administrasi/kegiatan/store_excel', [KegiatanAdministrasiController::class, 'storeExcel']);
 
     //akun
+    Route::get('/administrasi/akun/{id}', [AkunController::class, 'edit']);
+    Route::put('/administrasi/akun', [AkunController::class, 'update']);
     Route::resource('/administrasi/akun', AkunController::class);
     Route::get('/administrasi/akun/create-excel/{slug}', [AkunController::class, 'exportExcel']);
     Route::post('/administrasi/akun/destroy_excel', [AkunController::class, 'storeExcel']);
 
     //transaksi
+    Route::get('/administrasi/transaksi/{id}', [TransaksiController::class, 'edit']);
+    Route::put('/administrasi/transaksi', [TransaksiController::class, 'update']);
     Route::resource('/administrasi/transaksi', TransaksiController::class);
     Route::get('/administrasi/transaksi/create-excel/{id}', [TransaksiController::class, 'exportExcel']);
     Route::post('/administrasi/transaksi/destroy_excel', [TransaksiController::class, 'storeExcel']);
