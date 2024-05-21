@@ -23,6 +23,8 @@ class KegiatanAdministrasiController extends Controller
      */
     public function index()
     {
+        $searchResults = [];
+
         $startYear = Carbon::createFromFormat('Y', '2023')->year;
         $currentYear = Carbon::now()->year;
         $years = range($startYear, $currentYear);
@@ -53,7 +55,9 @@ class KegiatanAdministrasiController extends Controller
                 ->filter($query)
                 ->paginate(200)
                 ->appends(['search' => $search]),
-            'years' => $years
+            'years' => $years,
+            'searchResults' => $searchResults,
+
         ]);
     }
 

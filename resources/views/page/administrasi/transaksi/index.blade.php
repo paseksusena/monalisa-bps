@@ -129,9 +129,6 @@
                                 <h2 class="text-xl font-semibold text-gray-800 dark:text-neutral-200">
                                     {{$akun->nama}}
                                 </h2>
-                                <p class="text-xs text-gray-600 dark:text-neutral-400">
-                                    {{\Carbon\Carbon::parse($akun->tgl_awal)->format('d/m/Y')}} -  {{\Carbon\Carbon::parse($akun->tgl_akhir)->format('d/m/Y')}}
-                                </p>
                             </div>
                         </div>
                         <!-- End Header -->

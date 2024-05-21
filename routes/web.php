@@ -93,6 +93,9 @@ Route::middleware('auth')->group(function () {
     // Route::get('/administrasi/periode/{periodeAdministrasi}/edit', [PeriodeAdministrasiController::class, 'edit']);
     // Route::resource('/administrasi/periode', PeriodeAdministrasiController::class);
 
+    //search 
+    Route::get('/administrasi/kegiatan/search', [AdministrasiController::class, 'search']);
+
     //kegiatan
     Route::get('/administrasi/kegiatan/{id}', [KegiatanAdministrasiController::class, 'edit']);
     Route::put('/administrasi/kegiatan', [KegiatanAdministrasiController::class, 'update']);

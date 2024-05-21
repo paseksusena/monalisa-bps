@@ -111,7 +111,7 @@
                                     {{$transaksi->nama}}
                                 </h2>
                                 <p class="text-xs text-gray-600 dark:text-neutral-400">
-                                    {{\Carbon\Carbon::parse($transaksi->tgl_awal)->format('d/m/Y')}} -  {{\Carbon\Carbon::parse($transaksi->tgl_akhir)->format('d/m/Y')}}
+                                  {{\Carbon\Carbon::parse($transaksi->tgl_akhir)->format('d/m/Y')}}
                                 </p>
                             </div>
 

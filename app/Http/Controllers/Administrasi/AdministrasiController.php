@@ -46,7 +46,7 @@ class AdministrasiController extends Controller
                     $searchLink = "/administrasi/file?transaksi=$transaksiFile->id&akun=$akunFile->id&kegiatan=$kegiatanFile->id&fungsi=$fungsi";
                     $searchLinks[] = $searchLink; // Tetapkan nilai $fileLink ke dalam array
                     $searchNames[] = $file->judul;
-                    $searchUrls[] =  $fungsi . '/' . '/' . $kegiatanFile->nama . '/' . $akunFile->nama . '/' . $transaksiFile->nama . '/' . $file->namaFile;
+                    $searchUrls[] =  $fungsi .  '/' . $kegiatanFile->nama . '/' . $akunFile->nama . '/' . $transaksiFile->nama . '/' . $file->namaFile;
                 }
             }
 
@@ -166,5 +166,69 @@ class AdministrasiController extends Controller
         $year = $request->input('year');
         $request->session()->put('selected_year', $year);
         return response()->json(['success' => true]);
+    }
+    public function search(Request $request)
+    {
+        // Inisialisasi array untuk menyimpan hasil pencarian
+        $searchResults = [];
+
+        // Ambil data pencarian dari permintaan
+        $searchTerm = $request->input('search');
+        $session = session('selected_year');
+
+        // Lakukan pencarian di berbagai model dan simpan hasilnya ke dalam array
+        $files = File::where('judul', 'like', '%' . $searchTerm . '%')->get();
+        $transaksis = Transaksi::where('nama', 'like', '%' . $searchTerm . '%')->get();
+        $akuns = Akun::where('nama', 'like', '%' . $searchTerm . '%')->get();
+        $kegiatans = KegiatanAdministrasi::where('nama', 'like', '%' . $searchTerm . '%')->where('tahun', $session)
+            ->get();;
+
+        // Loop melalui setiap hasil pencarian dan tambahkan ke array hasil pencarian
+        foreach ($files as $file) {
+            if ($file->transaksi->akun->kegiatanAdministrasi->tahun === $session) {
+                $searchResults[] = [
+                    'name' => $file->judul,
+                    'url' => '/administrasi/file?transaksi=' . $file->transaksi->id . '&akun=' . $file->transaksi->akun->id . '&kegiatan=' . $file->transaksi->akun->kegiatanAdministrasi->id . '&fungsi=' . $file->transaksi->akun->kegiatanAdministrasi->fungsi,
+                    'alamat' => $file->transaksi->akun->kegiatanAdministrasi->fungsi .  '/' . $file->transaksi->akun->kegiatanAdministrasi->nama . '/' . $file->transaksi->akun->nama . '/' . $file->transaksi->nama . '/' . $file->judul,
+                ];
+            }
+        }
+
+        foreach ($transaksis as $transaksi) {
+            if ($transaksi->akun->kegiatanAdministrasi->tahun === $session) {
+                $searchResults[] = [
+                    'name' => $transaksi->nama,
+                    'url' => '/administrasi/file?transaksi=' . $transaksi->id . '&akun=' . $transaksi->akun->id . '&kegiatan=' . $transaksi->akun->kegiatanAdministrasi->id . '&fungsi=' . $transaksi->akun->kegiatanAdministrasi->fungsi,
+                    'alamat' => $transaksi->akun->kegiatanAdministrasi->fungsi .  '/' . $transaksi->akun->kegiatanAdministrasi->nama . '/' . $transaksi->akun->nama . '/' . $transaksi->nama,
+                ];
+            }
+        }
+
+        foreach ($akuns as $akun) {
+            if ($akun->kegiatanAdministrasi->tahun === $session) {
+
+
+                $searchResults[] = [
+                    'name' => $akun->nama,
+                    'url' => '/administrasi/transaksi?akun=' . $akun->id . '&kegiatan=' . $akun->kegiatanAdministrasi->id . '&fungsi=' . $akun->kegiatanAdministrasi->fungsi,
+                    'alamat' => $akun->kegiatanAdministrasi->fungsi .  '/' . $akun->kegiatanAdministrasi->nama . '/' . $akun->nama,
+                ];
+            }
+        }
+
+        foreach ($kegiatans as $kegiatan) {
+            if ($kegiatan->tahun === $session) {
+
+
+                $searchResults[] = [
+                    'name' => $kegiatan->nama,
+                    'url' => '/administrasi/akun?kegiatan=' . $kegiatan->id . '&fungsi=' . $kegiatan->fungsi,
+                    'alamat' => $kegiatan->fungsi .  '/' . $kegiatan->nama,
+                ];
+            }
+        }
+
+        // Kirim hasil pencarian sebagai respons JSON
+        return response()->json($searchResults);
     }
 }

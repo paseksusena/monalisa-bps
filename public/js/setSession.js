@@ -1,6 +1,5 @@
 $(document).ready(function () {
     var csrfToken = $('meta[name="csrf-token"]').attr("content");
-    console.log("sss");
     $(".flex .hs-dropdown-menu a").click(function (e) {
         e.preventDefault();
         var year = $(this).data("year");
