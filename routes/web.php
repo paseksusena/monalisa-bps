@@ -88,10 +88,18 @@ Route::middleware('auth')->group(function () {
     //index administrasi
     Route::get('/administrasi',  [AdministrasiController::class, 'index_administrasi']);
 
+    //download excel notif
+    Route::get('/download-notifinasi-excel',  [AdministrasiController::class, 'download_notif_excel']);
+
+
+
     //periode
     // Route::delete('/administrasi/periode/{periodeAdministrasi}', [PeriodeAdministrasiController::class, 'destroy']);
     // Route::get('/administrasi/periode/{periodeAdministrasi}/edit', [PeriodeAdministrasiController::class, 'edit']);
     // Route::resource('/administrasi/periode', PeriodeAdministrasiController::class);
+    //notifikasi
+    Route::get('/notifications', [AdministrasiController::class, 'getNotifications'])->name('notifications');
+
 
     //search 
     Route::get('/administrasi/kegiatan/search', [AdministrasiController::class, 'search']);

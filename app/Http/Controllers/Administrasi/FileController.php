@@ -214,20 +214,29 @@ class FileController extends Controller
     public function addFile(StoreFileRequest $request)
     {
         // Lakukan validasi untuk setiap file yang diunggah
-        try {
-            $validatedData = $request->validate([
-                'files.*' => 'required|file|max:20480|mimes:pdf'
-            ], [
-                'files.*.mimes' => 'File harus PDF.',
-                'files.*.max' => 'Ukuran file maksimal 20 mb.',
-
-            ]);
-        } catch (\Throwable $e) {
-            return back()->with('error', $e->getMessage());
-        }
+        $errorMessage = '';
 
         foreach ($request->file('files') as $uploadedFile) {
+            // Periksa apakah file diunggah
 
+            $maxFileSize = 1073741824; // 1 GB dalam kilobyte
+            if ($uploadedFile->getSize() > $maxFileSize) {
+                $errorMessage .= $uploadedFile->getClientOriginalName() . ': Ukuran file melebihi batas maksimum (1 GB).' . PHP_EOL;
+                continue;
+            }
+
+            // Periksa apakah file diunggah
+            if (!$uploadedFile->isValid()) {
+                $errorMessage .= $uploadedFile->getClientOriginalName() . ': File tidak valid.' . PHP_EOL;
+                continue;
+            }
+
+            // Periksa apakah file memiliki ekstensi yang benar
+            $fileExtension = $uploadedFile->getClientOriginalExtension();
+            if ($fileExtension !== 'pdf') {
+                $errorMessage .= $uploadedFile->getClientOriginalName() . ': File harus berformat PDF.' . PHP_EOL;
+                continue;
+            }
             $fileInfo = pathinfo($uploadedFile->getClientOriginalName());
             $namaFile = $fileInfo['filename'];
 
@@ -253,13 +262,18 @@ class FileController extends Controller
 
                 $this->progres($transaksi->id);
             } else {
-                return back()->with('error', 'Nama File ' . $namaFile . ' tidak dapat ditemukan dalam laci transaksi!');
+                $errorMessage .= 'Nama file ' . $namaFile . ' tidak dapat ditemukan dalam laci transaksi!';
+                continue;
             }
         }
 
-        return redirect('/administrasi/file?transaksi=' . $transaksi->id . '&akun=' . $akun->id . '&kegiatan=' . $kegiatan->id . '&fungsi=' . $fungsi)->with('success', 'File ' . $namaFile . ' Berhasil Ditambahkan!');
-    }
+        if ($errorMessage) {
+            // Jika terjadi kesalahan validasi, kembalikan dengan pesan kesalahan
+            return back()->with('error', $errorMessage);
+        }
 
+        return redirect('/administrasi/file?transaksi=' . $transaksi->id . '&akun=' . $akun->id . '&kegiatan=' . $kegiatan->id . '&fungsi=' . $fungsi)->with('success', 'File berhasil ditambahkan!');
+    }
 
     public function download()
     {

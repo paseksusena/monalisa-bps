@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Administrasi;
 
+use App\Exports\notifikasiExport;
 use App\Http\Controllers\Controller;
 use App\Models\Akun;
 use App\Models\File;
@@ -10,6 +11,9 @@ use App\Models\PeriodeAdministrasi;
 use App\Models\Transaksi;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use App\Models\User;
+use Maatwebsite\Excel\Facades\Excel;
+
 
 class AdministrasiController extends Controller
 {
@@ -177,15 +181,16 @@ class AdministrasiController extends Controller
         $session = session('selected_year');
 
         // Lakukan pencarian di berbagai model dan simpan hasilnya ke dalam array
-        $files = File::where('judul', 'like', '%' . $searchTerm . '%')->get();
-        $transaksis = Transaksi::where('nama', 'like', '%' . $searchTerm . '%')->get();
-        $akuns = Akun::where('nama', 'like', '%' . $searchTerm . '%')->get();
         $kegiatans = KegiatanAdministrasi::where('nama', 'like', '%' . $searchTerm . '%')->where('tahun', $session)
             ->get();;
 
+        $files = File::where('judul', 'like', '%' . $searchTerm . '%')->get();
+        $transaksis = Transaksi::where('nama', 'like', '%' . $searchTerm . '%')->get();
+        $akuns = Akun::where('nama', 'like', '%' . $searchTerm . '%')->get();
+
         // Loop melalui setiap hasil pencarian dan tambahkan ke array hasil pencarian
         foreach ($files as $file) {
-            if ($file->transaksi->akun->kegiatanAdministrasi->tahun === $session) {
+            if ($file->transaksi->akun->kegiatanAdministrasi->tahun == $session) {
                 $searchResults[] = [
                     'name' => $file->judul,
                     'url' => '/administrasi/file?transaksi=' . $file->transaksi->id . '&akun=' . $file->transaksi->akun->id . '&kegiatan=' . $file->transaksi->akun->kegiatanAdministrasi->id . '&fungsi=' . $file->transaksi->akun->kegiatanAdministrasi->fungsi,
@@ -195,7 +200,7 @@ class AdministrasiController extends Controller
         }
 
         foreach ($transaksis as $transaksi) {
-            if ($transaksi->akun->kegiatanAdministrasi->tahun === $session) {
+            if ($transaksi->akun->kegiatanAdministrasi->tahun == $session) {
                 $searchResults[] = [
                     'name' => $transaksi->nama,
                     'url' => '/administrasi/file?transaksi=' . $transaksi->id . '&akun=' . $transaksi->akun->id . '&kegiatan=' . $transaksi->akun->kegiatanAdministrasi->id . '&fungsi=' . $transaksi->akun->kegiatanAdministrasi->fungsi,
@@ -205,9 +210,7 @@ class AdministrasiController extends Controller
         }
 
         foreach ($akuns as $akun) {
-            if ($akun->kegiatanAdministrasi->tahun === $session) {
-
-
+            if ($akun->kegiatanAdministrasi->tahun == $session) {
                 $searchResults[] = [
                     'name' => $akun->nama,
                     'url' => '/administrasi/transaksi?akun=' . $akun->id . '&kegiatan=' . $akun->kegiatanAdministrasi->id . '&fungsi=' . $akun->kegiatanAdministrasi->fungsi,
@@ -217,9 +220,7 @@ class AdministrasiController extends Controller
         }
 
         foreach ($kegiatans as $kegiatan) {
-            if ($kegiatan->tahun === $session) {
-
-
+            if ($kegiatan->tahun == $session) {
                 $searchResults[] = [
                     'name' => $kegiatan->nama,
                     'url' => '/administrasi/akun?kegiatan=' . $kegiatan->id . '&fungsi=' . $kegiatan->fungsi,
@@ -230,5 +231,41 @@ class AdministrasiController extends Controller
 
         // Kirim hasil pencarian sebagai respons JSON
         return response()->json($searchResults);
+    }
+
+
+    public function getNotifications()
+    {
+        $transaksis = Transaksi::all();
+        $session = session('selected_year');
+        $tgl_now = Carbon::now()->toDateString();
+        $lateResults = [];
+
+        // Loop melalui setiap hasil pencarian dan tambahkan ke array hasil pencarian
+        foreach ($transaksis as $transaksi) {
+            if ($transaksi->akun->kegiatanAdministrasi->tahun === $session) {
+                if ($tgl_now > $transaksi->tgl_akhir) { // Perubahan kondisi ini
+                    if ($transaksi->progres  < 100) {
+                        $lateResults[] = [
+                            'name' => $transaksi->nama,
+                            'url' => '/administrasi/file?transaksi=' . $transaksi->id . '&akun=' . $transaksi->akun->id . '&kegiatan=' . $transaksi->akun->kegiatanAdministrasi->id . '&fungsi=' . $transaksi->akun->kegiatanAdministrasi->fungsi,
+                            'alamat' => $transaksi->akun->kegiatanAdministrasi->fungsi .  '/' . $transaksi->akun->kegiatanAdministrasi->nama . '/' . $transaksi->akun->nama . '/' . $transaksi->nama,
+                            'tgl' => $transaksi->tgl_akhir
+                        ];
+                    }
+                }
+            }
+        }
+
+        // Kirim hasil pencarian sebagai respons JSON
+        return response()->json($lateResults);
+    }
+
+    public function download_notif_excel()
+    {
+
+        return Excel::download(new notifikasiExport, 'notifikasi-administrasi.xlsx');
+
+        // Kirim hasil pencarian sebagai respons JSON
     }
 }
