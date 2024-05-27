@@ -29,7 +29,7 @@ class Transaksi extends Model
         //filter berdasarkan keyword search
         $query->when($filters['search'] ?? false, function ($query, $search) {
             return $query->where('nama', 'like', '%' . $search . '%')
-                ->orWhere('progres', 'like', '%' . $search . '%');
+                ->orWhere('no_kwt', 'like', '%' . $search . '%');
         });
 
         $query->when($filters['akun'] ?? false, function ($query, $akun) {

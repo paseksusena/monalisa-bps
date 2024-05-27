@@ -111,6 +111,7 @@ class AdministrasiController extends Controller
             'searchNames' => $searchNames,
             'searchLinks' => $searchLinks,
             'searchUrls' => $searchUrls,
+            'fungsi' => null,
 
 
         ]);
@@ -185,7 +186,9 @@ class AdministrasiController extends Controller
             ->get();;
 
         $files = File::where('judul', 'like', '%' . $searchTerm . '%')->get();
-        $transaksis = Transaksi::where('nama', 'like', '%' . $searchTerm . '%')->get();
+        $transaksis = Transaksi::where('nama', 'like', '%' . $searchTerm . '%')
+            ->orWhere('no_kwt', 'like', '%' . $searchTerm . '%')
+            ->get();
         $akuns = Akun::where('nama', 'like', '%' . $searchTerm . '%')->get();
 
         // Loop melalui setiap hasil pencarian dan tambahkan ke array hasil pencarian
@@ -202,7 +205,7 @@ class AdministrasiController extends Controller
         foreach ($transaksis as $transaksi) {
             if ($transaksi->akun->kegiatanAdministrasi->tahun == $session) {
                 $searchResults[] = [
-                    'name' => $transaksi->nama,
+                    'name' =>   '(' . $transaksi->no_kwt . ') ' . $transaksi->nama,
                     'url' => '/administrasi/file?transaksi=' . $transaksi->id . '&akun=' . $transaksi->akun->id . '&kegiatan=' . $transaksi->akun->kegiatanAdministrasi->id . '&fungsi=' . $transaksi->akun->kegiatanAdministrasi->fungsi,
                     'alamat' => $transaksi->akun->kegiatanAdministrasi->fungsi .  '/' . $transaksi->akun->kegiatanAdministrasi->nama . '/' . $transaksi->akun->nama . '/' . $transaksi->nama,
                 ];
@@ -243,7 +246,7 @@ class AdministrasiController extends Controller
 
         // Loop melalui setiap hasil pencarian dan tambahkan ke array hasil pencarian
         foreach ($transaksis as $transaksi) {
-            if ($transaksi->akun->kegiatanAdministrasi->tahun === $session) {
+            if ($transaksi->akun->kegiatanAdministrasi->tahun == $session) {
                 if ($tgl_now > $transaksi->tgl_akhir) { // Perubahan kondisi ini
                     if ($transaksi->progres  < 100) {
                         $lateResults[] = [

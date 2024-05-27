@@ -73,14 +73,35 @@
 
                 @include('page.administrasi.kegiatan.create')
                 @include('page.administrasi.kegiatan.create-excel')
-                
 
+                <div class="flex items-center space-x-4">
+                    <!-- Fraction Indicator -->
+                    <div class="flex items-center bg-blue-100 rounded-full p-1">
+                        <div class="py-1.5 px-1.5 bg-blue-500 text-white rounded-full text-sm mr-1">
+                            {{$complete_file}}/{{$amount_file}}
+                        </div>
+                        <span class="text-gray-800 dark:text-gray-400 text-sm mr-2">Uploaded</span>
+                    </div>
+        
+        
+                    <!-- Percentage Indicator -->
+                    <div class="flex items-center bg-blue-100 rounded-full p-1">
+                        <div class="py-1.5 px-1.5 bg-blue-500 text-white rounded-full text-sm mr-1">
+                           {{$progres}}%
+                        </div>
+                        <span class="text-gray-800 dark:text-gray-400 text-sm mr-2">Progress</span>
+                    </div>
+                </div>
+                
             </div>
 
         </div>
+        <!-- Progress Indicators Container -->
+        
 
         <!-- Card Tahunan -->
         <div class="flex flex-col">
+            
             <div class="-m-1.5 overflow-x-auto">
                 <div class="p-1.5 min-w-full inline-block align-middle">
                     <div

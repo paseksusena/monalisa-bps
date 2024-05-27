@@ -22,41 +22,49 @@ class FileController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-
-
         $fungsi = request('fungsi');
-        // $periode = request('periode');
-        // $kegiatan = request('kegiatan');
-        // $akun = request('akun');
-
-        $kegiatan = KegiatanAdministrasi::where('id', request('kegiatan'))->first();
-        $akun = Akun::where('id', request('akun'))->first();
-        $transaksi = Transaksi::where('id', request('transaksi'))->first();
+        $kegiatan = KegiatanAdministrasi::findOrFail(request('kegiatan'));
+        $akun = Akun::findOrFail(request('akun'));
+        $transaksi = Transaksi::findOrFail(request('transaksi'));
         $search = request('search');
-        //melakukan penambahan parameter
-        $previousQuery = request()->except(['search']);
-        $query = array_merge($previousQuery, ['search' => $search]);
 
+        $filesQuery = File::where('transaksi_id', $transaksi->id)
+            ->filter([
+                'status' => request('status'),
+                'search' => $search,
+                'transaksi' => $transaksi->id,
+            ]);
+
+        $files = $filesQuery->paginate(200)
+            ->appends(['search' => $search, 'status' => request('status')]);
 
         $this->progres($transaksi->id);
         $this->progresAkun();
         $this->progresKegiatan();
 
-        // $files = File::where('transaksi_id', $transaksi_id)->get();
+        // Jika parameter status disertakan, kembalikan respons JSON
+        // if ($request->has('status')) {
+        //     return response()->json($files);
+        // }
+
+        // Jika tidak, kembalikan tampilan HTML
+        $status = 'Semua';
+        if (request('status')) {
+            $status = request('status');
+        }
         return view('page.administrasi.file.index', [
             'transaksi' => $transaksi,
             'fungsi' => $fungsi,
-            'files' => File::where('transaksi_id', $transaksi->id)
-                ->filter($query)
-                ->paginate(200)
-                ->appends(['search' => $search]),
+            'files' => $files,
             'kegiatan' => $kegiatan,
             'akun' => $akun,
-
+            'status' => $status
         ]);
     }
+
+
 
     /**
      * Show the form for creating a new resource.

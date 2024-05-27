@@ -31,6 +31,9 @@ class KegiatanAdministrasiController extends Controller
         //jika tidak ada session selected_year pakai tahun sekarang
         $startYear = Carbon::createFromFormat('Y', '2023')->year;
 
+        $amount_file = 0;
+        $complete_file = 0;
+        $progres = 0;
 
         $currentYear = Carbon::now()->year;
         $years = range($startYear, $currentYear);
@@ -44,20 +47,31 @@ class KegiatanAdministrasiController extends Controller
         $search = request('search');
         $fungsi = $this->getFungsi();
 
-        //melakukan penambahan parameter
+
+
         $previousQuery = request()->except(['search']);
         $query = array_merge($previousQuery, ['search' => $search]);
+        $kegiatans = KegiatanAdministrasi::where('fungsi', $fungsi)
+            ->where('tahun', $selected_year)
+            ->filter($query)
+            ->paginate(200)
+            ->appends(['search' => $search]);
+
+        foreach ($kegiatans as $kegiatan) {
+            $amount_file = $kegiatan->amount_file + $amount_file;
+            $complete_file = $kegiatan->complete_file + $complete_file;
+        }
+
+        $progres = $amount_file > 0 ? number_format(($complete_file / $amount_file) * 100, 2) : 0;
 
         return view('page.administrasi.kegiatan.index', [
             'fungsi' => $fungsi,
-            'kegiatans' => KegiatanAdministrasi::where('fungsi', $fungsi)
-                ->where('tahun', $selected_year)
-                ->filter($query)
-                ->paginate(200)
-                ->appends(['search' => $search]),
+            'kegiatans' => $kegiatans,
             'years' => $years,
             'searchResults' => $searchResults,
-
+            'amount_file' => $amount_file,
+            'complete_file' => $complete_file,
+            'progres' => $progres
         ]);
     }
 

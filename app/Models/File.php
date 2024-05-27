@@ -18,19 +18,25 @@ class File extends Model
 
     public function scopeFilter($query, array $filters)
     {
-
-        //filter berdasarkan keyword search
         $query->when($filters['search'] ?? false, function ($query, $search) {
             return $query->where('judul', 'like', '%' . $search . '%')
                 ->orWhere('namaFile', 'like', '%' . $search . '%')
-                ->orWhere('ukuran_file', 'like', '%' . $search . '%')
                 ->orWhere('ukuran_file', 'like', '%' . $search . '%');
         });
 
         $query->when($filters['transaksi'] ?? false, function ($query, $transaksi) {
-            return $query->whereHas('transaksi', function ($query) use ($transaksi) {
-                $query->where('id', $transaksi);
-            });
+            return $query->where('transaksi_id', $transaksi);
         });
+
+        $query->when($filters['status'] ?? false, function ($query, $status) {
+            if ($status == 'Sudah') {
+                return $query->where('status', 1);
+            } elseif ($status == 'Belum') {
+                return $query->where('status', 0);
+            }
+        });
+
+
+        return $query;
     }
 }
