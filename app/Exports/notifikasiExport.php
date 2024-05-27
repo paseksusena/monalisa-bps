@@ -24,7 +24,7 @@ class NotifikasiExport implements FromCollection, WithMapping, WithHeadings
         // Loop melalui setiap hasil pencarian dan tambahkan ke collection hasil pencarian
         $i = 1; // Nomor baris awal
         foreach ($transaksis as $transaksi) {
-            if ($transaksi->akun->kegiatanAdministrasi->tahun === $session) {
+            if ($transaksi->akun->kegiatanAdministrasi->tahun == $session) {
                 if ($tgl_now > $transaksi->tgl_akhir) {
                     if ($transaksi->progres < 100) {
                         $lateResults->push([
