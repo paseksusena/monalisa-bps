@@ -6,11 +6,14 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="csrf-token" content="{{csrf_token()}}">
     <title>Kegiatan</title>
+    
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <link rel="shortcut icon" href="{{ asset('storage/img/icontab.png') }}" type="image/x-icon">
+
 </head>
 <body>
   <!-- ========== HEADER ========== -->
-  @include('page.administrasi.kegiatan.search')
+  @include('page.administrasi.partials.search')
   <!-- ========== END HEADER ========== -->
 
   <!-- ========== Side Bar ========== -->
@@ -299,7 +302,7 @@
         </div>
         <!-- End Card -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <script src="{{asset('js/setSession.js')}}"></script>
+        {{-- <script src="{{asset('js/setSession.js')}}"></script> --}}
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
         <script>
             function confirmDelete(id) {

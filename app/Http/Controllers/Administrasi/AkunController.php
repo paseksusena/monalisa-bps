@@ -106,6 +106,7 @@ class AkunController extends Controller
 
         $fungsi = $request->fungsi;
         $kegiatan = $request->kegiatan;
+        $session  = session('selected_year');
 
 
         $existingAkun = Akun::where('kegiatan_id', $kegiatan)
@@ -120,8 +121,8 @@ class AkunController extends Controller
 
 
         $akun = Akun::findOrFail($request->id);
-        $oldFolderPath = 'public/administrasis/' . $fungsi . '/' . $kegiatan->nama . '/' . $request->oldNama;
-        $newFolderPath = 'public/administrasis/' . $fungsi . '/'  . $kegiatan->nama . '/' . $request->nama;
+        $oldFolderPath = 'public/administrasis/'  . $session  . '/' . $fungsi . '/' . $kegiatan->nama . '/' . $request->oldNama;
+        $newFolderPath = 'public/administrasis/' . $session  . '/' . $fungsi . '/'  . $kegiatan->nama . '/' . $request->nama;
         // dd($request->oldNama);
         // Rename the folder
         if ($request->nama !== $request->oldNama) {
@@ -134,8 +135,8 @@ class AkunController extends Controller
                 foreach ($files as $file) {
                     // Mengganti jalur lama dengan jalur baru
                     $file = Str::of($file)->replace(
-                        'storage/administrasis/' . $fungsi . '/' . $kegiatan->nama . '/' . $request->oldNama,
-                        'storage/administrasis/' . $fungsi . '/' . $kegiatan->nama . '/' . $request->oldNama
+                        'storage/administrasis/' . $session  . '/' . $fungsi . '/' . $kegiatan->nama . '/' . $request->oldNama,
+                        'storage/administrasis/' . $session  . '/' . $fungsi . '/' . $kegiatan->nama . '/' . $request->oldNama
                     );
                     $file_content = Storage::get($file);
                     $file_name_parts = explode("/", $file);
@@ -161,8 +162,10 @@ class AkunController extends Controller
     {
         $fungsi = $request->fungsi;
         $kegiatan = KegiatanAdministrasi::where('id', $request->kegiatan)->first();
+        $session = session('selected_year');
 
-        $filePath = "storage/administrasis/$fungsi/{$kegiatan->nama}/{$akun->nama}";
+
+        $filePath = "storage/administrasis/$session/$fungsi/{$kegiatan->nama}/{$akun->nama}";
         File::deleteDirectory($filePath);
 
         $akun->transaksi()->each(function ($transaksi) {

@@ -54,6 +54,16 @@ class="hs-overlay hidden size-full fixed top-0 start-0 z-[80] overflow-x-hidden 
         </div>
         @enderror
     </div>
+
+    <div>
+        <label for="nilai_trans" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Nilai Transaksi</label>
+        <input type="text" id="edit-nilai_trans" name="nilai_trans" value="{{ old('nilai_trans') }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" required>
+        @error('nilai_trans')
+        <div class="invalid-feedback">
+            {{ $message }}
+        </div>
+        @enderror
+    </div>
     
     <!-- Input untuk Tanggal Selesai -->
     <div>
@@ -94,43 +104,61 @@ class="hs-overlay hidden size-full fixed top-0 start-0 z-[80] overflow-x-hidden 
 
 <script>
     function openEditModal(button) {
-        const id = button.getAttribute('data-id');
-        fetch(`/administrasi/transaksi/${id}`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                // console.log(data);
+    const id = button.getAttribute('data-id');
+    fetch(`/administrasi/transaksi/${id}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            // console.log(data);
 
-                const editId = document.getElementById('edit-id');
-                const editName = document.getElementById('edit-nama');
-                const oldNama = document.getElementById('oldNama');
-                const noKwt = document.getElementById('edit-no_kwt');
-                const tglAkhir = document.getElementById('edit-tgl_akhir');
-                const blnArsip = document.getElementById('edit-bln_arsip');
+            const editId = document.getElementById('edit-id');
+            const editName = document.getElementById('edit-nama');
+            const oldNama = document.getElementById('oldNama');
+            const noKwt = document.getElementById('edit-no_kwt');
+            const tglAkhir = document.getElementById('edit-tgl_akhir');
+            const blnArsip = document.getElementById('edit-bln_arsip');
+            const nilaiTrans = document.getElementById('edit-nilai_trans');
+            
 
+            if (editId && editName) {
+                editId.value = data.id;
+                editName.value = data.nama;
+                oldNama.value = data.nama;
+                noKwt.value = data.no_kwt;
+                tglAkhir.value = data.tgl_akhir;
+                blnArsip.value = data.bln_arsip;
+                nilaiTrans.value = data.nilai_trans;
 
-                if (editId && editName) {
-                    editId.value = data.id;
-                    editName.value = data.nama;
-                    oldNama.value = data.nama;
-                    noKwt.value = data.no_kwt;
-                    tglAkhir.value = data.tgl_akhir;
-                    blnArsip.value = data.bln_arsip;
+            } else {
+                console.error('Modal elements not found');
+            }
 
+            document.getElementById('edit-transaksi').classList.remove('hidden');
+        })
+        .catch(error => {
+            console.error('Error fetching data:', error);
+        });
+}
 
+var nilaiTransInput = document.getElementById('edit-nilai_trans');
 
-                } else {
-                    console.error('Modal elements not found');
-                }
+// Tambahkan event listener untuk setiap kali ada input
+nilaiTransInput.addEventListener('input', function(event) {
+    // Ambil nilai input
+    var inputNilai = event.target.value;
 
-                document.getElementById('edit-transaksi').classList.remove('hidden');
-            })
-            .catch(error => {
-                console.error('Error fetching data:', error);
-            });
-    }
+    // Hapus semua karakter kecuali angka
+    var cleanedInput = inputNilai.replace(/\D/g, '');
+
+    // Format nilai dengan titik setiap tiga digit dari kanan
+    var formattedNilai = cleanedInput.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+    // Masukkan nilai yang diformat kembali ke input
+    event.target.value = formattedNilai;
+});
+
 </script>

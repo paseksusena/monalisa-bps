@@ -12,7 +12,7 @@
     <div class="px-8 pt-4">
         <!-- Logo -->
         <a class="flex-none rounded-xl text-xl text-blue-500 inline-block ml-8   mt-1 font-extrabold focus:outline-none focus:opacity-80"
-            href="/administrasi">
+        href="/administrasi?tahun={{ session('selected_year') }}">
             MONALISA
         </a>
         <!-- End Logo -->

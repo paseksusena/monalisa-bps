@@ -6,10 +6,12 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Akun</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <link rel="shortcut icon" href="{{ asset('storage/img/icontab.png') }}" type="image/x-icon">
+
 </head>
 <body>
   <!-- ========== HEADER ========== -->
-  @include('page.administrasi.akun.search')
+  @include('page.administrasi.partials.search2')
   <!-- ========== END HEADER ========== -->
 
   <!-- ========== Side Bar ========== -->

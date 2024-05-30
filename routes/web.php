@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\TahunAdministrasiController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Administrasi\AdministrasiController;
@@ -71,13 +72,19 @@ Route::middleware('auth')->group(function () {
 
 //Autentikasi Admin
 Route::middleware(['auth', 'admin'])->group(function () {
+    // Rute-rute yang memerlukan autentikasi dan akses admin
     Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
     Route::get('/admin/users/create', [UserController::class, 'create'])->name('admin.users.create');
     Route::post('/admin/users', [UserController::class, 'store'])->name('admin.users.store');
     Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
     Route::put('/users/{user}', [UserController::class, 'update'])->name('admin.users.update');
     Route::resource('/admin', UserController::class);
+
+    // Rute untuk tambah-tahun dengan middleware admin
+    Route::get('/admin-tambah-tahun', [TahunAdministrasiController::class, 'index'])->name('tahun.index');
+    Route::delete('/hapus-arsip-tahun', [TahunAdministrasiController::class, 'destroy']);
 });
+
 
 Route::middleware('auth')->group(function () {
     // ADMINISTRASI
@@ -93,11 +100,6 @@ Route::middleware('auth')->group(function () {
 
 
 
-    //periode
-    // Route::delete('/administrasi/periode/{periodeAdministrasi}', [PeriodeAdministrasiController::class, 'destroy']);
-    // Route::get('/administrasi/periode/{periodeAdministrasi}/edit', [PeriodeAdministrasiController::class, 'edit']);
-    // Route::resource('/administrasi/periode', PeriodeAdministrasiController::class);
-    //notifikasi
     Route::get('/notifications', [AdministrasiController::class, 'getNotifications'])->name('notifications');
 
 

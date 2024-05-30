@@ -42,6 +42,17 @@ class="hs-overlay hidden size-full fixed top-0 start-0 z-[80] overflow-x-hidden 
                 </div>
                 @enderror
             </div>
+            <!-- Input untuk Nilai Transaksi -->
+<div>
+    <label for="nilai_trans" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Nilai Transaksi</label>
+    <input type="text" id="nilai_trans" name="nilai_trans" value="{{ old('nilai_trans') }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" required>
+    @error('nilai_trans')
+    <div class="invalid-feedback">
+        {{ $message }}
+    </div>
+    @enderror
+</div>
+
             <!-- Tanggal Selesai -->
             <div>
                 <label for="tgl_akhir" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Tanggal Selesai</label>
@@ -72,3 +83,27 @@ class="hs-overlay hidden size-full fixed top-0 start-0 z-[80] overflow-x-hidden 
     </form>
 </div>
 </div>
+
+
+
+<script>
+    // Ambil elemen input
+    var nilaiTransInput = document.getElementById('nilai_trans');
+
+    // Tambahkan event listener untuk setiap kali ada input
+    nilaiTransInput.addEventListener('input', function(event) {
+        // Ambil nilai input
+        var inputNilai = event.target.value;
+
+        // Hapus semua karakter kecuali angka
+        var cleanedInput = inputNilai.replace(/\D/g, '');
+
+        // Format nilai dengan titik setiap tiga digit dari kanan
+        var formattedNilai = cleanedInput.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+
+
+        // Masukkan nilai yang diformat kembali ke input
+        event.target.value = formattedNilai;
+    });
+</script>

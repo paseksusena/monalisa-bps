@@ -23,7 +23,7 @@
                             <path d="m21 21-4.3-4.3"></path>
                         </svg>
                     </div>
-                    <input id="search" class="py-3 ps-10 pe-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" type="text" placeholder="Search..." value="" data-hs-combo-box-input="">
+                    <input id="search" class="py-3 ps-10 pe-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600" type="text" placeholder="Search..." value="" data-hs-combo-box-input="" autocomplete="off">
                 </div>
               
                 <!-- SearchBox Dropdown -->
@@ -35,6 +35,8 @@
                 <!-- End SearchBox Dropdown -->
             </div>
             <!-- End SearchBox -->
+
+            @include('page.administrasi.partials.notification')
             
             <!-- Tombol Home -->
             <div class="hs-dropdown relative inline-flex mr-4">
@@ -62,7 +64,7 @@
                 </button>
                 <div class="hs-dropdown-menu transition-[opacity,margin] duration hs-dropdown-open:opacity-100 opacity-0 hidden min-w-20 bg-white shadow-md rounded-lg p-2 mt-2 dark:bg-neutral-800 dark:border dark:border-neutral-700 dark:divide-neutral-700 after:h-4 after:absolute after:-bottom-4 after:start-0 after:w-full before:h-4 before:absolute before:-top-4 before:start-0 before:w-full" aria-labelledby="hs-dropdown-default">
                     @foreach ($years as $tahun)
-                    <a class="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700" href="" data-year="{{ $tahun }}">{{ $tahun }}</a>      
+                    <a class="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700" href="/administrasi?tahun={{$tahun}}" data-year="{{ $tahun }}">{{ $tahun }}</a>      
                     @endforeach   
                 </div>
             </div>
@@ -92,7 +94,7 @@ $(document).ready(function() {
 
                 // Loop melalui hasil pencarian dan tambahkan setiap item ke dalam dropdown
                 response.forEach(function(item) {
-                    dropdown.append('<div data-hs-combo-box-output-item="{&quot;group&quot;: {&quot;name&quot;: &quot;fungsi&quot;, &quot;title&quot;: &quot;Fungsi&quot;}}" tabindex="0"><a class="py-2 px-3 flex items-center gap-x-3 hover:bg-gray-100 rounded-lg focus:outline-none focus:bg-gray-100 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700" href="' + item.url + '"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M13 9h-2v3H8v2h3v3h2v-3h3v-2h-3z"></path><path d="M20 5h-8.586L9.707 3.293A.996.996 0 0 0 9 3H4c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2h16c1.103 0 2-.897 2-2V7c0-1.103-.897-2-2-2zM4 19V7h16l.002 12H4z"></path></svg><span class="text-sm font-semibold text-gray-800 dark:text-neutral-200" data-hs-combo-box-search-text="Compose an email" data-hs-combo-box-value="">' + item.name + '</span></a></div><div class="ml-3 text-sm text-gray-500">' + item.alamat + '</div>');
+                    dropdown.append('<div data-hs-combo-box-output-item="{&quot;group&quot;: {&quot;name&quot;: &quot;fungsi&quot;, &quot;title&quot;: &quot;Fungsi&quot;}}" tabindex="0"><a class="py-2 px-3 flex items-center gap-x-3 hover:bg-gray-100 rounded-lg focus:outline-none focus:bg-gray-100 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700" href="' + item.url + '"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M13 9h-2v3H8v2h3v3h2v-3h3v-2h-3z"></path><path d="M20 5h-8.586L9.707 3.293A.996.996 0 0 0 9 3H4c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2h16c1.103 0 2-.897 2-2V7c0-1.103-.897-2-2-2zM4 19V7h16l.002 12H4z"></path></svg><span class="text-sm font-semibold text-gray-800 dark:text-neutral-200" data-hs-combo-box-search-text="" data-hs-combo-box-value="">' + item.name + '</span></a></div><div class="ml-3 text-sm text-gray-500">' + item.alamat + '</div>');
                 });
 
                 // Tampilkan dropdown jika ada hasil pencarian, dan sembunyikan jika tidak ada

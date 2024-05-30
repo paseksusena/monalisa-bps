@@ -6,10 +6,12 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Transaksi</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <link rel="shortcut icon" href="{{ asset('storage/img/icontab.png') }}" type="image/x-icon">
+
 </head>
 <body>
   <!-- ========== HEADER ========== -->
-  @include('page.administrasi.transaksi.search')
+  @include('page.administrasi.partials.search2')
   <!-- ========== END HEADER ========== -->
 
   <!-- ========== Side Bar ========== -->
@@ -191,6 +193,16 @@
                                         <div class="px-1 py-3 text-start">
                                             <div class="flex items-center gap-x-3">
                                                 <span
+                                                    class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-1 mr-1">
+                                                    Nilai Transaksi
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="size-px whitespace-nowrap"> 
+                                        <div class="px-1 py-3 text-start">
+                                            <div class="flex items-center gap-x-3">
+                                                <span
                                                     class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-4 mr-4">
                                                     Tgl Akhir
                                                 </span>
@@ -315,6 +327,29 @@
                                         @else
                                             <td></td>
                                             <td></td>
+                                    @endif
+                                    @if ($trans->nilai_trans > 0)
+                                    <td class="size-px whitespace-nowrap"> 
+                                        <div class="px-1 py-3 text-start">
+                                            <div class="flex items-center gap-x-3">
+                                                <span
+                                                    class="text-sm font-medium text-gray-800 dark:text-neutral-200 ml-1 mr-1">
+                                                    Rp{{$trans->nilai_trans}}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </td> 
+                                    @else
+                                    <td class="size-px whitespace-nowrap"> 
+                                        <div class="px-1 py-3 text-start">
+                                            <div class="flex items-center gap-x-3">
+                                                <span
+                                                    class="text-sm font-medium text-gray-800 dark:text-neutral-200 ml-1 mr-1">
+                                                    -
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </td> 
                                     @endif
 
                                     <td class="size-px whitespace-nowrap"> 

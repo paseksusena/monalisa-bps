@@ -160,11 +160,12 @@ class FileController extends Controller
         if ($file->status === 1) {
 
             //menghapus di folder
+            $session = session('selected_year');
             $fungsi = $request->fungsi;
             $kegiatan = KegiatanAdministrasi::where('id', $request->kegiatan)->first();
             $akun = Akun::where('id', $request->akun)->first();
             $transaksi = Transaksi::where('id', $request->transaksi)->first();
-            $filePath = "storage/administrasi/$fungsi/{$kegiatan->nama}/{$akun->nama}/{$transaksi->nama}/{$file->namaFile}";
+            $filePath = "storage/administrasis/$session/$fungsi/{$kegiatan->nama}/{$akun->nama}/{$transaksi->nama}/{$file->namaFile}";
 
             File2::delete(public_path($filePath));
 
@@ -223,6 +224,8 @@ class FileController extends Controller
     {
         // Lakukan validasi untuk setiap file yang diunggah
         $errorMessage = '';
+        $session = session('selected_year');
+
 
         foreach ($request->file('files') as $uploadedFile) {
             // Periksa apakah file diunggah
@@ -259,7 +262,7 @@ class FileController extends Controller
                 $namaFile = $fileInfo['basename'];
                 $ukuranFile = $uploadedFile->getSize(); // Ukuran dalam byte
                 $ukuranFileMB = round($ukuranFile / 1024 / 1024, 2); // Ubah ke megabyte dan round to 2 desimal
-                $path = public_path('storage/administrasis/' . $request->fungsi . '/' . $kegiatan->nama . '/' . $akun->nama . '/' . $transaksi->nama);
+                $path = public_path('storage/administrasis/' . $session . '/' . $request->fungsi . '/' . $kegiatan->nama . '/' . $akun->nama . '/' . $transaksi->nama);
                 $uploadedFile->move($path, $namaFile);
                 $file->namaFile = $namaFile;
                 $file->file = $path;
@@ -285,6 +288,7 @@ class FileController extends Controller
 
     public function download()
     {
+        $session = session('selected_year');
         $fungsi = request('fungsi');
         $kegiatan = KegiatanAdministrasi::where('id', request('kegiatan'))->first();
         $akun = Akun::where('id', request('akun'))->first();
@@ -297,7 +301,7 @@ class FileController extends Controller
         $nama_file = request('nama_file');
 
         // Bentuk path file
-        $path = public_path("storage/administrasis/$fungsi/{$kegiatan->nama}/{$akun->nama}/{$transaksi->nama}/$nama_file");
+        $path = public_path("storage/administrasis/$session/$fungsi/{$kegiatan->nama}/{$akun->nama}/{$transaksi->nama}/$nama_file");
 
         // Periksa apakah file ada
         if (!file_exists($path)) {
@@ -403,6 +407,7 @@ class FileController extends Controller
         $kegiatan = KegiatanAdministrasi::find($request->query('kegiatan'));
         $akun = Akun::find($request->query('akun'));
         $transaksi = Transaksi::find($request->query('transaksi'));
+        $session = session('selected_year');
 
         if (!$kegiatan || !$akun || !$transaksi) {
             return response()->json(['error' => 'Invalid parameters.'], 400);
@@ -411,7 +416,7 @@ class FileController extends Controller
         $nama_file = $request->query('nama_file');
 
         // Bentuk path file
-        $path = public_path("storage/administrasis/{$fungsi}/{$kegiatan->nama}/{$akun->nama}/{$transaksi->nama}/{$nama_file}");
+        $path = public_path("storage/administrasis/{$session}/{$fungsi}/{$kegiatan->nama}/{$akun->nama}/{$transaksi->nama}/{$nama_file}");
 
         // Periksa apakah file ada
         if (!file_exists($path)) {

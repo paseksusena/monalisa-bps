@@ -25,11 +25,10 @@ class KegiatanAdministrasiController extends Controller
     {
         $searchResults = [];
 
-        $startYear = Carbon::createFromFormat('Y', '2023')->year;
         $currentYear = Carbon::now()->year;
+        $startYear = Carbon::createFromFormat('Y', $currentYear - 5)->year;
         $years = range($startYear, $currentYear);
         //jika tidak ada session selected_year pakai tahun sekarang
-        $startYear = Carbon::createFromFormat('Y', '2023')->year;
 
         $amount_file = 0;
         $complete_file = 0;
@@ -140,6 +139,7 @@ class KegiatanAdministrasiController extends Controller
         ]);
 
         $fungsi = $request->fungsi;
+        $session = session('selected_year');
 
 
         $existingKegiatan = KegiatanAdministrasi::where('fungsi', $fungsi)
@@ -153,8 +153,8 @@ class KegiatanAdministrasiController extends Controller
 
 
         $kegiatan = KegiatanAdministrasi::findOrFail($request->id);
-        $oldFolderPath = 'public/administrasis/' . $fungsi . '/'  . $request->oldNama;
-        $newFolderPath = 'public/administrasis/' . $fungsi . '/'  . $request->nama;
+        $oldFolderPath = 'public/administrasis/'  . $session . '/' . $fungsi . '/'  . $request->oldNama;
+        $newFolderPath = 'public/administrasis/' . $session . '/' .  $fungsi . '/'  . $request->nama;
         // dd($request->oldNama);
         // Rename the folder
         if ($request->nama !== $request->oldNama) {
@@ -170,8 +170,8 @@ class KegiatanAdministrasiController extends Controller
                     foreach ($files as $file) {
                         // Mengganti jalur lama dengan jalur baru
                         $file = Str::of($file)->replace(
-                            'storage/administrasis/' . $fungsi . '/' . $request->oldNama,
-                            'storage/administrasis/' . $fungsi . '/'  . $request->oldNama
+                            'storage/administrasis/'  . $session .  '/'  . $fungsi . '/' . $request->oldNama,
+                            'storage/administrasis/' . $session  . '/' . $fungsi . '/'  . $request->oldNama
                         );
                         $file_content = Storage::get($file);
                         $file_name_parts = explode("/", $file);
@@ -207,8 +207,9 @@ class KegiatanAdministrasiController extends Controller
     {
         $fungsi = $request->fungsi;
         $kegiatan = KegiatanAdministrasi::where('id', $request->kegiatan)->first();
+        $session = session('selected_year');
 
-        $filePath = "storage/administrasis/$fungsi/{$kegiatan->nama}";
+        $filePath = "storage/administrasis/$session/$fungsi/{$kegiatan->nama}";
         File::deleteDirectory($filePath);
 
         $kegiatan->Akun()->each(function ($akun) {

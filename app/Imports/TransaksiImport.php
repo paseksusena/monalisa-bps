@@ -38,6 +38,7 @@ class TransaksiImport implements ToModel, WithStartRow
                 'no_kwt' => $row[1],
                 'nama' => $row[2],
                 'bln_arsip' => $row[3],
+                'nilai_trans' => $row[4],
                 'tgl_akhir' => $tgl_akhir,
             ]);
         }

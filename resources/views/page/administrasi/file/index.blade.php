@@ -6,10 +6,12 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Administrasi</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <link rel="shortcut icon" href="{{ asset('storage/img/icontab.png') }}" type="image/x-icon">
+
 </head>
 <body>
   <!-- ========== HEADER ========== -->
-  @include('page.administrasi.file.search')
+  @include('page.administrasi.partials.search2')
   <!-- ========== END HEADER ========== -->
 
   <!-- ========== Side Bar ========== -->
@@ -137,8 +139,8 @@
                                 <h2 class="text-xl font-semibold text-gray-800 dark:text-neutral-200">
                                     {{$transaksi->nama}}
                                 </h2>
-                                <p class="text-xs text-gray-600 dark:text-neutral-400">
-                                  {{\Carbon\Carbon::parse($transaksi->tgl_akhir)->format('d/m/Y')}}
+                                <p class="text-base text-gray-600 dark:text-neutral-400">
+                                    {{$transaksi->no_kwt}}
                                 </p>
                             </div>
 

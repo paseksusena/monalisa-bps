@@ -8,6 +8,8 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
+    <link rel="shortcut icon" href="{{ asset('storage/img/icontab.png') }}" type="image/x-icon">
+
 </head>
 
 <body class="bg-gray-100">
@@ -100,7 +102,7 @@
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-<script src="{{ asset('js/setSession.js') }}"></script>
+{{-- <script src="{{ asset('js/setSession.js') }}"></script> --}}
 
 
 

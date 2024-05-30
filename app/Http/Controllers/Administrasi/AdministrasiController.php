@@ -22,14 +22,13 @@ class AdministrasiController extends Controller
      */
     public function index_administrasi()
     {
-        $startYear = Carbon::createFromFormat('Y', '2023')->year;
-        //file
         $searchNames[] = null;
         $searchUrls[] = null;
         $searchLinks[] = null;
 
 
         $session = session('selected_year');
+
 
         if (request('search')) {
             $search = request('search');
@@ -95,17 +94,20 @@ class AdministrasiController extends Controller
         }
 
         $currentYear = Carbon::now()->year;
+        $startYear = Carbon::createFromFormat('Y', $currentYear - 5)->year;
         $years = range($startYear, $currentYear);
         //jika tidak ada session selected_year pakai tahun sekarang
-        $startYear = Carbon::createFromFormat('Y', '2023')->year;
 
-
-        $currentYear = Carbon::now()->year;
-        $years = range($startYear, $currentYear);
         //jika tidak ada session selected_year pakai tahun sekarang
-        if (!session('selected_year')) {
+
+        if (request('tahun')) {
+            session()->put('selected_year', request('tahun'));
+        }
+
+        if (!session('selected_year') || !request('tahun')) {
             session()->put('selected_year', $currentYear);
         }
+
         return view('page.administrasi.index', [
             'years' => $years,
             'searchNames' => $searchNames,

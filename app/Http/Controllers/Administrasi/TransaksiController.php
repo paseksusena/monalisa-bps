@@ -79,7 +79,8 @@ class TransaksiController extends Controller
                 'tgl_akhir' => 'required',
                 'bln_arsip' => 'required',
                 'no_kwt' => 'required',
-                'akun_id' => 'required'
+                'akun_id' => 'required',
+                'nilai_trans' => 'required'
 
             ]);
             $fungsi = $request->fungsi;
@@ -128,12 +129,15 @@ class TransaksiController extends Controller
             'no_kwt' => 'required',
             'tgl_akhir' => 'required',
             'bln_arsip' => 'required',
+            'nilai_trans' => 'required'
+
         ]);
 
 
         $fungsi = $request->fungsi;
         $kegiatan = $request->kegiatan;
         $akun = $request->akun;
+        $session = session('selected_year');
 
 
         $existingAkun = Transaksi::where('akun_id', $akun)
@@ -149,8 +153,8 @@ class TransaksiController extends Controller
 
 
         $transaksi = Transaksi::findOrFail($request->id);
-        $oldFolderPath = 'public/administrasis/' . $fungsi . '/' . $kegiatan->nama . '/'  . $akun->nama . '/' . $request->oldNama;
-        $newFolderPath = 'public/administrasis/' . $fungsi . '/'  . $kegiatan->nama . '/'  . $akun->nama . '/' . $request->nama;
+        $oldFolderPath = 'public/administrasis/' . $session . '/' . $fungsi . '/' . $kegiatan->nama . '/'  . $akun->nama . '/' . $request->oldNama;
+        $newFolderPath = 'public/administrasis/' . $session . '/' . $fungsi . '/'  . $kegiatan->nama . '/'  . $akun->nama . '/' . $request->nama;
         // Rename the folder
         if ($request->nama !== $request->oldNama) {
             $pathOld = ($oldFolderPath);
@@ -158,8 +162,8 @@ class TransaksiController extends Controller
             foreach ($files as $file) {
                 // Mengganti jalur lama dengan jalur baru
                 $file = Str::of($file)->replace(
-                    'storage/administrasis/' . $fungsi . '/' . $kegiatan->nama . '/' . $akun->nama . '/' . $request->oldNama,
-                    'storage/administrasis/' . $fungsi . '/' . $kegiatan->nama . '/' . $akun->nama . '/' . $request->oldNama
+                    'storage/administrasis/' . $session . '/' .  $fungsi . '/' . $kegiatan->nama . '/' . $akun->nama . '/' . $request->oldNama,
+                    'storage/administrasis/' . $session . '/' . $fungsi . '/' . $kegiatan->nama . '/' . $akun->nama . '/' . $request->oldNama
                 );
                 $file_content = Storage::get($file);
                 $file_name_parts = explode("/", $file);
@@ -184,10 +188,12 @@ class TransaksiController extends Controller
     public function destroy(Transaksi $transaksi, StoreTransaksiRequest $request)
     {
         $fungsi = $request->fungsi;
+        $session = session('selected_year');
+
 
         $kegiatan = KegiatanAdministrasi::where('id', $request->kegiatan)->first();
         $akun = Akun::where('id', $request->akun)->first();
-        $filePath = "storage/administrasis/$fungsi/{$kegiatan->nama}/{$akun->nama}/{$transaksi->nama}";
+        $filePath = "storage/administrasis/$session/$fungsi/{$kegiatan->nama}/{$akun->nama}/{$transaksi->nama}";
         File::deleteDirectory($filePath);
 
         $transaksi->file()->delete();
@@ -313,8 +319,6 @@ class TransaksiController extends Controller
                 $kegiatan->save();
             }
         }
-
-
 
         return 0;
     }
