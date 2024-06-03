@@ -265,7 +265,7 @@ class FileController extends Controller
                 $path = public_path('storage/administrasis/' . $session . '/' . $request->fungsi . '/' . $kegiatan->nama . '/' . $akun->nama . '/' . $transaksi->nama);
                 $uploadedFile->move($path, $namaFile);
                 $file->namaFile = $namaFile;
-                $file->file = $path;
+                // $file->file = $path;
                 $file->ukuran_file = $ukuranFileMB;
                 $file->status = true;
                 $file->update = Carbon::now()->toDateString();
