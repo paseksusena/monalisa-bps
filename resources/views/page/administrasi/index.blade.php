@@ -46,13 +46,15 @@
                                                 <tbody class="divide-y divide-gray-200 dark:divide-neutral-700">
                                                     <tr class="hover:bg-gray-100 dark:hover:bg-neutral-700">
                                                         <td class="px-6 py-3">
-                                                            <div class="text-sm font-extrabold text-black dark:text-gray-500">
+                                                            <div
+                                                                class="text-sm font-extrabold text-black dark:text-gray-500">
                                                                 NAMA
                                                             </div>
                                                         </td>
                                                         <!-- Path Column -->
                                                         <td class="px-6 py-3">
-                                                            <div class="text-sm font-extrabold text-black dark:text-hray-500">
+                                                            <div
+                                                                class="text-sm font-extrabold text-black dark:text-hray-500">
                                                                 ALAMAT
                                                             </div>
                                                         </td>
@@ -61,7 +63,8 @@
                                                     <tr class="hover:bg-gray-100 dark:hover:bg-neutral-700">
                                                         <td class="px-6 py-3">
                                                             <div class="text-sm text-gray-500 dark:text-neutral-500">
-                                                                <a href="{{ $searchLink }}">{{ $searchNames[$index] }}</a>
+                                                                <a
+                                                                    href="{{ $searchLink }}">{{ $searchNames[$index] }}</a>
                                                             </div>
                                                         </td>
                                                         <!-- Path Column -->
@@ -90,12 +93,29 @@
     @else
     <div class="w-full lg:ps-64 flex justify-center items-center h-screen">
         <div class="text-center">
-            <img src="{{ asset('storage/img/welcome-administrasi.png') }}" alt="Monalisa" class="mx-auto mb-4 sm:max-w-sm md:max-w-lg lg:max-w-lg xl:max-w-xl">
-            <h1 class="text-xl sm:text-xl md:text-xl lg:text-xl xl:text-xl font-medium text-gray-700">Selamat Datang Di Halaman Administrasi</h1>
-            <h1 class="text-2xl sm:text-1xl md:text-1xl lg:text-1xl xl:text-1xl font-bold text-gray-700">Monalisa</h1>
+            <img src="{{ asset('storage/img/welcome-administrasi.png') }}" alt="Monalisa"
+                class="mx-auto mb-4 sm:max-w-sm md:max-w-lg lg:max-w-lg xl:max-w-xl">
+            <h1 class="text-lg sm:text-xl md:text-2xl lg:text-2xl xl:text-2xl font-medium text-gray-700">Selamat Datang
+                Di Halaman Administrasi</h1>
+            <h1 class="text-xl sm:text-2xl md:text-3xl lg:text-3xl xl:text-3xl font-bold text-gray-700">Monalisa</h1>
         </div>
     </div>
     @endif
+
+    <style>
+    @media (max-width: 640px) {
+        .text-center h1:first-of-type {
+            font-size: 1rem;
+            /* Ukuran teks "Selamat Datang Di Halaman Administrasi" */
+        }
+
+        .text-center h1:last-of-type {
+            font-size: 1.25rem;
+            /* Ukuran teks "Monalisa" */
+        }
+    }
+    </style>
+
 
 
     <!-- ========== END MAIN CONTENT ========== -->
@@ -103,7 +123,6 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 {{-- <script src="{{ asset('js/setSession.js') }}"></script> --}}
-
 
 
 </html>

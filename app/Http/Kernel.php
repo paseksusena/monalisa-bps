@@ -69,5 +69,6 @@ class Kernel extends HttpKernel
     protected $routeMiddleware = [
         // ...
         'admin' => \App\Http\Middleware\RedirectIfNotAdmin::class,
+        'redirectIfRegisterEnabled' => \App\Http\Middleware\RedirectIfRegisterEnabled::class,
     ];
 }

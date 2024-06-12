@@ -273,4 +273,12 @@ class AdministrasiController extends Controller
 
         // Kirim hasil pencarian sebagai respons JSON
     }
+
+
+    public function downloadTemlate()
+    {
+        $nameFile = request('template');
+        $path = public_path('storage/template/' . $nameFile . '.xlsx');
+        return response()->download($path);
+    }
 }

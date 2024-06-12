@@ -10,6 +10,13 @@ use App\Http\Controllers\Administrasi\KegiatanAdministrasiController;
 use App\Http\Controllers\Administrasi\PeriodeAdministrasiController;
 use App\Http\Controllers\Administrasi\TransaksiController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Teknis\KegiatanTeknisController;
+use App\Http\Controllers\Teknis\PemutakhiranRumahTanggaController;
+use App\Http\Controllers\Teknis\PencacahanRumahTanggaController;
+use App\Http\Controllers\Teknis\TeknisController;
+use App\Models\KegiatanTeknis;
+use App\Models\PemutakhiranRumahTangga;
+use App\Models\PencacahanRumahTangga;
 use App\Models\Transaksi;
 use Dompdf\Dompdf;
 use Illuminate\Support\Facades\Route;
@@ -30,6 +37,7 @@ use Illuminate\Support\Facades\Storage;
 Route::get('/', function () {
     return view('home');
 });
+
 Route::get('/administrasi/preview', function () {
     return view('page.administrasi.partials.preview');
 });
@@ -38,24 +46,6 @@ Route::get('/administrasi/preview', function () {
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
-Route::get('/umum', function () {
-    return view('page.umum');
-})->name('umum');
-Route::get('/produksi', function () {
-    return view('page.produksi');
-})->name('produksi');
-Route::get('/distribusi', function () {
-    return view('page.distribusi');
-})->name('distribusi');
-Route::get('/neraca', function () {
-    return view('page.neraca');
-})->name('neraca');
-Route::get('/sosial', function () {
-    return view('page.sosial');
-})->name('sosial');
-Route::get('/ipds', function () {
-    return view('page.ipds');
-})->name('ipds');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -76,13 +66,16 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
     Route::get('/admin/users/create', [UserController::class, 'create'])->name('admin.users.create');
     Route::post('/admin/users', [UserController::class, 'store'])->name('admin.users.store');
+    Route::get('admin/users-edit/{id}', [UserController::class, 'edit'])->name('admin.users.edit');
     Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
-    Route::put('/users/{user}', [UserController::class, 'update'])->name('admin.users.update');
+    Route::put('/users-update', [UserController::class, 'update'])->name('admin.users.update');
     Route::resource('/admin', UserController::class);
+    Route::post('/user/store_excel', [UserController::class, 'storeExcel'])->name('user.storeExcel');
 
     // Rute untuk tambah-tahun dengan middleware admin
     Route::get('/admin-tambah-tahun', [TahunAdministrasiController::class, 'index'])->name('tahun.index');
     Route::delete('/hapus-arsip-tahun', [TahunAdministrasiController::class, 'destroy']);
+    Route::get('/download-zip', [TahunAdministrasiController::class, 'download_zip']);
 });
 
 
@@ -140,7 +133,62 @@ Route::middleware('auth')->group(function () {
     Route::get('/download-file', [FileController::class, 'download']);
 
     Route::get('/view-file', [FileController::class, 'viewFile'])->name('view-file');
+    Route::get('/download-excel-template', [AdministrasiController::class, 'downloadTemlate']);
 });
+
+Route::middleware('auth')->group(function () {
+
+
+    Route::get('/teknis/kegiatan',  [KegiatanTeknisController::class, 'index']);
+    Route::post('/teknis/kegiatan', [KegiatanTeknisController::class, 'store']);
+
+
+    // Rumah Tangga 
+    // Pemutakhiran 
+    Route::get('/teknis/rumah-tangga-pemutakhiran-edit/{id}', [PemutakhiranRumahTanggaController::class, 'edit']);
+    Route::put('/teknis/kegiatan/rumah-tangga/pemutakhiran', [PemutakhiranRumahTanggaController::class, 'update']);
+    Route::resource('/teknis/kegiatan/rumah-tangga/pemutakhiran', PemutakhiranRumahTanggaController::class);
+    Route::get('/teknis/rumah-tangga-pemutakhiran-create/{id}', [PemutakhiranRumahTanggaController::class, 'create']);
+    Route::post('/teknis/rumah-tangga/pemutakhiran/create-excel', [PemutakhiranRumahTanggaController::class, 'store_excel']);
+
+
+    //pencacahan
+    Route::get('/teknis/rumah-tangga-pencacahan-edit/{id}', [PencacahanRumahTanggaController::class, 'edit']);
+    Route::put('/teknis/kegiatan/rumah-tangga/pencacahan', [PencacahanRumahTanggaController::class, 'update']);
+
+    Route::get('/teknis/rumah-tangga-pencacahan-create/{id}', [PencacahanRumahTanggaController::class, 'create']);
+    Route::post('/teknis/rumah-tangga/pencacahan/create-excel', [PencacahanRumahTanggaController::class, 'store_excel']);
+    Route::resource('/teknis/kegiatan/rumah-tangga/pencacahan', PencacahanRumahTanggaController::class);
+
+
+    // Perusahaan 
+    //pemutakhiran 
+    Route::resource('/teknis/kegiatan/perusahaan/pemutakhiran', PemutakhiranRumahTanggaController::class);
+});
+
+
+// Route::get('/teknis', function () {
+//     return view('page.teknis.index');
+// });
+
+// Route::get('/teknis/perusahaan/pencacahan', function () {
+//     return view('page.teknis.perusahaan.pencacahan.index');
+// });
+
+
+// Route::get('/teknis/perusahaan/pemutakhiran', function () {
+//     return view('page.teknis.perusahaan.pemutakhiran.index');
+// });
+
+// Route::get('/teknis/rumah-tangga/pencacahan', function () {
+//     return view('page.teknis.rumah-tangga.pencacahan.index');
+// });
+
+// Route::get('/teknis/rumah-tangga/pemutakhiran', function () {
+//     return view('page.teknis.rumah-tangga.pemutakhiran.index');
+// });
+
+
 
 
 require __DIR__ . '/auth.php';

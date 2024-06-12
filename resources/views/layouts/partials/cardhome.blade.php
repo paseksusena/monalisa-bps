@@ -3,7 +3,7 @@
     <!-- Grid -->
     <div class="grid lg:grid-cols-3 gap-6">
       <!-- Card -->
-      <a class="group relative block rounded-xl dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="{{route('umum')}}">
+      <a class="group relative block rounded-xl dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="/teknis/kegiatan?fungsi=Umum">
         <div class="flex-shrink-0 relative rounded-xl overflow-hidden w-full h-[350px] before:absolute before:inset-x-0 before:size-full before:bg-gradient-to-t before:from-gray-900/[.7] before:z-[1]">
           <img class="size-full absolute top-0 start-0 object-cover group-hover:scale-105 transition-transform duration-500 ease-in-out" src="{{asset('storage/img/gambar6.jpeg')}}" alt="Image Description">
         </div>
@@ -19,7 +19,7 @@
       <!-- End Card -->
   
       <!-- Card -->
-      <a class="group relative block rounded-xl dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="{{route('produksi')}}">
+      <a class="group relative block rounded-xl dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="/teknis/kegiatan?fungsi=Produksi">
         <div class="flex-shrink-0 relative rounded-xl overflow-hidden w-full h-[350px] before:absolute before:inset-x-0 before:size-full before:bg-gradient-to-t before:from-gray-900/[.7] before:z-[1]">
           <img class="size-full absolute top-0 start-0 object-cover group-hover:scale-105 transition-transform duration-500 ease-in-outr" src="{{asset('storage/img/gambar1.jpeg')}}" alt="Image Description">
         </div>
@@ -35,7 +35,7 @@
       <!-- End Card -->
 
       <!-- Card -->
-      <a class="group relative block rounded-xl dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="{{route('distribusi')}}">
+      <a class="group relative block rounded-xl dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="/teknis/kegiatan?fungsi=Distribusi">
         <div class="flex-shrink-0 relative rounded-xl overflow-hidden w-full h-[350px] before:absolute before:inset-x-0 before:size-full before:bg-gradient-to-t before:from-gray-900/[.7] before:z-[1]">
           <img class="size-full absolute top-0 start-0 object-cover group-hover:scale-105 transition-transform duration-500 ease-in-out" src="{{asset('storage/img/gambar2.jpg')}}" alt="Image Description">
         </div>
@@ -51,7 +51,7 @@
       <!-- End Card -->
   
       <!-- Card -->
-      <a class="group relative block rounded-xl dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="{{route('neraca')}}">
+      <a class="group relative block rounded-xl dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="/teknis/kegiatan?fungsi=Neraca">
         <div class="flex-shrink-0 relative rounded-xl overflow-hidden w-full h-[350px] before:absolute before:inset-x-0 before:size-full before:bg-gradient-to-t before:from-gray-900/[.7] before:z-[1]">
           <img class="size-full absolute top-0 start-0 object-cover group-hover:scale-105 transition-transform duration-500 ease-in-out" src="{{asset('storage/img/gambar5.jpeg')}}" alt="Image Description">
         </div>
@@ -67,7 +67,7 @@
       <!-- End Card -->
 
       <!-- Card -->
-      <a class="group relative block rounded-xl dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="{{route('sosial')}}">
+      <a class="group relative block rounded-xl dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="/teknis/kegiatan?fungsi=Sosial">
         <div class="flex-shrink-0 relative rounded-xl overflow-hidden w-full h-[350px] before:absolute before:inset-x-0 before:size-full before:bg-gradient-to-t before:from-gray-900/[.7] before:z-[1]">
           <img class="size-full absolute top-0 start-0 object-cover group-hover:scale-105 transition-transform duration-500 ease-in-out" src="{{asset('storage/img/gambar4.jpeg')}}" alt="Image Description">
         </div>
@@ -84,7 +84,7 @@
       <!-- End Card -->
   
       <!-- Card -->
-      <a class="group relative block rounded-xl dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="{{route('ipds')}}">
+      <a class="group relative block rounded-xl dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="/teknis/kegiatan?fungsi=IPDS">
         <div class="flex-shrink-0 relative rounded-xl overflow-hidden w-full h-[350px] before:absolute before:inset-x-0 before:size-full before:bg-gradient-to-t before:from-gray-900/[.7] before:z-[1]">
           <img class="size-full absolute top-0 start-0 object-cover group-hover:scale-105 transition-transform duration-500 ease-in-out" src="{{asset('storage/img/gambar3.jpeg')}}" alt="Image Description">
         </div>

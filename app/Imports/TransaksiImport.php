@@ -32,13 +32,13 @@ class TransaksiImport implements ToModel, WithStartRow
             throw new \Exception("Terdapat kolom tanggal awal kosong.");
         } else {
 
-            $tgl_akhir = Date::excelToDateTimeObject($row[4])->format('Y-m-d');
+            $tgl_akhir = Date::excelToDateTimeObject($row[5])->format('Y-m-d');
             return new Transaksi([
                 'akun_id' => $this->akun_id, // Nilai id_periode yang diteruskan dari formulir
                 'no_kwt' => $row[1],
                 'nama' => $row[2],
                 'bln_arsip' => $row[3],
-                'nilai_trans' => $row[4],
+                'nilai_trans' => number_format($row[4], 0, ',', '.'), // Format nilai_trans
                 'tgl_akhir' => $tgl_akhir,
             ]);
         }

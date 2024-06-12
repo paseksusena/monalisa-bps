@@ -1,5 +1,5 @@
 <!-- Tombol Notifikasi -->
-<div class="hs-dropdown relative inline-flex mr-4">
+<div class="hs-dropdown relative inline-flex ml-2 mr-4">
     <div class="rounded-lg bg-gray-100 p-1">
         <button id="dropdownNotificationButton" data-dropdown-toggle="dropdownNotification" class="relative inline-flex items-center text-sm font-medium text-center text-gray-500 hover:text-gray-900 focus:outline-none dark:hover:text-white dark:text-gray-400" type="button">
             <svg class="w-6 h-6 text-amber-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 14 20">

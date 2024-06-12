@@ -40,6 +40,10 @@
                             <!-- ========== Modal DropDown ========== -->
 
                             <div class="hs-dropdown-menu transition-[opacity,margin] duration hs-dropdown-open:opacity-100 opacity-0 hidden min-w-20 bg-white shadow-md rounded-lg p-2 mt-2 dark:bg-neutral-800 dark:border dark:border-neutral-700 dark:divide-neutral-700 after:h-4 after:absolute after:-bottom-4 after:start-0 after:w-full before:h-4 before:absolute before:-top-4 before:start-0 before:w-full" aria-labelledby="hs-dropdown-default">
+                                <a href="/download-zip?tahun={{ $tahun }}" class="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-blue-800 hover:bg-blue-100 focus:outline-none focus:bg-blue-100 dark:text-blue-400 dark:hover:bg-blue-700 dark:hover:text-blue-300 dark:focus:bg-blue-700">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(21, 37, 232, 1);transform: ;msFilter:;"><path d="m21.706 5.292-2.999-2.999A.996.996 0 0 0 18 2H6a.996.996 0 0 0-.707.293L2.294 5.292A.994.994 0 0 0 2 6v13c0 1.103.897 2 2 2h16c1.103 0 2-.897 2-2V6a.994.994 0 0 0-.294-.708zM6.414 4h11.172l1 1H5.414l1-1zM4 19V7h16l.002 12H4z"></path><path d="M14 9h-4v3H7l5 5 5-5h-3z"></path></svg>
+                                    Download zip
+                                </a>
                                 <form id="delete-form-{{$tahun}}" action="/hapus-arsip-tahun" method="POST">
                                     @csrf <!-- Untuk Laravel, untuk keamanan CSRF -->
                                     @method('delete')

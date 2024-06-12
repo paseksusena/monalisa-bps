@@ -199,11 +199,15 @@ class AkunController extends Controller
 
             $file = $request->file('excel_file');
             $fileName = $file->getClientOriginalName();
-            $file->move('DataAkunAdministrasi', $fileName);
+            $file->move('Excel', $fileName);
+            $filePath = public_path('Excel/' . $fileName);
 
             // Move uploaded file to storage
             $fileName = $file->getClientOriginalName();
-            Excel::import(new AkunImport($kegiatan_id), public_path('/DataAkunAdministrasi/' . $fileName));
+            Excel::import(new AkunImport($kegiatan_id), $filePath);
+            if (file_exists($filePath)) {
+                unlink($filePath);
+            }
         } catch (\Throwable $e) {
             // Tangkap pengecualian dan tampilkan pesan kesalahan
             return redirect()->back()->with('error', 'Error saat mengimpor file: ' . $e->getMessage());

@@ -11,12 +11,12 @@
         
   
           <div class="mt-2 grid space-y-3">
-            <p><a class="inline-flex gap-x-2 text-gray-800 hover:text-gray-700 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="{{route('umum')}}">Umum</a></p>
-            <p><a class="inline-flex gap-x-2 text-gray-800 hover:text-gray-700 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="{{route('produksi')}}">Produksi</a></p>
-            <p><a class="inline-flex gap-x-2 text-gray-800 hover:text-gray-700 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="{{route('distribusi')}}">Distribusi</a></p>
-            <p><a class="inline-flex gap-x-2 text-gray-800 hover:text-gray-700 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="{{route('neraca')}}">Neraca</a></p>
-            <p><a class="inline-flex gap-x-2 text-gray-800 hover:text-gray-700 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="{{route('sosial')}}">Sosial</a></p>
-            <p><a class="inline-flex gap-x-2 text-gray-800 hover:text-gray-700 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="{{route('ipds')}}">IDPS</a></p>
+            <p><a class="inline-flex gap-x-2 text-gray-800 hover:text-gray-700 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="/teknis/kegiatan?fungsi=Umum">Umum</a></p>
+            <p><a class="inline-flex gap-x-2 text-gray-800 hover:text-gray-700 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="/teknis/kegiatan?fungsi=Produksi">Produksi</a></p>
+            <p><a class="inline-flex gap-x-2 text-gray-800 hover:text-gray-700 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="/teknis/kegiatan?fungsi=Distribusi">Distribusi</a></p>
+            <p><a class="inline-flex gap-x-2 text-gray-800 hover:text-gray-700 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="/teknis/kegiatan?fungsi=Neraca">Neraca</a></p>
+            <p><a class="inline-flex gap-x-2 text-gray-800 hover:text-gray-700 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="/teknis/kegiatan?fungsi=Sosial">Sosial</a></p>
+            <p><a class="inline-flex gap-x-2 text-gray-800 hover:text-gray-700 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="/teknis/kegiatan?fungsi=IPDS">IDPS</a></p>
             
           </div>
        

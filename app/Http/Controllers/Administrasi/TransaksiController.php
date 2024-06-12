@@ -214,6 +214,7 @@ class TransaksiController extends Controller
 
         ]);
     }
+
     public function storeExcel(StoreTransaksiRequest $request)
     {
         try {
@@ -223,12 +224,15 @@ class TransaksiController extends Controller
             $akun_id = $request->akun_id;
             $file = $request->file('excel_file');
             $fileName = $file->getClientOriginalName();
-            $file->move('DataTransaksi', $fileName);
+            $file->move('Excel', $fileName);
+            $filePath = public_path('Excel/' . $fileName);
+
 
             // Move uploaded file to storage
-            $fileName = $file->getClientOriginalName();
-            // Excel::import(new PemutakhiranSusenasImport($request->id_periode, $tgl_awal, $tgl_akhir), public_path('/DataPemuktahiranSusenas/' . $fileName));
-            Excel::import(new TransaksiImport($akun_id), public_path('/DataTransaksi/' . $fileName));
+            Excel::import(new TransaksiImport($akun_id), $filePath);
+            if (file_exists($filePath)) {
+                unlink($filePath);
+            }
         } catch (\Throwable $e) {
             // Tangkap pengecualian dan tampilkan pesan kesalahan
             return redirect()->back()->with('error', 'Error saat mengimpor file: ' . $e->getMessage());
