@@ -70,5 +70,6 @@ class Kernel extends HttpKernel
         // ...
         'admin' => \App\Http\Middleware\RedirectIfNotAdmin::class,
         'redirectIfRegisterEnabled' => \App\Http\Middleware\RedirectIfRegisterEnabled::class,
+        'usermitra' => \App\Http\Middleware\AuthenticateUserMitra::class,
     ];
 }

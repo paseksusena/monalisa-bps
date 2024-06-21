@@ -32,12 +32,11 @@ class PencacahanPetaniImport implements ToModel, WithStartRow
             'pml' => $row[2],
             'id_ppl' => $row[3],
             'ppl' => $row[4],
-            'nama_krt' => $row[5],
-            'kode_kec' => $row[6],
-            'kecamatan' => $row[7],
-            'kode_desa' => $row[8],
-            'desa' => $row[9],
-            'jenis_komoditas' => $row[10]
+            'kode_kec' => $row[5],
+            'kecamatan' => $row[6],
+            'kode_desa' => $row[7],
+            'desa' => $row[8],
+            'nks' => $row[9],
 
         ]);
 

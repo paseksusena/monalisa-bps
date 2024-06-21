@@ -59,6 +59,6 @@
         <!-- End Col --> 
       </div>
     </div>
-  </footer>
+</footer>
   <!-- ========== End Footer ========== -->
   

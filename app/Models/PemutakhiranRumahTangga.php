@@ -35,4 +35,9 @@ class PemutakhiranRumahTangga extends Model
                 ->orWhere('id', 'like', '%' . $search . '%');
         });
     }
+
+    public function kegiatanTeknis()
+    {
+        return $this->belongsTo(KegiatanTeknis::class, 'kegiatan_id');
+    }
 }

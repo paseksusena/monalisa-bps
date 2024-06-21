@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('pencacahan_perusahaans', function (Blueprint $table) {
             $table->id();
             $table->foreignId("kegiatan_id");
+            $table->string("perusahaan", 100);
             $table->string("id_ppl", 50);
             $table->string("pml", 100);
             $table->string("id_pml", 50);

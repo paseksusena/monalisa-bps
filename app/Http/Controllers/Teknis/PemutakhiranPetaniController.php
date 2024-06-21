@@ -15,6 +15,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\PemutakhiranPetaniImport;
 use App\Models\RutaPetani;
 use App\Models\UserMitra;
+use App\Models\PencacahanPetani;
 
 
 
@@ -27,13 +28,40 @@ class PemutakhiranPetaniController extends Controller
      */
     public function index()
     {
+        $date = [];
         $kegiatan = request('kegiatan');
+        $pemutakhirans = PemutakhiranPetani::where('kegiatan_id', $kegiatan)->get();
+        if (request('search')) {
+            $pemutakhirans = PemutakhiranPetani::filter(request(['search']))->where('kegiatan_id', $kegiatan)->get();
+        }
+        $kegiatan = KegiatanTeknis::where('id', $kegiatan)->first();
+        $this->progres_kegiatan($kegiatan->id);
 
-        $pemutakhirans = PemutakhiranPetani::filter(request(['search']))->where('kegiatan_id', $kegiatan)->get();
+        if ($pemutakhirans->isEmpty()) {
+            $pemutakhiran = [];
+            $semua_tanggal = [];
+            $tgl_awal = null;
+            $tgl_akhir = null;
+        } else {
+            $date = PemutakhiranPetani::where('kegiatan_id', $kegiatan->id)->first();
+            if (!$date) {
+                $tgl_awal = null;
+                $tgl_akhir = null;
+            } else {
+                $semua_tanggal = Carbon::parse($date->tgl_awal)->toPeriod($date->tgl_akhir)->map(function ($date) {
+                    return $date->format('d/m/Y'); // Mengubah format tanggal menjadi 'hari/bulan'
+                });
+                $tgl_awal = $date->tgl_awal;
+                $tgl_akhir = $date->tgl_akhir;
+            }
+        }
 
-        return view('', [
-            'pemutakhirans' => $pemutakhirans
-
+        return view('page.teknis.petani.pemutakhiran.index', [
+            'pemutakhirans' => $pemutakhirans,
+            'kegiatan' => $kegiatan,
+            "semua_tanggal" => $semua_tanggal ?? [],
+            'tgl_awal' => $tgl_awal,
+            'tgl_akhir' => $tgl_akhir,
         ]);
     }
 
@@ -47,7 +75,7 @@ class PemutakhiranPetaniController extends Controller
         if ($pemutakhiran) {
             return response()->json($pemutakhiran);
         } else {
-            return response()->json(null);
+            return response()->json(0);
         }
     }
 
@@ -70,8 +98,8 @@ class PemutakhiranPetaniController extends Controller
             'nks' => 'required|max:100',
             'nama_sls' => 'required|max:100|string',
             'beban_kerja' => 'required|integer|max:99999',
-            'keluarga_awal' => 'integer|max:99999',
-            'keluarga_akhir' => 'integer|max:99999',
+            // 'keluarga_awal' => 'integer|max:99999',
+            // 'keluarga_akhir' => 'integer|max:99999',
             'kegiatan_id' => 'required',
             'tgl_awal' => 'required',
             'tgl_akhir' => 'required'
@@ -83,36 +111,39 @@ class PemutakhiranPetaniController extends Controller
         $kegiatan = KegiatanTeknis::findOrFail($request->kegiatan_id);
         $tgl_awal = Carbon::parse($request->tgl_awal);
         $tgl_akhir = Carbon::parse($request->tgl_akhir);
-        $pemutakhiranPetaniTanggaOld = PemutakhiranPetani::where('kegiatan_id', $request->kegiatan_id)->get();
+        $pemutakhiranPetaniOld = PemutakhiranPetani::where('kegiatan_id', $request->kegiatan_id)->get();
 
+
+        $requestValidasi['keluarga_awal'] = 0;
+        $requestValidasi['keluarga_akhir'] = 0;
         PemutakhiranPetani::create($requestValidasi);
 
-        $existingPemutakhiranIds = $pemutakhiranPetaniTanggaOld->pluck('id')->toArray();
+        $existingPemutakhiranIds = $pemutakhiranPetaniOld->pluck('id')->toArray();
 
-        if (!$pemutakhiranPetaniTanggaOld->isEmpty()) {
-            $pemutakhiranPetaniTanggaNew = collect();
-            $pemutakhiranPetaniTanggaNew = $pemutakhiranPetaniTanggaNew->merge($pemutakhiranPetaniTanggaOld);
-            $pemutakhiranPetaniTanggaNewUpdated = PemutakhiranPetani::where('kegiatan_id', $request->kegiatan_id)->get();
+        if (!$pemutakhiranPetaniOld->isEmpty()) {
+            $pemutakhiranPetaniNew = collect();
+            $pemutakhiranPetaniNew = $pemutakhiranPetaniNew->merge($pemutakhiranPetaniOld);
+            $pemutakhiranPetaniNewUpdated = PemutakhiranPetani::where('kegiatan_id', $request->kegiatan_id)->get();
 
-            foreach ($pemutakhiranPetaniTanggaNewUpdated as $p) {
+            foreach ($pemutakhiranPetaniNewUpdated as $p) {
                 if (!in_array($p->id, $existingPemutakhiranIds)) {
-                    $pemutakhiranPetaniTanggaNew->push($p);
+                    $pemutakhiranPetaniNew->push($p);
                 }
             }
         } else {
-            $pemutakhiranPetaniTanggaNew = PemutakhiranPetani::where('kegiatan_id', $request->kegiatan_id)->get();
+            $pemutakhiranPetaniNew = PemutakhiranPetani::where('kegiatan_id', $request->kegiatan_id)->get();
         }
 
-        foreach ($pemutakhiranPetaniTanggaNew as $p) {
+        foreach ($pemutakhiranPetaniNew as $p) {
             if (!in_array($p->id, $existingPemutakhiranIds)) {
                 $currentDate = $tgl_awal->copy();
                 $endDate = $tgl_akhir->copy();
-                $estimasi = $endDate - $currentDate;
+                $estimasi = $endDate->diffInDays($currentDate);
 
                 for ($i = 0; $i < $estimasi; $i++) {
                     while ($currentDate <= $endDate) {
                         $ruta = [
-                            'pemutakhiaran_id' => $p->id,
+                            'pemutakhiran_id' => $p->id,
                             'tanggal' => $currentDate->toDateString(),
                             'ruta' => 'Ruta_' . $i,
                         ];
@@ -123,6 +154,7 @@ class PemutakhiranPetaniController extends Controller
                 }
             }
         }
+
 
         // Cari UserMitra berdasarkan ppl_id
         $find = UserMitra::where('ppl_id', $request->id_ppl)->first();
@@ -152,14 +184,22 @@ class PemutakhiranPetaniController extends Controller
     public function edit($id)
     {
         $pemutakhiran = PemutakhiranPetani::find($id);
-        return response()->json($pemutakhiran);
+        $ruta = RutaPetani::where('pemutakhiran_id', $pemutakhiran->id)->get();
+
+        return response()->json([
+            'pemutakhiran' => $pemutakhiran,
+            'ruta' => $ruta,
+        ]);
     }
+
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $req)
     {
+
+
         $requestValidasi = $req->validate([
 
             'pml' => 'required|max:100|string',
@@ -174,11 +214,13 @@ class PemutakhiranPetaniController extends Controller
             'nks' => 'required|max:100',
             'nama_sls' => 'required|max:100|string',
             'beban_kerja' => 'required|integer|max:99999',
-            'keluarga_awal' => 'integer|max:99999',
-            'keluarga_akhir' => 'integer|max:99999',
+            'keluarga_awal' => 'nullable|integer|max:99999',
+            'keluarga_akhir' => 'nullable|integer|max:99999',
 
         ]);
-        $find = PemutakhiranPetani::where('id', $req->id)->first();
+        $id = $req->id;
+
+
 
         //save ruta
         $this->validate($req, [
@@ -197,14 +239,17 @@ class PemutakhiranPetaniController extends Controller
             foreach ($rutas as $key => $id_ruta) {
                 // Update progres untuk setiap ruta
                 RutaPetani::where('id', $id_ruta)->update([
+
                     'progres' => $rutaValues[$key]
                 ]);
             }
         }
 
-        $rutas = RutaPetani::where('pemutakhiran_id', $find->id)->get();
+        $rutas = RutaPetani::where('pemutakhiran_id', $id)->get();
+
         $status = 0;
         foreach ($rutas as $ruta) {
+
             $status = $ruta->progres + $status;
         }
 
@@ -241,7 +286,7 @@ class PemutakhiranPetaniController extends Controller
      */
     public function destroy(Request $request)
     {
-        $pemutakhiran = PemutakhiranPetani::find($request->id)->first();
+        $pemutakhiran = PemutakhiranPetani::find($request->id);
         $sucsses = PemutakhiranPetani::destroy($pemutakhiran->id);
         if ($sucsses) {
             RutaPetani::where('pemutakhiran_id', $pemutakhiran->id)->delete();
@@ -250,11 +295,9 @@ class PemutakhiranPetaniController extends Controller
             return back()->with('error', 'Terdapat kesalahan, coba ulang lagi');
         }
     }
-
-    public function strore_excel(Request $request)
+    public function store_excel(Request $request)
     {
         try {
-
             // Move uploaded file to storage
             $file = $request->file('excel_file');
             $fileName = $file->getClientOriginalName();
@@ -265,43 +308,39 @@ class PemutakhiranPetaniController extends Controller
             $tgl_akhir = Carbon::parse($request->tgl_akhir);
             $pemutakhiranPetaniTanggaOld = PemutakhiranPetani::where('kegiatan_id', $request->kegiatan_id)->get();
 
-            //MENGHITUNG ESTIMASI
+            // Calculate estimation
             $tanggalAwal = strtotime($tgl_awal);
             $tanggalAkhir = strtotime($tgl_akhir);
             $estimasi = ($tanggalAkhir - $tanggalAwal) / (60 * 60 * 24);
 
-
+            // Import Excel file
             Excel::import(new PemutakhiranPetaniImport($request->kegiatan_id, $tgl_awal, $tgl_akhir), public_path('/ExcelTeknis/' . $fileName));
 
+            // Delete uploaded file
             $filePath = public_path('/ExcelTeknis/' . $fileName);
             if (file_exists($filePath)) {
                 unlink($filePath);
             }
+
             $existingPemutakhiranIds = $pemutakhiranPetaniTanggaOld->pluck('id')->toArray();
 
-            if (!$pemutakhiranPetaniTanggaOld->isEmpty()) {
-                $pemutakhiranPetaniTanggaNew = collect();
-                $pemutakhiranPetaniTanggaNew = $pemutakhiranPetaniTanggaNew->merge($pemutakhiranPetaniTanggaOld);
-                $pemutakhiranPetaniTanggaNewUpdated = PemutakhiranPetani::where('kegiatan_id', $request->kegiatan_id)->get();
-
-                foreach ($pemutakhiranPetaniTanggaNewUpdated as $p) {
-                    if (!in_array($p->id, $existingPemutakhiranIds)) {
-                        $pemutakhiranPetaniTanggaNew->push($p);
-                    }
-                }
-            } else {
-                $pemutakhiranPetaniTanggaNew = PemutakhiranPetani::where('kegiatan_id', $request->kegiatan_id)->get();
-            }
-
+            // Merge old and new PemutakhiranPetani
+            $pemutakhiranPetaniTanggaNew = PemutakhiranPetani::where('kegiatan_id', $request->kegiatan_id)->get();
             foreach ($pemutakhiranPetaniTanggaNew as $p) {
                 if (!in_array($p->id, $existingPemutakhiranIds)) {
-                    $currentDate = $tgl_awal->copy();
-                    $endDate = $tgl_akhir->copy();
+                    $pemutakhiranPetaniTanggaOld->push($p);
+                }
+            }
 
-                    for ($i = 0; $i < $estimasi; $i++) {
-                        while ($currentDate <= $endDate) {
+            for ($i = 0; $i < $estimasi; $i++) {
+
+                // Create RutaPetani for new PemutakhiranPetani
+                foreach ($pemutakhiranPetaniTanggaOld as $p) {
+                    if (!in_array($p->id, $existingPemutakhiranIds)) {
+                        $currentDate = $tgl_awal->copy();
+                        while ($currentDate <= $tgl_akhir) {
                             $ruta = [
-                                'id_pemutakhiran' => $p->id,
+                                'pemutakhiran_id' => $p->id,
                                 'tanggal' => $currentDate->toDateString(),
                                 'ruta' => 'Ruta_' . $i,
                             ];
@@ -315,7 +354,78 @@ class PemutakhiranPetaniController extends Controller
 
             return back()->with('success', 'Data berhasil diimpor!');
         } catch (\Exception $e) {
-            return redirect()->back()->withInput()->with('error', 'File yang dinput harus sesuai dengan file Excel.');
+            return redirect()->back()->withInput()->with('error', 'File yang diinput harus sesuai dengan file Excel.');
         }
+    }
+
+    public function progres_kegiatan($kegiatan_id)
+    {
+        // Menghitung progres all pemutakhiran
+        $pemutakhirans = PemutakhiranPetani::where('kegiatan_id', $kegiatan_id)->get();
+
+        $beban_kerja_pemutakhiran_all = 0;
+        $ruta_progres_pemutakhiran = 0;
+
+        foreach ($pemutakhirans as $pemutakhiran) {
+            $beban_kerja_pemutakhiran_all += $pemutakhiran->beban_kerja;
+
+            foreach ($pemutakhiran->rutapetani as $ruta) {
+                $ruta_progres_pemutakhiran += $ruta->progres;
+            }
+        }
+
+        // Avoid division by zero
+        if ($beban_kerja_pemutakhiran_all > 0) {
+            $progres_pemutakhiran = ($ruta_progres_pemutakhiran / $beban_kerja_pemutakhiran_all) * 100;
+            $progres_pemutakhiran = floatval(number_format($progres_pemutakhiran, 1));
+        } else {
+            $progres_pemutakhiran = 0.0;
+        }
+
+        // Menghitung progres all pencacahan
+        $pencacahans = PencacahanPetani::where('kegiatan_id', $kegiatan_id)->get();
+
+        $beban_kerja_pencacahan_all = $pencacahans->count();
+        $progres_pencacahan = 0;
+        $progres_pencacahan2 = 0; // Initialize the variable outside the loop
+
+        foreach ($pencacahans as $pencacahan) {
+            if ($pencacahan->status == 1) {
+                $progres_pencacahan++;
+            }
+        }
+
+        $progres_pencacahan2 = $progres_pencacahan; // Ensure it is assigned here
+
+        // Avoid division by zero
+        if ($beban_kerja_pencacahan_all > 0) {
+            $progres_pencacahan = ($progres_pencacahan / $beban_kerja_pencacahan_all) * 100;
+            $progres_pencacahan = floatval(number_format($progres_pencacahan, 1));
+        } else {
+            $progres_pencacahan = 0.0;
+        }
+
+        // Menghitung rata-rata progres kegiatan
+        if (($beban_kerja_pemutakhiran_all + $beban_kerja_pencacahan_all) > 0) {
+            $progres_kegiatan = (($progres_pencacahan2 + $ruta_progres_pemutakhiran) / ($beban_kerja_pemutakhiran_all + $beban_kerja_pencacahan_all)) * 100;
+            $progres_kegiatan = floatval(number_format($progres_kegiatan, 1));
+        } else {
+            $progres_kegiatan = 0.0;
+        }
+
+
+        // Save the result
+        $kegiatan = KegiatanTeknis::find($kegiatan_id);
+        $kegiatan['progres'] = $progres_kegiatan;
+        $kegiatan->save();
+
+        return 0;
+
+        // Optionally, you can return the results if needed
+        // return [
+        //     'progres_pemutakhiran' => $progres_pemutakhiran,
+        //     'progres_pencacahan' => $progres_pencacahan,
+        //     'progres_kegiatan' => $progres_kegiatan
+        // ];
     }
 }

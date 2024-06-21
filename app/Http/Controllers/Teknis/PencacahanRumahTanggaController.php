@@ -189,7 +189,7 @@ class PencacahanRumahTanggaController extends Controller
         $pencacahanSampel->save();
 
         // Redirect back with success message
-        return back()->with('success', 'Berhasil di ubah!');
+        return back()->with('success', 'Pencacahan berhasi di update!');
     }
 
 

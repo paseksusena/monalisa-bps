@@ -34,7 +34,7 @@ return new class extends Migration
             $table->string("sampel_9")->nullable();
             $table->string("sampel_10")->nullable();
             $table->boolean("status")->default(false);
-            $table->integer("progres")->nullable();
+            $table->integer("progres")->default(0);
             $table->date('tgl_awal');
             $table->date('tgl_akhir');
             $table->timestamps();

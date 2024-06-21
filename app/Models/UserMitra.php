@@ -2,20 +2,22 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class UserMitra extends Model
+class UserMitra extends Authenticatable
 {
-    use HasFactory;
+    use Notifiable;
 
-    use HasFactory, Notifiable;
+    // Tambahkan atribut yang dibutuhkan oleh model
+    protected $fillable = [
+        'ppl_id',
+        // Tambahkan atribut lainnya jika diperlukan
+    ];
 
-    protected $guarded = ['id'];
+    // Jika menggunakan timestamp
+    public $timestamps = true;
 
-    public function isMitra()
-    {
-        return $this->role === 'mitra';
-    }
+    // Tentukan nama tabel jika tidak sesuai konvensi
+    protected $table = 'user_mitras';
 }

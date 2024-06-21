@@ -169,7 +169,7 @@
                                     PN
                                 </div>
 
-                                <a href="#">
+                                <a href="/teknis/kegiatan/petani/pemutakhiran?kegiatan={{$kegiatan->id}}">
                                     <h5 class="mb-2 text-2xl font-semibold tracking-tight text-gray-900 dark:text-white">
                                         {{$kegiatan->nama}}
                                     </h5>

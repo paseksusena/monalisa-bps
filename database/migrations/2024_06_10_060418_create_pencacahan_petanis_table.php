@@ -22,8 +22,9 @@ return new class extends Migration
             $table->string("pml", 100);
             $table->string("id_ppl", 50);
             $table->string("ppl", 100);
-            $table->string("jenis_komoditas", 50);
-            $table->string("nama_krt", 100);
+            $table->string("nks", 100);
+            $table->string("jenis_komoditas", 50)->nullable();
+            $table->string("nama_krt", 100)->nullable();
             $table->boolean("status")->default(false);
             $table->date('tgl_awal');
             $table->date('tgl_akhir');

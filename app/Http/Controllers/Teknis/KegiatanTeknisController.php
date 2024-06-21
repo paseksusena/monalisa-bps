@@ -143,6 +143,13 @@ class KegiatanTeknisController extends Controller
         return back()->with('success', 'Kegiatan ' . $request->nama . ' berhasil diubah');
     }
 
+    public function downloadTemlate()
+    {
+        $nameFile = request('template');
+        $path = public_path('storage/template/' . $nameFile . '.xlsx');
+        return response()->download($path);
+    }
+
     /**
      * Remove the specified resource from storage.
      */

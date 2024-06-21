@@ -7,21 +7,18 @@ use App\Http\Controllers\Administrasi\AdministrasiController;
 use App\Http\Controllers\Administrasi\AkunController;
 use App\Http\Controllers\Administrasi\FileController;
 use App\Http\Controllers\Administrasi\KegiatanAdministrasiController;
-use App\Http\Controllers\Administrasi\PeriodeAdministrasiController;
 use App\Http\Controllers\Administrasi\TransaksiController;
+use App\Http\Controllers\Mitra\MitraController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Teknis\KegiatanTeknisController;
+use App\Http\Controllers\Teknis\PemutakhiranPerusahaanController;
+use App\Http\Controllers\Teknis\PemutakhiranPetaniController;
 use App\Http\Controllers\Teknis\PemutakhiranRumahTanggaController;
+use App\Http\Controllers\Teknis\PencacahanPerusahaanController;
+use App\Http\Controllers\Teknis\PencacahanPetaniController;
 use App\Http\Controllers\Teknis\PencacahanRumahTanggaController;
-use App\Http\Controllers\Teknis\TeknisController;
-use App\Models\KegiatanTeknis;
-use App\Models\PemutakhiranRumahTangga;
-use App\Models\PencacahanRumahTangga;
-use App\Models\Transaksi;
-use Dompdf\Dompdf;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -42,7 +39,6 @@ Route::get('/administrasi/preview', function () {
     return view('page.administrasi.partials.preview');
 });
 
-
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
@@ -52,15 +48,15 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 
-// ADMIN USER
-//Autentikasi User
+// ROUTE AUTENTIKASI USER
+//Autentikasi User Profil
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-//Autentikasi Admin
+// ROUTE AUTENTIKASI ADMIN
 Route::middleware(['auth', 'admin'])->group(function () {
     // Rute-rute yang memerlukan autentikasi dan akses admin
     Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
@@ -78,9 +74,8 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/download-zip', [TahunAdministrasiController::class, 'download_zip']);
 });
 
-
+// ROUTE ADMINISTRASI MONALISA
 Route::middleware('auth')->group(function () {
-    // ADMINISTRASI
 
     // set session
     Route::post('/set-year-session', [AdministrasiController::class, 'setYearSession']);
@@ -91,13 +86,13 @@ Route::middleware('auth')->group(function () {
     //download excel notif
     Route::get('/download-notifinasi-excel',  [AdministrasiController::class, 'download_notif_excel']);
 
-
-
     Route::get('/notifications', [AdministrasiController::class, 'getNotifications'])->name('notifications');
-
 
     //search 
     Route::get('/administrasi/kegiatan/search', [AdministrasiController::class, 'search']);
+
+    //Monitoring
+    Route::get('/administrasi-monitoring', [AdministrasiController::class, 'monitoring']);
 
     //kegiatan
     Route::get('/administrasi/kegiatan/{id}', [KegiatanAdministrasiController::class, 'edit']);
@@ -126,8 +121,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/administrasi/file/create-excel/{id}', [FileController::class, 'exportExcel']);
     Route::post('/administrasi/file/store_excel', [FileController::class, 'stroreExcel']);
     Route::post('/administrasi/file/addFile', [FileController::class, 'addFile']);
-    // Route::get('/administrasi/file/{filename}', [FileController::class, 'show'])->name('pdf.show');
-    // Route::get('/administrasi/file/{fungsi}/{periode}/{kegiatan}/{akun}/{transaksi}/{filename}', [FileController::class, 'show'])->name('pdf.show');
 
     //download
     Route::get('/download-file', [FileController::class, 'download']);
@@ -136,12 +129,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/download-excel-template', [AdministrasiController::class, 'downloadTemlate']);
 });
 
+// Route Teknis Monalisa
 Route::middleware('auth')->group(function () {
-
 
     Route::get('/teknis/kegiatan',  [KegiatanTeknisController::class, 'index']);
     Route::post('/teknis/kegiatan', [KegiatanTeknisController::class, 'store']);
 
+    Route::get('/download-excel-template', [KegiatanTeknisController::class, 'downloadTemlate']);
 
     // Rumah Tangga 
     // Pemutakhiran 
@@ -152,43 +146,60 @@ Route::middleware('auth')->group(function () {
     Route::post('/teknis/rumah-tangga/pemutakhiran/create-excel', [PemutakhiranRumahTanggaController::class, 'store_excel']);
 
 
-    //pencacahan
+    //Pencacahan
     Route::get('/teknis/rumah-tangga-pencacahan-edit/{id}', [PencacahanRumahTanggaController::class, 'edit']);
     Route::put('/teknis/kegiatan/rumah-tangga/pencacahan', [PencacahanRumahTanggaController::class, 'update']);
-
     Route::get('/teknis/rumah-tangga-pencacahan-create/{id}', [PencacahanRumahTanggaController::class, 'create']);
     Route::post('/teknis/rumah-tangga/pencacahan/create-excel', [PencacahanRumahTanggaController::class, 'store_excel']);
     Route::resource('/teknis/kegiatan/rumah-tangga/pencacahan', PencacahanRumahTanggaController::class);
 
-
     // Perusahaan 
-    //pemutakhiran 
-    Route::resource('/teknis/kegiatan/perusahaan/pemutakhiran', PemutakhiranRumahTanggaController::class);
+    //Pemutakhiran 
+    Route::get('/teknis/perusahaan-pemutakhiran-edit/{id}', [PemutakhiranPerusahaanController::class, 'edit']);
+    Route::put('/teknis/kegiatan/perusahaan/pemutakhiran', [PemutakhiranPerusahaanController::class, 'update']);
+    Route::get('/teknis/perusahaan-pemutakhiran-create/{id}', [PemutakhiranPerusahaanController::class, 'create']);
+    Route::post('/teknis/perusahaan/pemutakhiran/create-excel', [PemutakhiranPerusahaanController::class, 'store_excel']);
+    Route::resource('/teknis/kegiatan/perusahaan/pemutakhiran', PemutakhiranPerusahaanController::class);
+    Route::post('/teknis/kegiatan/perusahaan/pemutakhiran/ceklist/{id}', [PemutakhiranPerusahaanController::class, 'ceklist']);
+
+    //Pencacahan 
+    Route::get('/teknis/perusahaan-pencacahan-edit/{id}', [PencacahanPerusahaanController::class, 'edit']);
+    Route::put('/teknis/kegiatan/perusahaan/pencacahan', [PencacahanPerusahaanController::class, 'update']);
+    Route::get('/teknis/kegiatan/perusahaan/pencacahan-create/{id}', [PencacahanPerusahaanController::class, 'create']);
+    Route::post('/teknis/perusahaan/pencacahan/create-excel', [PencacahanPerusahaanController::class, 'store_excel']);
+    Route::resource('/teknis/kegiatan/perusahaan/pencacahan', PencacahanPerusahaanController::class);
+    Route::post('/teknis/kegiatan/perusahaan/pencacahan/ceklist/{id}', [PencacahanPerusahaanController::class, 'ceklist']);
+
+    //Petani
+    //Pemutakhiran
+    Route::get('/teknis/kegiatan/petani/pemutakhiran-edit/{id}', [PemutakhiranPetaniController::class, 'edit']);
+    Route::put('/teknis/kegiatan/petani/pemutakhiran', [PemutakhiranPetaniController::class, 'update']);
+    Route::get('/teknis/kegiatan/petani/pemutakhiran-create/{id}', [PemutakhiranPetaniController::class, 'create']);
+    Route::post('/teknis/kegiatan/petani/pemutakhiran-create-excel', [PemutakhiranPetaniController::class, 'store_excel']);
+    Route::resource('/teknis/kegiatan/petani/pemutakhiran', PemutakhiranPetaniController::class);
+
+
+    //Pencacahan
+    Route::get('/teknis/kegiatan/petani/pencacahan-edit/{id}', [PencacahanPetaniController::class, 'edit']);
+    Route::put('/teknis/kegiatan/petani/pencacahan', [PencacahanPetaniController::class, 'update']);
+    Route::get('/teknis/kegiatan/petani/pencacahan-create/{id}', [PencacahanPetaniController::class, 'create']);
+    Route::post('/teknis/kegiatan/petani/pencacahan-create-excel', [PencacahanPetaniController::class, 'store_excel']);
+    Route::resource('/teknis/kegiatan/petani/pencacahan', PencacahanPetaniController::class);
 });
 
+// Route Mitra Monalisa
+Route::middleware(['usermitra'])->group(function () {
+    Route::get('/mitra-pemutakhiran', [MitraController::class, 'index_pemutakhiran']);
+    Route::post('/mitra/logout', [MitraController::class, 'logout'])->name('mitra.logout');
+    Route::get('/mitra-pencacahan', [MitraController::class, 'index_pencacahan']);
 
-// Route::get('/teknis', function () {
-//     return view('page.teknis.index');
-// });
+    //pemutakhiran
+    //rumah tangga
+    Route::get('/mitra/rumah-tangga/pemutakhiran-input/{id}', [MitraController::class, 'input_pemutakhiran_rumah']);
+});
 
-// Route::get('/teknis/perusahaan/pencacahan', function () {
-//     return view('page.teknis.perusahaan.pencacahan.index');
-// });
-
-
-// Route::get('/teknis/perusahaan/pemutakhiran', function () {
-//     return view('page.teknis.perusahaan.pemutakhiran.index');
-// });
-
-// Route::get('/teknis/rumah-tangga/pencacahan', function () {
-//     return view('page.teknis.rumah-tangga.pencacahan.index');
-// });
-
-// Route::get('/teknis/rumah-tangga/pemutakhiran', function () {
-//     return view('page.teknis.rumah-tangga.pemutakhiran.index');
-// });
-
-
-
+// Route Autentikasi Mitra
+Route::get('/mitra/login', [MitraController::class, 'login_mitra'])->name('usermitra.login');
+Route::post('/mitra/login', [MitraController::class, 'autentikasi']);
 
 require __DIR__ . '/auth.php';

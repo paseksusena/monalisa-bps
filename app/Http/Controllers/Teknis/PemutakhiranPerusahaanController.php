@@ -1,19 +1,15 @@
 <?php
 
-
-
 namespace App\Http\Controllers\Teknis;
 
 use App\Http\Controllers\Controller;
 use App\Models\PemutakhiranPerusahaan;
-use App\Http\Requests\StorePemutakhiranPerusahaanRequest;
-use App\Http\Requests\UpdatePemutakhiranPerusahaanRequest;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\PemutakhiranPerusahaanImport;
+use App\Models\KegiatanTeknis;
 use App\Models\UserMitra;
-
 
 
 class PemutakhiranPerusahaanController extends Controller
@@ -25,12 +21,22 @@ class PemutakhiranPerusahaanController extends Controller
     {
 
         $kegiatan = request('kegiatan');
+        $tgl_awal = null;
+        $tgl_akhir = null;
 
         $pemutakhirans = PemutakhiranPerusahaan::filter(request(['search']))->where('kegiatan_id', $kegiatan)->get();
+        $kegiatan = KegiatanTeknis::where('id', $kegiatan)->first();
+        $find = PemutakhiranPerusahaan::where('kegiatan_id', $kegiatan)->first();
+        if ($find) {
+            $tgl_akhir = $find->tgl_akhir;
+            $tgl_awal = $find->tgl_awal;
+        }
 
-        return view('', [
-            'pemutakhirans' => $pemutakhirans
-
+        return view('page.teknis.perusahaan.pemutakhiran.index', [
+            'pemutakhirans' => $pemutakhirans,
+            'tgl_awal' => $tgl_awal,
+            'tgl_akhir' => $tgl_akhir,
+            'kegiatan' => $kegiatan
         ]);
     }
 
@@ -44,7 +50,7 @@ class PemutakhiranPerusahaanController extends Controller
         if ($pemutakhiran) {
             return response()->json($pemutakhiran);
         } else {
-            return response()->json(null);
+            return response()->json(0);
         }
     }
 
@@ -67,7 +73,8 @@ class PemutakhiranPerusahaanController extends Controller
             'desa' => 'required|max:20',
             'kode_desa' => 'required|max:4',
             'tgl_awal' => 'required|date',
-            'tgl_akhir' => 'required|date'
+            'tgl_akhir' => 'required|date',
+            'perusahaan' => 'required'
         ]);
 
         // Cari UserMitra berdasarkan ppl_id
@@ -123,7 +130,8 @@ class PemutakhiranPerusahaanController extends Controller
             'desa' => 'required|max:20',
             'kode_desa' => 'required|max:4',
             'tgl_awal' => 'required',
-            'tgl_akhir' => 'required'
+            'tgl_akhir' => 'required',
+            'perusahaan' => 'required'
         ]);
 
         PemutakhiranPerusahaan::where('id', $request->id)->update($validateRequest);
@@ -142,7 +150,7 @@ class PemutakhiranPerusahaanController extends Controller
      */
     public function destroy(Request $request)
     {
-        $pemutakhiran = PemutakhiranPerusahaan::find($request->id)->first();
+        $pemutakhiran = PemutakhiranPerusahaan::find($request->id);
         $sucsses = PemutakhiranPerusahaan::destroy($pemutakhiran->id);
         if ($sucsses) {
             return back()->with('success', 'Id-' . $request->id . " berhasil dihapus!");
@@ -175,6 +183,26 @@ class PemutakhiranPerusahaanController extends Controller
             return back()->with('success', 'Data berhasil diimpor!');
         } catch (\Exception $e) {
             return redirect()->back()->withInput()->with('error', 'File yang dinput harus sesuai dengan file Excel.');
+        }
+    }
+
+    public function ceklist(Request $request, $id)
+    {
+        try {
+            $isChecked = $request->isChecked;
+
+            // Cari entri PemutakhiranPerusahaan berdasarkan ID
+            $file = PemutakhiranPerusahaan::findOrFail($id);
+
+            // Ubah nilai ceklist sesuai dengan isChecked yang dikirimkan
+            $file->status = $isChecked ? 1 : 0; // Misalkan kolom status digunakan untuk menyimpan ceklist
+
+            // Simpan perubahan
+            $file->save();
+
+            return response()->json(['message' => 'Status ceklist berhasil diperbarui', 'isChecked' => $isChecked]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500); // Tangani kesalahan jika terjadi
         }
     }
 }

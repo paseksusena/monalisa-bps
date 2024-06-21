@@ -9,6 +9,11 @@ class PemutakhiranPetani extends Model
 {
     use HasFactory;
     protected $guarded = ['id'];
+
+    public function rutaPetani()
+    {
+        return $this->hasMany(RutaPetani::class, 'pemutakhiran_id'); // Ganti 'pemutakhiran_susenas_id' dengan nama kolom kunci asing aktual
+    }
     public function scopeFilter($query, array $filters)
     {
         $query->when($filters['search'] ?? false, function ($query, $search) {

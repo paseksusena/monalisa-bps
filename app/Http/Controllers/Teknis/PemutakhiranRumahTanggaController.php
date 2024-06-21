@@ -17,9 +17,6 @@ use App\Models\RutaRumahTangga;
 use App\Models\UserMitra;
 
 
-
-
-
 class PemutakhiranRumahTanggaController extends Controller
 {
     /**
@@ -257,20 +254,17 @@ class PemutakhiranRumahTanggaController extends Controller
 
 
         if ($status >= $req->beban_kerja) {
-
             $requestValidasi['status'] = true;
         } else {
             $requestValidasi['status'] = false;
         }
 
+        PemutakhiranRumahTangga::where('id', $req->id)->update($requestValidasi);
 
         UserMitra::where('ppl_id', $req->id_ppl)->update([
             'name' => $req->ppl,
             'ppl_id' => $req->id_ppl
         ]);
-
-
-        PemutakhiranRumahTangga::where('id', $req->id)->update($requestValidasi);
 
 
         return back()->with('success', 'Pemutakhiran berhasi di update!');
@@ -358,7 +352,7 @@ class PemutakhiranRumahTanggaController extends Controller
                 }
             }
 
-            return back()->with('success', 'Data berhasil diimpor!');
+            return back()->with('success', 'Data berhasil diimport!');
         } catch (\Exception $e) {
             return redirect()->back()->withInput()->with('error', 'File yang dinput harus sesuai dengan file Excel.');
         }

@@ -7,11 +7,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Akun;
 use App\Models\File;
 use App\Models\KegiatanAdministrasi;
-use App\Models\PeriodeAdministrasi;
 use App\Models\Transaksi;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
-use App\Models\User;
 use Maatwebsite\Excel\Facades\Excel;
 
 
@@ -280,5 +278,136 @@ class AdministrasiController extends Controller
         $nameFile = request('template');
         $path = public_path('storage/template/' . $nameFile . '.xlsx');
         return response()->download($path);
+    }
+
+    public function monitoring()
+    {
+
+        $session = session('selected_year');
+
+        $currentYear = Carbon::now()->year;
+        $startYear = Carbon::createFromFormat('Y', $currentYear - 5)->year;
+        $years = range($startYear, $currentYear);
+        if (!$session) {
+            $session = $currentYear;
+        }
+
+        // menghitung progres umum
+        $complete_file_umum = 0;
+        $amount_file_umum = 0;
+        $progresUmum = 0;
+        $kegiatans = KegiatanAdministrasi::where('tahun', $session)->where('fungsi', 'Umum')->get();
+        foreach ($kegiatans as $kegiatan) {
+            $amount_file_umum = $kegiatan->amount_file + $amount_file_umum;
+            $complete_file_umum = $kegiatan->complete_file + $complete_file_umum;
+        }
+
+        $progresUmum = $amount_file_umum > 0 ? number_format(($complete_file_umum / $amount_file_umum) * 100, 2) : 0;
+
+        // menghitung proses produksi
+        $complete_file_produksi = 0;
+        $amount_file_produksi = 0;
+        $progresProduksi = 0;
+        $kegiatans = KegiatanAdministrasi::where('tahun', $session)->where('fungsi', 'Produksi')->get();
+        foreach ($kegiatans as $kegiatan) {
+            $amount_file_produksi = $kegiatan->amount_file + $amount_file_produksi;
+            $complete_file_produksi = $kegiatan->complete_file + $complete_file_produksi;
+        }
+
+        $progresProduksi = $amount_file_produksi > 0 ? number_format(($complete_file_produksi / $amount_file_produksi) * 100, 2) : 0;
+
+        // menghitung proses NERACA
+        $complete_file_neraca = 0;
+        $amount_file_neraca = 0;
+        $progresNeraca = 0;
+        $kegiatans = KegiatanAdministrasi::where('tahun', $session)->where('fungsi', 'Neraca')->get();
+        foreach ($kegiatans as $kegiatan) {
+            $amount_file_neraca = $kegiatan->amount_file + $amount_file_neraca;
+            $complete_file_neraca = $kegiatan->complete_file + $complete_file_neraca;
+        }
+
+        $progresNeraca = $amount_file_neraca > 0 ? number_format(($complete_file_neraca / $amount_file_neraca) * 100, 2) : 0;
+
+        // menghitung proses distribusi
+        $complete_file_distribusi = 0;
+        $amount_file_distribusi = 0;
+        $progresDistribusi = 0;
+        $kegiatans = KegiatanAdministrasi::where('tahun', $session)->where('fungsi', 'Distribusi')->get();
+        foreach ($kegiatans as $kegiatan) {
+            $amount_file_distribusi = $kegiatan->amount_file + $amount_file_distribusi;
+            $complete_file_distribusi = $kegiatan->complete_file + $complete_file_distribusi;
+        }
+
+        $progresDistribusi = $amount_file_distribusi > 0 ? number_format(($complete_file_distribusi / $amount_file_distribusi) * 100, 2) : 0;
+
+        // menghitung proses sosial
+        $complete_file_sosial = 0;
+        $amount_file_sosial = 0;
+        $progresSosial = 0;
+        $kegiatans = KegiatanAdministrasi::where('tahun', $session)->where('fungsi', 'Sosial')->get();
+        foreach ($kegiatans as $kegiatan) {
+            $amount_file_sosial = $kegiatan->amount_file + $amount_file_sosial;
+            $complete_file_sosial = $kegiatan->complete_file + $complete_file_sosial;
+        }
+
+        $progresSosial = $amount_file_sosial > 0 ? number_format(($complete_file_sosial / $amount_file_sosial) * 100, 2) : 0;
+
+
+        // menghitung proses ipds
+        $complete_file_ipds = 0;
+        $amount_file_ipds = 0;
+        $progresIpds = 0;
+        $kegiatans = KegiatanAdministrasi::where('tahun', $session)->where('fungsi', 'IPDS')->get();
+        foreach ($kegiatans as $kegiatan) {
+            $amount_file_ipds = $kegiatan->amount_file + $amount_file_ipds;
+            $complete_file_ipds = $kegiatan->complete_file + $complete_file_ipds;
+        }
+
+        $progresIpds = $amount_file_ipds > 0 ? number_format(($complete_file_ipds / $amount_file_ipds) * 100, 2) : 0;
+
+        if (request('tahun')) {
+            session()->put('selected_year', request('tahun'));
+        }
+
+        if (!session('selected_year') || !request('tahun')) {
+            session()->put('selected_year', $currentYear);
+        }
+
+        return view('page.administrasi.monitoring', [
+            'years' => $years,
+            'fungsi' => '',
+            'tahun' => $session,
+
+            //umum
+            'progresUmum' => $progresUmum,
+            'amount_file_umum' => $amount_file_umum,
+            'complete_file_umum' => $complete_file_umum,
+
+            //produksi
+            'progresProduksi' => $progresProduksi,
+            'amount_file_produksi' => $amount_file_produksi,
+            'complete_file_produksi' => $complete_file_produksi,
+
+            //neraca
+            'progresNeraca' => $progresNeraca,
+            'amount_file_neraca' => $amount_file_neraca,
+            'complete_file_neraca' => $complete_file_neraca,
+
+            //distribusi
+            'progresDistribusi' => $progresDistribusi,
+            'amount_file_distribusi' => $amount_file_distribusi,
+            'complete_file_distribusi' => $complete_file_distribusi,
+
+
+            //sosial
+            'progresSosial' => $progresSosial,
+            'amount_file_sosial' => $amount_file_sosial,
+            'complete_file_sosial' => $complete_file_sosial,
+
+            //IPDS
+            'progresIpds' => $progresIpds,
+            'amount_file_ipds' => $amount_file_ipds,
+            'complete_file_ipds' => $complete_file_ipds,
+        ]);
     }
 }

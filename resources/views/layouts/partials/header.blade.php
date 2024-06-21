@@ -40,8 +40,8 @@
                 <a class="font-medium text-white/[.8] hover:text-white sm:py-6" href="/teknis/kegiatan?fungsi=Neraca">Neraca</a>
                 <a class="font-medium text-white/[.8] hover:text-white sm:py-6" href="/teknis/kegiatan?fungsi=Sosial">Sosial</a>
                 <a class="font-medium text-white/[.8] hover:text-white sm:py-6" href="/teknis/kegiatan?fungsi=IPDS">IPDS</a>
-                <a class="font-medium text-white/[.8] hover:text-white sm:py-6" href="/administrasi">Administrasi</a>
-                <a class="font-medium text-white/[.8] hover:text-white sm:py-6" href="/mitra">Mitra</a>
+                <a class="font-medium text-white/[.8] hover:text-white sm:py-6" href="/administrasi-monitoring">Administrasi</a>
+                <a class="font-medium text-white/[.8] hover:text-white sm:py-6" href="/mitra-pemutakhiran">Mitra</a>
 
                 <div class="flex md:order-2">
                     <div class="relative hidden md:block">

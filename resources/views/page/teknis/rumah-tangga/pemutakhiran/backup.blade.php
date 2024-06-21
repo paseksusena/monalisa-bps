@@ -13,29 +13,33 @@
                         data-hs-overlay="#hs-sign-out-alert3">
                         <span class="sr-only">Close</span>
                         <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24"
-                            height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
                             <path d="M18 6 6 18"></path>
                             <path d="m6 6 12 12"></path>
                         </svg>
                     </button>
                 </div>
-                <form class="flex flex-col space-y-4 p-4 overflow-y-auto">
+                <form action="/teknis/kegiatan/petani/pencacahan-create-excel" method="POST"
+                    enctype="multipart/form-data" class="flex flex-col space-y-4 p-4 overflow-y-auto">
+                    @csrf
+                    <input type="hidden" name="kegiatan_id" value="{{$kegiatan->id}}">
+
                     <div>
-                        <label for="start-date"
+                        <label for="tgl_awal-excel"
                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Tanggal
                             Mulai</label>
-                        <input type="date" id="start-date" name="start-date"
+                        <input type="date" id="tgl_awal-excel" name="tgl_awal"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
                             required>
                     </div>
 
                     <!-- Tanggal Selesai -->
                     <div>
-                        <label for="end-date"
+                        <label for="tgl_akhir-excel"
                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Tanggal
                             Selesai</label>
-                        <input type="date" id="end-date" name="end-date"
+                        <input type="date" id="tgl_akhir-excel" name="tgl_akhir"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
                             required>
                     </div>
@@ -49,15 +53,14 @@
                                 <div class="flex flex-col items-center justify-center w-full">
                                     <div
                                         class="border-2 border-dashed border-gray-300 rounded-lg text-sm leading-normal text-gray-500 bg-white py-10 px-4 w-full flex flex-col justify-center items-center">
-                                        <svg class="w-8 h-8 mb-3 text-gray-500" fill="none"
-                                            stroke="currentColor" viewBox="0 0 24 24"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                stroke-width="2" d="M12 4v16m8-8H4"></path>
+                                        <svg class="w-8 h-8 mb-3 text-gray-500" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M12 4v16m8-8H4"></path>
                                         </svg>
                                         <span class="mb-2">Drag and drop your file here or click to
                                             upload</span>
-                                        <input type="file" class="hidden" />
+                                        <input type="file" name="excel_file" class="hidden" />
                                     </div>
                                 </div>
                             </label>
@@ -79,3 +82,32 @@
         </div>
     </div>
 </div>
+<script>
+    function openCreatePetaniExcel(button) {
+        const id = button.getAttribute('data-id');
+        console.log(button);
+        fetch(`/teknis/kegiatan/petani/pencacahan-create/${id}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                const tglAwal = document.getElementById('tgl_awal-excel');
+                const tglAkhir = document.getElementById('tgl_akhir-excel');
+                if (data !== 0) {
+                    tglAwal.value = data.tgl_awal
+                    tglAkhir.value = data.tgl_akhir
+                    tglAwal.setAttribute('readonly', true); // Set the readonly attribute
+                    tglAkhir.setAttribute('readonly', true); // Set the readonly attribute
+                } else {
+                    tglAwal.removeAttribute('readonly'); // Remove the readonly attribute
+                    tglAkhir.removeAttribute('readonly'); // Remove the readonly attribute
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+            });
+    }
+</script>

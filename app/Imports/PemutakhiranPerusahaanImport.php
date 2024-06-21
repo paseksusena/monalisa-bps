@@ -25,21 +25,22 @@ class PemutakhiranPerusahaanImport implements ToModel, WithStartRow
             'kegiatan_id' => $this->kegiatan_id, // Nilai kegiatan_id yang diteruskan dari formulir
             'tgl_awal' => $this->tgl_awal,
             'tgl_akhir' => $this->tgl_akhir,
-            'id_pml' => $row[1],
-            'pml' => $row[2],
-            'id_ppl' => $row[3],
-            'ppl' => $row[4],
-            'kode_sbr' => $row[5],
-            'kode_kec' => $row[6],
-            'kecamatan' => $row[7],
-            'kode_desa' => $row[8],
-            'desa' => $row[9],
+            'perusahaan' => $row[1],
+            'id_pml' => $row[2],
+            'pml' => $row[3],
+            'id_ppl' => $row[4],
+            'ppl' => $row[5],
+            'kode_sbr' => $row[6],
+            'kode_kec' => $row[7],
+            'kecamatan' => $row[8],
+            'kode_desa' => $row[9],
+            'desa' => $row[10],
         ]);
 
         // Ensure only one UserMitra with the same ppl_id, update if exists
         UserMitra::updateOrCreate(
-            ['ppl_id' => $row[3]],
-            ['name' => $row[4]]
+            ['ppl_id' => $row[4]],
+            ['name' => $row[5]]
         );
 
         // Return null as ToModel requires
