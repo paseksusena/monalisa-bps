@@ -73,12 +73,6 @@ class KegiatanTeknisController extends Controller
         ]);
 
 
-        // if ($request->kategori == 'direct_link') {
-        //     $validasiRequest = [
-        //         'link' => 'required'
-        //     ];
-        // }
-
         $validasiRequest['link'] = $request->link;
         $find = KegiatanTeknis::where('nama', $request->nama)->first();
         if ($find) {
@@ -120,16 +114,12 @@ class KegiatanTeknisController extends Controller
             'fungsi' => 'required',
             'kategori' => 'required',
 
-
         ]);
 
-        if ($request->kategori == 'direct_link') {
-            $validasiRequest = [
-                'link' => 'required'
-            ];
-        }
-        // Periksa apakah ada record dengan 'nama' yang sama, tapi bukan record yang sedang diperbarui
-        $existingRecord = KegiatanTeknis::where('nama', $request->nama)
+        $validasiRequest['link'] = $request->link;
+
+        // Periksa apakah ada record dengan 'nama' dan 'fungsi' yang sama, tapi bukan record yang sedang diperbarui
+        $existingRecord = KegiatanTeknis::where('nama', $request->nama)->where('fungsi', $request->fungsi)
             ->where('id', '!=', $request->id)
             ->first();
 
@@ -143,18 +133,66 @@ class KegiatanTeknisController extends Controller
         return back()->with('success', 'Kegiatan ' . $request->nama . ' berhasil diubah');
     }
 
-    public function downloadTemlate()
-    {
-        $nameFile = request('template');
-        $path = public_path('storage/template/' . $nameFile . '.xlsx');
-        return response()->download($path);
-    }
-
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(KegiatanTeknis $kegiatanTeknis)
+    public function destroy($id)
     {
-        //
+        $kegiatan = KegiatanTeknis::find($id);
+
+
+        if ($kegiatan) {
+
+            if ($kegiatan->kategori == 'petani') {
+                // menghapus pemutakhiran petani
+                $kegiatan->pemutakhiranPetani()->each(function ($pemutakhiran) {
+                    $pemutakhiran->rutaPetani()->each(function ($ruta) {
+                        $ruta->delete();
+                    });
+                    $pemutakhiran->delete();
+                });
+                // menghapus pencacah petani
+                $kegiatan->pencacahanPetani()->each(function ($pencacahan) {
+                    $pencacahan->delete();
+                });
+                $kegiatan->delete();
+            }
+
+            if ($kegiatan->kategori == 'rumah_tangga') {
+                // menghapus pemutakhiran RumahTangga
+                $kegiatan->pemutakhiranRumahTangga()->each(function ($pemutakhiran) {
+                    $pemutakhiran->rutaRumahTangga()->each(function ($ruta) {
+                        $ruta->delete();
+                    });
+
+                    $pemutakhiran->delete();
+                });
+                // menghapus pencacah RumahTangga
+                $kegiatan->pencacahanRumahTangga()->each(function ($pencacahan) {
+                    $pencacahan->delete();
+                });
+                $kegiatan->delete();
+            }
+
+
+            if ($kegiatan->kategori == 'perusahaan') {
+                // menghapus pemutakhiran Perusahaan
+                $kegiatan->pemutakhiranPerusahaan()->each(function ($pemutakhiran) {
+                    $pemutakhiran->delete();
+                });
+                // menghapus pencacah Perusahaan
+                $kegiatan->pencacahanPerusahaan()->each(function ($pencacahan) {
+                    $pencacahan->delete();
+                });
+                $kegiatan->delete();
+            }
+
+            if ($kegiatan->kategori == 'direct_link') {
+                $kegiatan->delete();
+            }
+
+
+            return back()->with('success', 'Kegiatan ' . $kegiatan->nama . ' berhasil dihapus!');
+        }
     }
 }

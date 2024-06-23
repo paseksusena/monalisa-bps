@@ -136,6 +136,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/teknis/kegiatan', [KegiatanTeknisController::class, 'store']);
 
     Route::get('/download-excel-template', [KegiatanTeknisController::class, 'downloadTemlate']);
+    Route::delete('/teknis/kegiatan/{id}', [KegiatanTeknisController::class, 'destroy']);
+    Route::put('/teknis/kegiatan', [KegiatanTeknisController::class, 'update']);
+    Route::get('/teknis/kegiatan-edit/{id}', [KegiatanTeknisController::class, 'edit']);
 
     // Rumah Tangga 
     // Pemutakhiran 
