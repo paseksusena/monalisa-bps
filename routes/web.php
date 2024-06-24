@@ -47,6 +47,10 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+//setSession
+Route::post('/set-year-session', [KegiatanTeknisController::class, 'setYearSession']);
+//search
+Route::get('/teknis/kegiatan/search', [KegiatanTeknisController::class, 'search']);
 
 // ROUTE AUTENTIKASI USER
 //Autentikasi User Profil
@@ -136,9 +140,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/teknis/kegiatan', [KegiatanTeknisController::class, 'store']);
 
     Route::get('/download-excel-template', [KegiatanTeknisController::class, 'downloadTemlate']);
-    Route::delete('/teknis/kegiatan/{id}', [KegiatanTeknisController::class, 'destroy']);
     Route::put('/teknis/kegiatan', [KegiatanTeknisController::class, 'update']);
     Route::get('/teknis/kegiatan-edit/{id}', [KegiatanTeknisController::class, 'edit']);
+
+    Route::delete('/teknis/kegiatan/{id}', [KegiatanTeknisController::class, 'destroy']);
+
 
     // Rumah Tangga 
     // Pemutakhiran 

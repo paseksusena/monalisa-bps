@@ -22,9 +22,8 @@ class PemutakhiranPerusahaan extends Model
                 ->orWhere('kecamatan', 'like', '%' . $search . '%')
                 ->orWhere('kode_desa', 'like', '%' . $search . '%')
                 ->orWhere('desa', 'like', '%' . $search . '%')
-                ->orWhere('kode_sbr', 'like', '%' . $search . '%')
                 ->orWhere('status', 'like', '%' . $search . '%')
-                ->orWhere('penyelesaian_ruta', 'like', '%' . $search . '%');
+                ->orWhere('perusahaan', 'like', '%' . $search . '%');
         });
     }
 }

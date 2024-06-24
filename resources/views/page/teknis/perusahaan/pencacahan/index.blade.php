@@ -25,6 +25,26 @@
             <div class="grid lg:grid-cols-1 gap-1 bg-gray-100 shadow-lg p-4 rounded-lg overflow-x-auto mb-10">
 
                 <div class="pt-2 flex flex-col">
+                    <!-- SearchBox -->
+                    <form action="/teknis/kegiatan/perusahaan/pencacahan" class="flex w-full sm:w-64 mb-4 sm:mb-0">
+                        <div class="relative flex-grow">
+                            <div class="absolute inset-y-0 start-0 flex items-center pointer-events-none z-20 ps-3.5">
+                                <svg class="flex-shrink-0 size-4 text-gray-400 dark:text-white/60"
+                                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <circle cx="11" cy="11" r="8"></circle>
+                                    <path d="m21 21-4.3-4.3"></path>
+                                </svg>
+                            </div>
+                            <input type="hidden" name="kegiatan" value="{{ $kegiatan->id }}">
+                            <input
+                                class="py-2 ps-10 pe-4 block w-full shadow-sm border-gray-200 rounded-l-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none bg-gray-50 dark:text-neutral-400 dark:placeholder-neutral-500"
+                                type="text" placeholder="Search" value="{{$search}}" name="search"
+                                data-hs-combo-box-input="">
+                        </div>
+                        <button type="submit" class="py-2 px-4 bg-blue-500 text-white rounded-r-lg">Search</button>
+                    </form>
                     <div class="flex items-center justify-between">
                         <h1 class="font-semibold text-black sm:text-xl md:text-2xl lg:text-xl">
                             {{ $kegiatan->nama }}

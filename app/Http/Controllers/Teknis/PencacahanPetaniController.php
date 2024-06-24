@@ -24,6 +24,11 @@ class PencacahanPetaniController extends Controller
         $tgl_awal = null;
         $tgl_akhir = null;
         $kegiatan = request('kegiatan');
+        $search = null;
+
+        if (request('search')) {
+            $search = request('search');
+        }
 
         $pencacahans = PencacahanPetani::filter(request(['search']))->where('kegiatan_id', $kegiatan)->get();
         $pencacahan = PencacahanPetani::where('kegiatan_id', $kegiatan)->first();
@@ -36,6 +41,7 @@ class PencacahanPetaniController extends Controller
 
 
         return view('page.teknis.petani.pencacahan.index', [
+            'search' => $search,
             'pencacahans' => $pencacahans,
             'kegiatan' => $kegiatan,
             'tgl_awal' => $tgl_awal,

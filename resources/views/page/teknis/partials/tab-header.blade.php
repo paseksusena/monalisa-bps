@@ -3,23 +3,6 @@
     <!-- SearchBox -->
     <div>
         <!-- Tabs -->
-        <!-- SearchBox -->
-        <div class="static w-full sm:w-64 mb-4 sm:mb-0">
-            <div class="relative">
-                <div class="absolute inset-y-0 start-0 flex items-center pointer-events-none z-20 ps-3.5">
-                    <svg class="flex-shrink-0 size-4 text-gray-400 dark:text-white/60"
-                        xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <path d="m21 21-4.3-4.3"></path>
-                    </svg>
-                </div>
-                <input
-                    class="py-2 ps-10 pe-4 block w-full shadow-sm border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none bg-gray-50 dark:text-neutral-400 dark:placeholder-neutral-500"
-                    type="text" placeholder="Search" value="" data-hs-combo-box-input="">
-            </div>
-        </div>
-        <!-- End SearchBox -->
     </div>
     <!-- End SearchBox -->
 

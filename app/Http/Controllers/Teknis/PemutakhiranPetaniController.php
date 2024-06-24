@@ -31,6 +31,12 @@ class PemutakhiranPetaniController extends Controller
         $date = [];
         $kegiatan = request('kegiatan');
         $pemutakhirans = PemutakhiranPetani::where('kegiatan_id', $kegiatan)->get();
+        $search = null;
+
+        if (request('search')) {
+            $search = request('search');
+        }
+
         if (request('search')) {
             $pemutakhirans = PemutakhiranPetani::filter(request(['search']))->where('kegiatan_id', $kegiatan)->get();
         }
@@ -57,6 +63,7 @@ class PemutakhiranPetaniController extends Controller
         }
 
         return view('page.teknis.petani.pemutakhiran.index', [
+            'search' => $search,
             'pemutakhirans' => $pemutakhirans,
             'kegiatan' => $kegiatan,
             "semua_tanggal" => $semua_tanggal ?? [],

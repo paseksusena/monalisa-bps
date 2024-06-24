@@ -12,6 +12,7 @@ class UserMitra extends Authenticatable
     // Tambahkan atribut yang dibutuhkan oleh model
     protected $fillable = [
         'ppl_id',
+        'name'
         // Tambahkan atribut lainnya jika diperlukan
     ];
 

@@ -24,55 +24,75 @@
             <div class="grid lg:grid-cols-1 gap-1 bg-gray-100 shadow-lg p-4 rounded-lg overflow-x-auto mb-10">
 
                 <div class="pt-2 flex flex-col">
+                    <form action="/teknis/kegiatan/rumah-tangga/pencacahan" class="flex w-full sm:w-64 mb-4 sm:mb-0">
+                        <div class="relative flex-grow">
+                            <div class="absolute inset-y-0 start-0 flex items-center pointer-events-none z-20 ps-3.5">
+                                <svg class="flex-shrink-0 size-4 text-gray-400 dark:text-white/60"
+                                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <circle cx="11" cy="11" r="8"></circle>
+                                    <path d="m21 21-4.3-4.3"></path>
+                                </svg>
+                            </div>
+                            <input type="hidden" name="kegiatan" value="{{ $kegiatan->id }}">
+                            <input
+                                class="py-2 ps-10 pe-4 block w-full shadow-sm border-gray-200 rounded-l-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none bg-gray-50 dark:text-neutral-400 dark:placeholder-neutral-500"
+                                type="text" placeholder="Search" value="" name="search"
+                                data-hs-combo-box-input="">
+                        </div>
+                        <button type="submit" class="py-2 px-4 bg-blue-500 text-white rounded-r-lg">Search</button>
+                    </form>
                     <div class="flex items-center justify-between">
                         <h1 class="font-semibold text-black sm:text-xl md:text-2xl lg:text-xl">
-                            {{ $kegiatan->nama }}
+                            Rumah Tangga
                         </h1>
                         <!-- Tombol Import Data excel -->
                         <div class="text-center">
-                            <button id="dropdownDefaultButton" data-dropdown-toggle="dropdown"
-                                class="py-2 px-4 inline-flex items-center gap-x-1 text-sm font-medium rounded-xl border border-green-500 bg-white text-green-500 hover:bg-green-50 disabled:opacity-50 disabled:pointer-events-none">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
-                                    style="fill: rgb(22, 212, 152);transform: ;msFilter:;">
-                                    <path d="m12 16 4-5h-3V4h-2v7H8z"></path>
-                                    <path d="M20 18H4v-7H2v7c0 1.103.897 2 2 2h16c1.103 0 2-.897 2-2v-7h-2v7z"></path>
-                                </svg>
-                                Excel
-                            </button>
+                        <button id="dropdownDefaultButton" data-dropdown-toggle="dropdown"
+                            class="py-2 px-4 inline-flex items-center gap-x-1 text-sm font-medium rounded-xl border border-green-500 bg-white text-green-500 hover:bg-green-50 disabled:opacity-50 disabled:pointer-events-none">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                                style="fill: rgb(22, 212, 152);transform: ;msFilter:;">
+                                <path d="m12 16 4-5h-3V4h-2v7H8z"></path>
+                                <path d="M20 18H4v-7H2v7c0 1.103.897 2 2 2h16c1.103 0 2-.897 2-2v-7h-2v7z"></path>
+                            </svg>
+                            Excel
+                        </button>
 
-                            <!-- Dropdown menu -->
-                            <div id="dropdown"
-                                class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-64 dark:bg-gray-700">
-                                <ul class="py-2 text-sm text-gray-700 dark:text-gray-200"
-                                    aria-labelledby="dropdownDefaultButton">
-                                    <li>
-                                        <a href="/download-excel-template?template=Template_Rumah-tangga_pemutakhiran"
-                                            class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                viewBox="0 0 24 24"
-                                                style="fill: rgba(12, 226, 105, 1);transform: ;msFilter:;">
-                                                <path
-                                                    d="M18 22a2 2 0 0 0 2-2V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12zM13 4l5 5h-5V4zM7 8h3v2H7V8zm0 4h10v2H7v-2zm0 4h10v2H7v-2z">
-                                                </path>
-                                            </svg>
-                                            <span class="ml-4">Format Pemutakhiran</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="/download-excel-template?template=Template_Rumah-tangga_pencacahan"
-                                            class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                viewBox="0 0 24 24"
-                                                style="fill: rgba(12, 226, 105, 1);transform: ;msFilter:;">
-                                                <path
-                                                    d="M18 22a2 2 0 0 0 2-2V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12zM13 4l5 5h-5V4zM7 8h3v2H7V8zm0 4h10v2H7v-2zm0 4h10v2H7v-2z">
-                                                </path>
-                                            </svg>
-                                            <span class="ml-4">Format Pencacahan</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
+                        <!-- Dropdown menu -->
+                        <div id="dropdown"
+                            class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-64 dark:bg-gray-700">
+                            <ul class="py-2 text-sm text-gray-700 dark:text-gray-200"
+                                aria-labelledby="dropdownDefaultButton">
+                                <li>
+                                    <a href="/download-excel-template?template=Template_Rumah-tangga_pemutakhiran"
+                                        class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24"
+                                            style="fill: rgba(12, 226, 105, 1);transform: ;msFilter:;">
+                                            <path
+                                                d="M18 22a2 2 0 0 0 2-2V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12zM13 4l5 5h-5V4zM7 8h3v2H7V8zm0 4h10v2H7v-2zm0 4h10v2H7v-2z">
+                                            </path>
+                                        </svg>
+                                        <span class="ml-4">Format Pemutakhiran</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/download-excel-template?template=Template_Rumah-tangga_pencacahan"
+                                        class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24"
+                                            style="fill: rgba(12, 226, 105, 1);transform: ;msFilter:;">
+                                            <path
+                                                d="M18 22a2 2 0 0 0 2-2V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12zM13 4l5 5h-5V4zM7 8h3v2H7V8zm0 4h10v2H7v-2zm0 4h10v2H7v-2z">
+                                            </path>
+                                        </svg>
+                                        <span class="ml-4">Format Pencacahan</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
                             <button type="button" data-id="{{ $kegiatan->id }}" onclick="openCreateRumahTangga(this)"
                                 class="py-2 px-4 inline-flex items-center gap-x-1 text-sm font-medium rounded-xl border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
                                 data-hs-overlay="#hs-sign-out-alert3">
@@ -87,8 +107,7 @@
                             </button>
                             <!-- End Tombol Data -->
 
-                            <button type="button" data-id="{{ $kegiatan->id }}"
-                                onclick="openCreateRumahTanggaExcel(this)"
+                            <button type="button" data-id="{{ $kegiatan->id }}" onclick="openCreateRumahTanggaExcel(this)"
                                 class="py-2 px-4 inline-flex items-center gap-x-1 text-sm font-medium rounded-xl border border-transparent bg-green-600 text-white hover:bg-green-700 disabled:opacity-50 disabled:pointer-events-none"
                                 data-hs-overlay="#hs-sign-out-alert2">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
@@ -105,82 +124,81 @@
                     </div>
 
                     <div class="pb-2">
-                        <p class="text-black text-xs font-medium">
-                            {{ \Carbon\Carbon::parse($tgl_awal)->format('d/m/Y') }}
-                            - {{ \Carbon\Carbon::parse($tgl_akhir)->format('d/m/Y') }}
+                        <p class="text-black text-xs font-medium">{{ \Carbon\Carbon::parse($tgl_awal)->format('d/m/Y') }}
+                            -  {{ \Carbon\Carbon::parse($tgl_akhir)->format('d/m/Y') }}
                         </p>
                     </div>
 
                     <div class="flex flex-col">
                         <div class="-m-1.5 overflow-x-auto">
-                            <div
-                                class="p-1.5 min-w-full inline-block align-middle rounded-lg overflow-hidden bg-white ">
+                            <div class="p-1.5 min-w-full inline-block align-middle rounded-lg overflow-hidden bg-white ">
                                 <div class="overflow-hidden">
                                     <table class="min-w-full divide-y divide-gray-200 rounded-lg dark:divide-gray-700">
                                         <thead class="bg-gray-50 dark:bg-gray-800">
                                             <tr class="border-b-2 border-gray-300">
                                                 <th scope="col"
-                                                    class="px-6 py-3 text-start text-xs font-bold text-gray-500 uppercase">
+                                                    class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">
                                                     No</th>
                                                 <th scope="col"
-                                                    class="px-6 py-3 text-start text-xs font-bold text-gray-500 uppercase">
+                                                    class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">
                                                     Progres</th>
                                                 <th scope="col"
-                                                    class="px-6 py-3 text-start text-xs font-bold text-gray-500 uppercase">
+                                                    class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">
                                                     NKS</th>
-                                                <th scope="col"
-                                                    class="px-6 py-3 text-start text-xs font-bold text-gray-500 uppercase">
+                                                    <th scope="col"
+                                                    class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">
                                                     ID PML</th>
                                                 <th scope="col"
-                                                    class="px-6 py-3 text-start text-xs font-bold text-gray-500 uppercase">
+                                                    class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">
                                                     PML</th>
-                                                <th scope="col"
-                                                    class="px-6 py-3 text-start text-xs font-bold text-gray-500 uppercase">
+
+                                                    <th scope="col"
+                                                    class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">
                                                     ID PPL</th>
                                                 <th scope="col"
-                                                    class="px-6 py-3 text-start text-xs font-bold text-gray-500 uppercase">
+                                                    class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">
                                                     PPL</th>
                                                 <th scope="col"
-                                                    class="px-6 py-3 text-start text-xs font-bold text-gray-500 uppercase">
+                                                    class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">
                                                     Kecamatan</th>
                                                 <th scope="col"
-                                                    class="px-6 py-3 text-start text-xs font-bold text-gray-500 uppercase">
+                                                    class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">
                                                     Desa/Kelurahan</th>
                                                 <th scope="col"
-                                                    class="px-6 py-3 text-start text-xs font-bold text-gray-500 uppercase">
+                                                    class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">
                                                     KRT 1</th>
                                                 <th scope="col"
-                                                    class="px-6 py-3 text-start text-xs font-bold text-gray-500 uppercase">
+                                                    class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">
                                                     KRT 2</th>
                                                 <th scope="col"
-                                                    class="px-6 py-3 text-start text-xs font-bold text-gray-500 uppercase">
+                                                    class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">
                                                     KRT 3</th>
                                                 <th scope="col"
-                                                    class="px-6 py-3 text-start text-xs font-bold text-gray-500 uppercase">
+                                                    class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">
                                                     KRT 4</th>
                                                 <th scope="col"
-                                                    class="px-6 py-3 text-start text-xs font-bold text-gray-500 uppercase">
+                                                    class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">
                                                     KRT 5</th>
                                                 <th scope="col"
-                                                    class="px-6 py-3 text-start text-xs font-bold text-gray-500 uppercase">
+                                                    class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">
                                                     KRT 6</th>
                                                 <th scope="col"
-                                                    class="px-6 py-3 text-start text-xs font-bold text-gray-500 uppercase">
+                                                    class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">
                                                     KRT 7</th>
                                                 <th scope="col"
-                                                    class="px-6 py-3 text-start text-xs font-bold text-gray-500 uppercase">
+                                                    class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">
                                                     KRT 8</th>
                                                 <th scope="col"
-                                                    class="px-6 py-3 text-start text-xs font-bold text-gray-500 uppercase">
+                                                    class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">
                                                     KRT 9</th>
                                                 <th scope="col"
-                                                    class="px-6 py-3 text-start text-xs font-bold text-gray-500 uppercase">
+                                                    class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">
                                                     KRT 10</th>
                                                 <th scope="col"
-                                                    class="px-6 py-3 text-start text-xs font-bold text-gray-500 uppercase">
+                                                    class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">
                                                     Status</th>
                                                 <th scope="col"
-                                                    class="px-6 py-3 text-center text-xs font-bold text-gray-500 uppercase">
+                                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">
                                                     Action
                                                 </th>
                                             </tr>
@@ -192,27 +210,25 @@
                                             <tr
                                                 class="odd:bg-white even:bg-gray-100 hover:bg-gray-100 dark:odd:bg-gray-800 dark:even:bg-gray-700 dark:hover:bg-gray-700">
                                                 <td
-                                                    class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-gray-200">
-                                                    {{$loop->iteration}}</td>
-
+                                                class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-gray-200">
+                                                {{$loop->iteration}}</td>
                                                 <td
-                                                    class="px-6 py-4 whitespace-nowrap text-sm font-bold text-blue-800 dark:text-blue-200">
-                                                    {{$pencacahan->progres}}% </td>
-                                               
+                                                class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-gray-200">
+                                                {{$pencacahan->progres}}</td>
                                                 <td
                                                     class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-gray-200">
                                                     {{$pencacahan->nks}}</td>
                                                 <td
                                                     class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-gray-200">
                                                     {{$pencacahan->id_pml}}</td>
-                                                <td
+                                                    <td
                                                     class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-gray-200">
                                                     {{$pencacahan->pml}}</td>
                                                 <td
                                                     class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
                                                     {{$pencacahan->id_ppl}}</td>
 
-                                                <td
+                                                    <td
                                                     class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
                                                     {{$pencacahan->ppl}}</td>
                                                 <td
@@ -222,85 +238,46 @@
                                                     class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
                                                     {{$pencacahan->desa}}</td>
 
-                                                @for ($i = 1; $i <= 10; $i++) <td
-                                                    class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
-                                                    {{ $pencacahan->{'sampel_' . $i} }}
+                                                    @for ($i = 1; $i <= 10; $i++)
+                                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
+                                                        {{ $pencacahan->{'sampel_' . $i} }}
                                                     </td>
-                                                    @endfor
+                                                @endfor
 
-                                                    @if ($pencacahan->status == 0)
-                                                    <td
-                                                        class="px-4 py-4 whitespace-nowrap text-sm text-blue-600 font-semibold dark:text-gray-200">
-                                                        <span
-                                                            class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-bold bg-yellow-100 text-yellow-600 rounded-full dark:bg-yellow-100 dark:text-yellow-100">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="12"
-                                                                height="12" viewBox="0 0 24 24"
-                                                                style="fill: rgb(222, 130, 38);transform: ;msFilter:;">
-                                                                <path
-                                                                    d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm5 11H7v-2h10v2z">
-                                                                </path>
-                                                            </svg>
-                                                            Belum
-                                                        </span>
-                                                    </td>
-                                                    @else
-                                                    <td
-                                                        class="px-4 py-4 whitespace-nowrap text-sm text-blue-600 font-semibold dark:text-gray-200">
-                                                        <span
-                                                            class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-bold bg-green-200 text-green-800 rounded-full dark:bg-green-500/10 dark:text-green-500">
-                                                            <svg class="size-2.5" xmlns="http://www.w3.org/2000/svg"
-                                                                width="16" height="16" fill="currentColor"
-                                                                viewBox="0 0 16 16">
-                                                                <path
-                                                                    d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-                                                            </svg>
-                                                            Sudah
-                                                        </span>
-                                                    </td>
-                                                    @endif
+
+                                                <td
+                                                    class="px-6 py-4 whitespace-nowrap text-sm text-blue-600 font-semibold dark:text-gray-200">
+                                                    {{$pencacahan->status}}</td>
 
                                                     <td class="px-6 py-3 flex justify-center items-center space-x-2">
                                                         <a href="#" class="text-blue-600 hover:underline">
-                                                            <button type="button" data-hs-overlay="#hs-sign-out-alert5"
-                                                                data-id="{{$pencacahan->id}}"
-                                                                onclick="openEditModal(this)"
+                                                            <button type="button" data-hs-overlay="#hs-sign-out-alert5" data-id="{{$pencacahan->id}}" onclick="openEditModal(this)"
                                                                 class="bg-blue-600 hover:bg-blue-700 text-white p-1 rounded focus:outline-none focus:shadow-outline">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="20"
-                                                                    height="20" viewBox="0 0 24 24"
-                                                                    style="fill: rgba(255, 255, 255, 1);">
-                                                                    <path
-                                                                        d="m7 17.013 4.413-.015 9.632-9.54c.378-.378.586-.88.586-1.414s-.208-1.036-.586-1.414l-1.586-1.586c-.756-.756-2.075-.752-2.825-.003L7 12.583v4.43zM18.045 4.458l1.589 1.583-1.597 1.582-1.586-1.585 1.594-1.58zM9 13.417l6.03-5.973 1.586 1.586-6.029 5.971L9 15.006v-1.589z">
-                                                                    </path>
-                                                                    <path
-                                                                        d="M5 21h14c1.103 0 2-.897 2-2v-8.668l-2 2V19H8.158c-.026 0-.053.01-.079.01-.033 0-.066-.009-.1-.01H5V5h6.847l2-2H5c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2z">
-                                                                    </path>
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" style="fill: rgba(255, 255, 255, 1);">
+                                                                    <path d="m7 17.013 4.413-.015 9.632-9.54c.378-.378.586-.88.586-1.414s-.208-1.036-.586-1.414l-1.586-1.586c-.756-.756-2.075-.752-2.825-.003L7 12.583v4.43zM18.045 4.458l1.589 1.583-1.597 1.582-1.586-1.585 1.594-1.58zM9 13.417l6.03-5.973 1.586 1.586-6.029 5.971L9 15.006v-1.589z"></path>
+                                                                    <path d="M5 21h14c1.103 0 2-.897 2-2v-8.668l-2 2V19H8.158c-.026 0-.053.01-.079.01-.033 0-.066-.009-.1-.01H5V5h6.847l2-2H5c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2z"></path>
                                                                 </svg>
                                                             </button>
                                                         </a>
 
-                                                        <!-- Modal Edit-->
+                                                          <!-- Modal Edit-->
                                                         @include('page.teknis.rumah-tangga.pencacahan.edit')
 
-                                                        <form id="delete-pencacahan-rumahtangga{{$pencacahan->id}}"
-                                                            action="/teknis/kegiatan/rumah-tangga/pencacahan/{{$pencacahan->id}}"
-                                                            method="POST">
+                                                        <form id="delete-pencacahan-rumahtangga{{$pencacahan->id}}" action="/teknis/kegiatan/rumah-tangga/pencacahan/{{$pencacahan->id}}" method="POST">
                                                             @csrf
                                                             @method('delete')
                                                             <input type="hidden" name="id" value="{{$pencacahan->id}}">
-                                                            <button type="button"
-                                                                onclick="confirmDelete({{$pencacahan->id}})"
+                                                            <button type="button" onclick="confirmDelete({{$pencacahan->id}})"
                                                                 class="bg-red-600 hover:bg-red-700 text-white p-1 rounded focus:outline-none focus:shadow-outline">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="20"
-                                                                    height="20" viewBox="0 0 24 24"
-                                                                    style="fill: rgba(255, 252, 252, 1);">
-                                                                    <path
-                                                                        d="M5 20a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8h2V6h-4V4a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v2H3v2h2zM9 4h6v2H9zM8 8h9v12H7V8z">
-                                                                    </path>
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" style="fill: rgba(255, 252, 252, 1);">
+                                                                    <path d="M5 20a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8h2V6h-4V4a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v2H3v2h2zM9 4h6v2H9zM8 8h9v12H7V8z"></path>
                                                                     <path d="M9 10h2v8H9zm4 0h2v8h-2z"></path>
                                                                 </svg>
                                                             </button>
                                                         </form>
+
                                                     </td>
+
                                             </tr>
 
                                             @endforeach
@@ -312,16 +289,16 @@
                         </div>
                     </div>
 
-                    <!-- Data excel-->
-                    @include('page.teknis.rumah-tangga.pencacahan.create-excel')
+                <!-- Data excel-->
+                @include('page.teknis.rumah-tangga.pencacahan.create-excel')
 
-                    <!-- Data Manual-->
-                    @include('page.teknis.rumah-tangga.pencacahan.create')
+                <!-- Data Manual-->
+                @include('page.teknis.rumah-tangga.pencacahan.create')
 
 
-                </div>
             </div>
         </div>
+    </div>
 </body>
 
 </html>
@@ -329,23 +306,23 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <script>
-function confirmDelete(id) {
-    Swal.fire({
-        title: 'Apakah Anda yakin menghapus?',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#d33',
-        cancelButtonColor: '#3085d6',
-        confirmButtonText: 'Ya, hapus saja!',
-        cancelButtonText: 'Batal'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            document.getElementById('delete-pencacahan-rumahtangga' + id).submit();
-        }
-    });
-}
+    function confirmDelete(id) {
+        Swal.fire({
+            title: 'Apakah Anda yakin menghapus?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Ya, hapus saja!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('delete-pencacahan-rumahtangga' + id).submit();
+            }
+        });
+    }
 
-@if(session('success'))
+    @if(session('success'))
     Swal.fire({
         icon: 'success',
         title: '{{ session('success') }}',
@@ -353,5 +330,4 @@ function confirmDelete(id) {
         timer: 2000
     });
     @endif
-
 </script>

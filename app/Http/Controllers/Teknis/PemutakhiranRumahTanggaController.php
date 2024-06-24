@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Teknis;
 use App\Http\Controllers\Controller;
 
 
+use App\Models\PemutakhiranPetani;
 use App\Models\PemutakhiranRumahTangga;
 use Illuminate\Http\Request;
 use App\Models\KegiatanTeknis;
@@ -15,6 +16,10 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\PemutakhiranRumahTanggaImport;
 use App\Models\RutaRumahTangga;
 use App\Models\UserMitra;
+use App\Models\PencacahanRumahTangga;
+
+
+
 
 
 class PemutakhiranRumahTanggaController extends Controller
@@ -26,11 +31,15 @@ class PemutakhiranRumahTanggaController extends Controller
     {
         $date = [];
         $kegiatan = request('kegiatan');
+        $search = null;
         $pemutakhirans = PemutakhiranRumahTangga::where('kegiatan_id', $kegiatan)->get();
         if (request('search')) {
             $pemutakhirans = PemutakhiranRumahTangga::filter(request(['search']))->where('kegiatan_id', $kegiatan)->get();
         }
         $kegiatan = KegiatanTeknis::where('id', $kegiatan)->first();
+
+        // $this->progres_kegiatan($kegiatan->id);
+
 
         if ($pemutakhirans->isEmpty()) {
             $pemutakhiran = [];
@@ -51,12 +60,17 @@ class PemutakhiranRumahTanggaController extends Controller
             }
         }
 
+        if (request('search')) {
+            $search = request('search');
+        }
         return view('page.teknis.rumah-tangga.pemutakhiran.index', [
             'pemutakhirans' => $pemutakhirans,
             'kegiatan' => $kegiatan,
             "semua_tanggal" => $semua_tanggal ?? [],
             'tgl_awal' => $tgl_awal,
             'tgl_akhir' => $tgl_akhir,
+            'search' => $search,
+
         ]);
     }
 
@@ -93,16 +107,18 @@ class PemutakhiranRumahTanggaController extends Controller
             'nks' => 'required|max:100',
             'nama_sls' => 'required|max:100|string',
             'beban_kerja' => 'required|integer|max:99999',
-            'keluarga_awal' => 'integer|max:99999',
-            'keluarga_akhir' => 'integer|max:99999',
+
             'kegiatan_id' => 'required',
             'tgl_awal' => 'required',
             'tgl_akhir' => 'required'
 
         ]);
 
-        //proses membuat ruta otomatis berdasarkan tgl awal sampai akhir Kegiatan
+        //proses identifikasi keluarga awal dan akhir 0
+        $requestValidasi['keluarga_awal'] = 0;
+        $requestValidasi['keluarga_akhir'] = 0;
 
+        //proses membuat ruta otomatis berdasarkan tgl awal sampai akhir Kegiatan
         $kegiatan = KegiatanTeknis::findOrFail($request->kegiatan_id);
         $tgl_awal = Carbon::parse($request->tgl_awal);
         $tgl_akhir = Carbon::parse($request->tgl_akhir);
@@ -150,6 +166,7 @@ class PemutakhiranRumahTanggaController extends Controller
 
         // Cari UserMitra berdasarkan ppl_id
         $find = UserMitra::where('ppl_id', $request->id_ppl)->first();
+        // dd($request->ppl);
 
         // Jika tidak difind, buat entri UserMitra baru
         if (!$find) {
@@ -176,7 +193,7 @@ class PemutakhiranRumahTanggaController extends Controller
     public function edit($id)
     {
         $pemutakhiran = PemutakhiranRumahTangga::find($id);
-        $ruta = RutaRumahTangga::where('pemutakhiran_id', $pemutakhiran->id)->get();
+        $ruta = RutaRumahTangga::where('pemutakhiran_id', $id)->get();
 
         return response()->json([
             'pemutakhiran' => $pemutakhiran,
@@ -206,8 +223,8 @@ class PemutakhiranRumahTanggaController extends Controller
             'nks' => 'required|max:100',
             'nama_sls' => 'required|max:100|string',
             'beban_kerja' => 'required|integer|max:99999',
-            'keluarga_awal' => 'integer|max:99999',
-            'keluarga_akhir' => 'integer|max:99999',
+            'keluarga_awal' => 'nullable|integer|max:99999',
+            'keluarga_akhir' => 'nullable|integer|max:99999',
 
         ]);
         $id = $req->id;
@@ -254,12 +271,12 @@ class PemutakhiranRumahTanggaController extends Controller
 
 
         if ($status >= $req->beban_kerja) {
+
             $requestValidasi['status'] = true;
         } else {
             $requestValidasi['status'] = false;
         }
 
-        PemutakhiranRumahTangga::where('id', $req->id)->update($requestValidasi);
 
         UserMitra::where('ppl_id', $req->id_ppl)->update([
             'name' => $req->ppl,
@@ -267,8 +284,14 @@ class PemutakhiranRumahTanggaController extends Controller
         ]);
 
 
+        PemutakhiranRumahTangga::where('id', $req->id)->update($requestValidasi);
+
+
         return back()->with('success', 'Pemutakhiran berhasi di update!');
     }
+
+
+
 
     /**
      * Remove the specified resource from storage.
@@ -352,7 +375,7 @@ class PemutakhiranRumahTanggaController extends Controller
                 }
             }
 
-            return back()->with('success', 'Data berhasil diimport!');
+            return back()->with('success', 'Data berhasil diimpor!');
         } catch (\Exception $e) {
             return redirect()->back()->withInput()->with('error', 'File yang dinput harus sesuai dengan file Excel.');
         }

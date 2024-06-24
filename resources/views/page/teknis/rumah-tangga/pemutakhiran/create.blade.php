@@ -50,15 +50,6 @@
                     </div>
 
                     <div class="mb-5">
-                        <label for="penyelesaian_ruta"
-                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Penyelesaian
-                            Ruta</label>
-                        <input type="text" id="penyelesaian_ruta" name="penyelesaian_ruta"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
-                    </div>
-
-
-                    <div class="mb-5">
                         <label for="id_pml"
                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ID PML</label>
                         <input type="text" id="id_pml" name="id_pml"
@@ -126,21 +117,6 @@
                             Kerja</label>
                         <input type="number" id="beban_kerja" name="beban_kerja"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
-                    </div>
-
-
-                    <div class="mb-5">
-                        <label for="keluarga_awal"
-                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Keluarga Awal</label>
-                        <input type="number" id="keluarga_awal" name="keluarga_awal" 
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" >
-                    </div>
-
-                    <div class="mb-5">
-                        <label for="keluarga_akhir"
-                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Keluarga Akhir</label>
-                        <input type="number" id="keluarga_akhir" name="keluarga_akhir" 
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" >
                     </div>
                     
                 </div>

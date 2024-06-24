@@ -23,6 +23,11 @@ class PemutakhiranPerusahaanController extends Controller
         $kegiatan = request('kegiatan');
         $tgl_awal = null;
         $tgl_akhir = null;
+        $search = null;
+
+        if (request('search')) {
+            $search = request('search');
+        }
 
         $pemutakhirans = PemutakhiranPerusahaan::filter(request(['search']))->where('kegiatan_id', $kegiatan)->get();
         $kegiatan = KegiatanTeknis::where('id', $kegiatan)->first();
@@ -33,6 +38,7 @@ class PemutakhiranPerusahaanController extends Controller
         }
 
         return view('page.teknis.perusahaan.pemutakhiran.index', [
+            'search' => $search,
             'pemutakhirans' => $pemutakhirans,
             'tgl_awal' => $tgl_awal,
             'tgl_akhir' => $tgl_akhir,

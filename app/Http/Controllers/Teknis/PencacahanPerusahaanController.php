@@ -25,6 +25,11 @@ class PencacahanPerusahaanController extends Controller
         $kegiatan = request('kegiatan');
         $tgl_awal = null;
         $tgl_akhir = null;
+        $search = null;
+
+        if (request('search')) {
+            $search = request('search');
+        }
 
         $pencacahans = PencacahanPerusahaan::filter(request(['search']))->where('kegiatan_id', $kegiatan)->get();
         $kegiatan = KegiatanTeknis::where('id', $kegiatan)->first();
@@ -35,6 +40,7 @@ class PencacahanPerusahaanController extends Controller
         }
 
         return view('page.teknis.perusahaan.pencacahan.index', [
+            'search' => $search,
             'pencacahans' => $pencacahans,
             'tgl_awal' => $tgl_awal,
             'tgl_akhir' => $tgl_akhir,

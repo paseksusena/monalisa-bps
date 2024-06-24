@@ -42,7 +42,7 @@ class KegiatanTeknisController extends Controller
         return view('page.teknis.index', [
             'kegiatans' => $kegiatans,
             'fungsi' => $fungsi,
-            'tahun' =>  $years,
+            'years' =>  $years,
         ]);
     }
 
@@ -136,9 +136,9 @@ class KegiatanTeknisController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy($id, Request $request)
     {
-        $kegiatan = KegiatanTeknis::find($id);
+        $kegiatan = KegiatanTeknis::where('id', $request->kegiatan)->first();
 
 
         if ($kegiatan) {
@@ -191,8 +191,44 @@ class KegiatanTeknisController extends Controller
                 $kegiatan->delete();
             }
 
-
             return back()->with('success', 'Kegiatan ' . $kegiatan->nama . ' berhasil dihapus!');
         }
+    }
+
+    public function downloadTemlate()
+    {
+        $nameFile = request('template');
+        $path = public_path('storage/template/' . $nameFile . '.xlsx');
+        return response()->download($path);
+    }
+
+    public function search(Request $request)
+    {
+        // Inisialisasi array untuk menyimpan hasil pencarian
+        $searchResults = [];
+
+        // Ambil data pencarian dari permintaan
+        $searchTerm = $request->input('search');
+        $session = session('selected_year');
+
+        // Lakukan pencarian di berbagai model dan simpan hasilnya ke dalam array
+        $kegiatans = KegiatanTeknis::where('nama', 'like', '%' . $searchTerm . '%')->where('tahun', $session)
+            ->get();;
+
+
+        // Loop melalui setiap hasil pencarian dan tambahkan ke array hasil pencarian
+        foreach ($kegiatans as $kegiatan) {
+            if ($kegiatan->tahun == $session) {
+                $searchResults[] = [
+                    'name' => $kegiatan->nama,
+                    'url' => "/teknis/kegiatan/rumah-tangga/pemutakhiran?kegiatan=" . $kegiatan->id,
+                    'alamat' => $kegiatan->fungsi . '/' . $kegiatan->nama,
+                ];
+            }
+        }
+
+
+        // Kirim hasil pencarian sebagai respons JSON
+        return response()->json($searchResults);
     }
 }

@@ -21,7 +21,8 @@ class PencacahanPerusahaan extends Model
                 ->orWhere('kecamatan', 'like', '%' . $search . '%')
                 ->orWhere('kode_desa', 'like', '%' . $search . '%')
                 ->orWhere('desa', 'like', '%' . $search . '%')
-                ->orWhere('status', 'like', '%' . $search . '%');
+                ->orWhere('status', 'like', '%' . $search . '%')
+                ->orWhere('perusahaan', 'like', '%' . $search . '%');
         });
     }
 }
