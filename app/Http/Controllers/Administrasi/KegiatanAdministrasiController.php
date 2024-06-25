@@ -43,10 +43,14 @@ class KegiatanAdministrasiController extends Controller
 
         $selected_year = session('selected_year');
 
-        $search = request('search');
+        $search = request('search');;
+        $arrFungsi = ['Sosial', 'Produksi', 'Neraca', 'Umum', 'IPDS', 'Distribusi'];
         $fungsi = $this->getFungsi();
 
-
+        if (!in_array($fungsi, $arrFungsi)) {
+            // Handle the case when fungsi is not valid
+            return redirect('/administrasi');
+        }
 
         $previousQuery = request()->except(['search']);
         $query = array_merge($previousQuery, ['search' => $search]);

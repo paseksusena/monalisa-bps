@@ -91,33 +91,6 @@
                     <span class="text-gray-800 dark:text-gray-400 text-sm mr-2">Progress</span>
                 </div>
                 </div>
-                
-                <!-- Filter -->
-                <div class="hs-dropdown hs-dropdown-example relative inline-flex">
-                    <button id="hs-dropdown-example" type="button" class="hs-dropdown-toggle py-3 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(61, 61, 61, 1);transform: ;msFilter:;">
-                            <path d="M21 3H5a1 1 0 0 0-1 1v2.59c0 .523.213 1.037.583 1.407L10 13.414V21a1.001 1.001 0 0 0 1.447.895l4-2c.339-.17.553-.516.553-.895v-5.586l5.417-5.417c.37-.37.583-.884.583-1.407V4a1 1 0 0 0-1-1zm-6.707 9.293A.996.996 0 0 0 14 13v5.382l-2 1V13a.996.996 0 0 0-.293-.707L6 6.59V5h14.001l.002 1.583-5.71 5.71z"></path>
-                        </svg>
-                        {{$status}}                       
-                         <svg class="hs-dropdown-open:rotate-180 size-4 text-gray-600 dark:text-neutral-600" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="m6 9 6 6 6-6"></path>
-                        </svg>
-                    </button>
-                    
-                    <div class="hs-dropdown-menu transition-[opacity,margin] duration hs-dropdown-open:opacity-100 opacity-0 w-56 hidden z-10 mt-2 min-w-60 bg-white shadow-md rounded-lg p-2 dark:bg-neutral-800 dark:border dark:border-neutral-700 dark:divide-neutral-700" aria-labelledby="hs-dropdown-example">
-                        <a class="filter-option flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700" href="#" data-status="Semua">
-                            Semua
-                        </a>
-                        <a class="filter-option flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700" href="#" data-status="Sudah">
-                            Sudah
-                        </a>
-                        <a class="filter-option flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700" href="#" data-status="Belum">
-                            Belum
-                        </a>
-                    </div>
-                </div>
-                
-                <!-- End Filter -->
 
             </div>
 
@@ -214,13 +187,35 @@
                                             </div>
                                      </div>
                                     </td>
-                                    <td class="size-px whitespace-nowrap"> 
+                                    <td class="size-px whitespace-nowrap">
                                         <div class="px-1 py-3 text-start">
                                             <div class="flex items-center gap-x-3">
-                                                <span
-                                                    class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-2 mr-8">
-                                                    Status
-                                                </span>
+                                                <div class="hs-dropdown hs-dropdown-example relative inline-flex">
+                                                    <button id="hs-dropdown-example" type="button" class="hs-dropdown-toggle py-3 px-2 inline-flex items-center gap-x-2 text-sm font-medium">
+                                                        <span class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 flex justify-between items-center w-full">
+                                                            <span>
+                                                                Status
+                                                                <br>
+                                                                <span class="text-sm font-medium text-gray-500 dark:text-neutral-200">{{$status}}</span>
+                                                            </span>
+                                                            <svg class="hs-dropdown-open:rotate-180 size-4 text-gray-700 dark:text-neutral-600 ml-2" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                                <path d="m6 9 6 6 6-6"></path>
+                                                            </svg>
+                                                        </span>
+                                                    </button>
+                                    
+                                                    <div class="hs-dropdown-menu transition-[opacity,margin] duration hs-dropdown-open:opacity-100 opacity-0 w-56 hidden z-10 mt-2 min-w-60 bg-white shadow-md rounded-lg p-2 dark:bg-neutral-800 dark:border dark:border-neutral-700 dark:divide-neutral-700" aria-labelledby="hs-dropdown-example">
+                                                        <a class="filter-option flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700" href="#" data-status="Semua">
+                                                            Semua
+                                                        </a>
+                                                        <a class="filter-option flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700" href="#" data-status="Sudah">
+                                                            Sudah
+                                                        </a>
+                                                        <a class="filter-option flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700" href="#" data-status="Belum">
+                                                            Belum
+                                                        </a>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </td>
@@ -234,13 +229,35 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="size-px whitespace-nowrap"> 
+                                    <td class="size-px whitespace-nowrap">
                                         <div class="px-1 py-3 text-start">
                                             <div class="flex items-center gap-x-3">
-                                                <span
-                                                    class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-2 mr-8">
-                                                    Verifikasi
-                                                </span>
+                                                <div class="hs-dropdown hs-dropdown-example relative inline-flex">
+                                                    <button id="hs-dropdown-example" type="button" class="hs-dropdown-toggle py-3 px-2 inline-flex items-center gap-x-2 text-sm font-medium">
+                                                        <span class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 flex justify-between items-center w-full">
+                                                            <span>
+                                                                Verifikasi
+                                                                <br>
+                                                                <span class="text-sm font-medium text-gray-500 dark:text-neutral-200">{{$ceklist}}</span>
+                                                            </span>
+                                                            <svg class="hs-dropdown-open:rotate-180 size-4 text-gray-700 dark:text-neutral-600 ml-2" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                                <path d="m6 9 6 6 6-6"></path>
+                                                            </svg>
+                                                        </span>
+                                                    </button>
+                                    
+                                                    <div class="hs-dropdown-menu transition-[opacity,margin] duration hs-dropdown-open:opacity-100 opacity-0 w-56 hidden z-10 mt-2 min-w-60 bg-white shadow-md rounded-lg p-2 dark:bg-neutral-800 dark:border dark:border-neutral-700 dark:divide-neutral-700" aria-labelledby="hs-dropdown-example">
+                                                        <a class="filter-option-ceklist flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700" href="#" data-ceklist="Semua">
+                                                            Semua
+                                                        </a>
+                                                        <a class="filter-option-ceklist flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700" href="#" data-ceklist="Sudah">
+                                                            Sudah
+                                                        </a>
+                                                        <a class="filter-option-ceklist flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700" href="#" data-ceklist="Belum">
+                                                            Belum
+                                                        </a>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </td>
@@ -469,105 +486,139 @@
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
         <script>
-   $(document).ready(function() {
-    $('.link-checkbox').on('change', function() {
-        const id = $(this).siblings('.ceklist_id').val();
-        const isChecked = $(this).prop('checked');
-        console.log(isChecked);
-        $.ajax({
-            url: `/administrasi/file/ceklist/${id}`, 
-            type: 'POST',
-            data: {
-                _token: '{{ csrf_token() }}',
-                isChecked: isChecked
+            $(document).ready(function() {
+                $('.link-checkbox').on('change', function() {
+                    const id = $(this).siblings('.ceklist_id').val();
+                    const isChecked = $(this).prop('checked');
+                    console.log(isChecked);
+                    $.ajax({
+                        url: `/administrasi/file/ceklist/${id}`,
+                        type: 'POST',
+                        data: {
+                            _token: '{{ csrf_token() }}',
+                            isChecked: isChecked
 
-                // isChecked: isChecked ? true : false  // Ubah nilai menjadi boolean
-            },
-            success: function(response) {
-                console.log(response.message);
-                // Tambahkan tindakan lebih lanjut di sini jika sukses
-            },
-            error: function(xhr) {
-                console.error(xhr.responseText);
-                // Tangani kesalahan di sini
-            }
-        });
-    });
-});
-
-//filter 
-
-$(document).ready(function() {
-    $('.filter-option').on('click', function(e) {
-        e.preventDefault();
-        let status = $(this).data('status');
-        let transaksi = {{ $transaksi->id }};
-        let akun = {{ $akun->id }};
-        let kegiatan = {{ $kegiatan->id }};
-        let fungsi = "{{ $fungsi }}";
-
-        // Menambahkan parameter status dalam URL
-        let url = '/administrasi/file?transaksi=' + transaksi + '&akun=' + akun + '&kegiatan=' + kegiatan + '&fungsi=' + fungsi + '&status=' + status;
-
-        $.ajax({
-            url: url,
-            type: 'GET',
-            data: { status: status },
-            success: function(data) {
-                // console.log(data);
-                window.location.href = url;
-
-            }
-        });
-    });
-});
-
-
-// Ini adalah tanda penutup untuk fungsi jQuery $(document).ready()
-
-
-          function confirmDelete(id) {
-            Swal.fire({
-                title: 'Apakah Anda yakin menghapus?',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                confirmButtonText: 'Ya, hapus saja!',
-                cancelButtonText: 'Batal'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    document.getElementById('delete-form-' + id).submit();
-                }
-            });
-        }
-            function validatePDFFile() {
-            var fileInput = document.getElementById('file-input');
-            var filePath = fileInput.value;
-            var allowedExtensions = /(\.pdf)$/i;
-            if (!allowedExtensions.exec(filePath)) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Format file tidak valid',
-                    text: 'File harus berformat PDF!',
+                            // isChecked: isChecked ? true : false  // Ubah nilai menjadi boolean
+                        },
+                        success: function(response) {},
+                        error: function(xhr) {
+                            console.error(xhr.responseText);
+                            // Tangani kesalahan di sini
+                        }
+                    });
                 });
-                fileInput.value = '';
-                return false;
-            } else {
-                return true;
-            }
-        }
-            function showAlert(title, message, icon) {
-            Swal.fire({
-                title: title,
-                text: message,
-                icon: icon,
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'OK'
             });
-        }
 
-            @if(session('success'))
+            //filter
+
+            $(document).ready(function() {
+                $('.filter-option').on('click', function(e) {
+                    e.preventDefault();
+                    let status = $(this).data('status');
+                    let transaksi = {{ $transaksi->id }};
+                    let akun = {{ $akun->id }};
+                    let kegiatan = {{ $kegiatan->id }};
+                    let ceklist = "{{ $ceklist }}";
+                    let fungsi = "{{ $fungsi }}";
+
+
+                    // Menambahkan parameter status dalam URLdjdjdj
+                    let url = '/administrasi/file?transaksi=' + transaksi + '&akun=' + akun + '&kegiatan=' +
+                        kegiatan + '&fungsi=' + fungsi + '&status=' + status + '&ceklist=' +
+                    ceklist;
+                    // ssss
+                    $.ajax({
+                        url: url,
+                        type: 'GET',
+                        data: {
+                            status: status
+                        },
+                        success: function(data) {
+                            // console.log(data);
+                            window.location.href = url;
+
+                        }
+                    });
+                });
+
+
+                $('.filter-option-ceklist').on('click', function(e) {
+                    e.preventDefault();
+                    let ceklist = $(this).data('ceklist');
+                    let transaksi = {{ $transaksi->id }};
+                    let akun = {{ $akun->id }};
+                    let kegiatan = {{ $kegiatan->id }};
+                    let status = "{{ $status }}"
+                    let fungsi = "{{ $fungsi }}";
+
+                    let url = '/administrasi/file?transaksi=' + transaksi + '&akun=' + akun + '&kegiatan=' +
+                        kegiatan + '&fungsi=' + fungsi + '&status=' + status + '&ceklist=' +
+                    ceklist;
+
+                    $.ajax({
+                        url: url,
+                        type: 'GET',
+                        data: {
+                            ceklist: ceklist
+                        },
+
+                        success: function(data) {
+                            console.log(data);
+                            window.location.href = url;
+
+                        }
+                    });
+                });
+            });
+
+
+            // Ini adalah tanda penutup untuk fungsi jQuery $(document).ready()
+
+
+            function confirmDelete(id) {
+                Swal.fire({
+                    title: 'Apakah Anda yakin menghapus?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Ya, hapus saja!',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        document.getElementById('delete-form-' + id).submit();
+                    }
+                });
+            }
+
+            function validatePDFFile() {
+                var fileInput = document.getElementById('file-input');
+                var filePath = fileInput.value;
+                var allowedExtensions = /(\.pdf)$/i;
+                if (!allowedExtensions.exec(filePath)) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Format file tidak valid',
+                        text: 'File harus berformat PDF!',
+                    });
+                    fileInput.value = '';
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+
+            function showAlert(title, message, icon) {
+                Swal.fire({
+                    title: title,
+                    text: message,
+                    icon: icon,
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK'
+                });
+            }
+
+            @if (session('success'))
                 Swal.fire({
                     icon: 'success',
                     title: '{{ session('success') }}',
@@ -576,8 +627,8 @@ $(document).ready(function() {
                 });
             @endif
 
-            @if(session('error'))
-            showAlert('Error', '{{ session('error') }}', 'error');
+            @if (session('error'))
+                showAlert('Error', '{{ session('error') }}', 'error');
             @endif
         </script>
     </div>

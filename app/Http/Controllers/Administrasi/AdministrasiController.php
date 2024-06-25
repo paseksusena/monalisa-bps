@@ -292,84 +292,264 @@ class AdministrasiController extends Controller
             $session = $currentYear;
         }
 
-        // menghitung progres umum
-        $complete_file_umum = 0;
-        $amount_file_umum = 0;
+        // 1. menghitung progres umum
+
         $progresUmum = 0;
         $kegiatans = KegiatanAdministrasi::where('tahun', $session)->where('fungsi', 'Umum')->get();
+        $nilai_trans_umum = 0; // Inisialisasi $nilai_trans_umum dengan nilai awal 0
+        $amount_file_umum = 0; // Inisialisasi $amount_file_umum dengan nilai awal 0
+        $complete_file_umum = 0; // Inisialisasi $complete_file_umum dengan nilai awal 0
+
         foreach ($kegiatans as $kegiatan) {
-            $amount_file_umum = $kegiatan->amount_file + $amount_file_umum;
-            $complete_file_umum = $kegiatan->complete_file + $complete_file_umum;
+            // Mengiterasi setiap akun yang terkait dengan kegiatan
+            $kegiatan->Akun()->each(function ($akun) use (&$nilai_trans_umum, &$amount_file_umum, &$complete_file_umum) {
+                // Mengiterasi setiap transaksi dalam akun
+                $akun->transaksi()->each(function ($transaksi) use (&$nilai_trans_umum) {
+                    // Ambil nilai transaksi dari transaksi saat ini
+                    $nilai = $transaksi->nilai_trans;
+
+                    // Periksa jika nilai transaksi tidak null dan tidak kosong
+                    if ($nilai !== null && $nilai !== '') {
+                        // Menghapus titik sebagai pemisah ribuan
+                        $nilai = str_replace('.', '', $nilai);
+
+                        // Konversi string ke nilai numerik (float)
+                        $numericTransNilai = (float) $nilai;
+
+                        // Tambahkan nilai transaksi ke $nilai_trans_umum
+                        $nilai_trans_umum += $numericTransNilai;
+                    }
+                });
+            });
+
+            // Tambahan perhitungan untuk variabel lainnya
+            $amount_file_umum += $kegiatan->amount_file;
+            $complete_file_umum += $kegiatan->complete_file;
         }
+
+        $nilai_trans_umum = number_format($nilai_trans_umum, 0, ',', '.');
 
         $progresUmum = $amount_file_umum > 0 ? number_format(($complete_file_umum / $amount_file_umum) * 100, 2) : 0;
 
-        // menghitung proses produksi
+
+        //2.  Menghitung proses produksi
         $complete_file_produksi = 0;
         $amount_file_produksi = 0;
         $progresProduksi = 0;
+        $nilai_trans_produksi = 0; // Inisialisasi $nilai_trans_produksi dengan nilai awal 0
+
         $kegiatans = KegiatanAdministrasi::where('tahun', $session)->where('fungsi', 'Produksi')->get();
+
         foreach ($kegiatans as $kegiatan) {
-            $amount_file_produksi = $kegiatan->amount_file + $amount_file_produksi;
-            $complete_file_produksi = $kegiatan->complete_file + $complete_file_produksi;
+            // Mengiterasi setiap akun yang terkait dengan kegiatan produksi
+            $kegiatan->Akun()->each(function ($akun) use (&$nilai_trans_produksi, &$amount_file_produksi, &$complete_file_produksi) {
+                // Mengiterasi setiap transaksi dalam akun
+                $akun->transaksi()->each(function ($transaksi) use (&$nilai_trans_produksi) {
+                    // Ambil nilai transaksi dari transaksi saat ini
+                    $nilai = $transaksi->nilai_trans;
+
+                    // Periksa jika nilai transaksi tidak null dan tidak kosong
+                    if ($nilai !== null && $nilai !== '') {
+                        // Menghapus titik sebagai pemisah ribuan
+                        $nilai = str_replace('.', '', $nilai);
+
+                        // Konversi string ke nilai numerik (float)
+                        $numericTransNilai = (float) $nilai;
+
+                        // Tambahkan nilai transaksi ke $nilai_trans_produksi
+                        $nilai_trans_produksi += $numericTransNilai;
+                    }
+                });
+            });
+
+            // Tambahan perhitungan untuk variabel lainnya
+            $amount_file_produksi += $kegiatan->amount_file;
+            $complete_file_produksi += $kegiatan->complete_file;
         }
 
+        // Format nilai $nilai_trans_produksi tanpa titik di belakang nol
+        $nilai_trans_produksi = number_format($nilai_trans_produksi, 0, ',', '.');
+
+
+        // Hitung progres produksi
         $progresProduksi = $amount_file_produksi > 0 ? number_format(($complete_file_produksi / $amount_file_produksi) * 100, 2) : 0;
 
-        // menghitung proses NERACA
+
+
+        //3.  menghitung proses NERACA
         $complete_file_neraca = 0;
         $amount_file_neraca = 0;
         $progresNeraca = 0;
+        $nilai_trans_neraca = 0; // Inisialisasi $nilai_trans_neraca dengan nilai awal 0
+
         $kegiatans = KegiatanAdministrasi::where('tahun', $session)->where('fungsi', 'Neraca')->get();
+
         foreach ($kegiatans as $kegiatan) {
-            $amount_file_neraca = $kegiatan->amount_file + $amount_file_neraca;
-            $complete_file_neraca = $kegiatan->complete_file + $complete_file_neraca;
+            // Mengiterasi setiap akun yang terkait dengan kegiatan neraca
+            $kegiatan->Akun()->each(function ($akun) use (&$nilai_trans_neraca, &$amount_file_neraca, &$complete_file_neraca) {
+                // Mengiterasi setiap transaksi dalam akun
+                $akun->transaksi()->each(function ($transaksi) use (&$nilai_trans_neraca) {
+                    // Ambil nilai transaksi dari transaksi saat ini
+                    $nilai = $transaksi->nilai_trans;
+
+                    // Periksa jika nilai transaksi tidak null dan tidak kosong
+                    if ($nilai !== null && $nilai !== '') {
+                        // Menghapus titik sebagai pemisah ribuan
+                        $nilai = str_replace('.', '', $nilai);
+
+                        // Konversi string ke nilai numerik (float)
+                        $numericTransNilai = (float) $nilai;
+
+                        // Tambahkan nilai transaksi ke $nilai_trans_neraca
+                        $nilai_trans_neraca += $numericTransNilai;
+                    }
+                });
+            });
+
+            // Tambahan perhitungan untuk variabel lainnya
+            $amount_file_neraca += $kegiatan->amount_file;
+            $complete_file_neraca += $kegiatan->complete_file;
         }
 
+        // Format nilai $nilai_trans_neraca tanpa titik di belakang nol
+        $nilai_trans_neraca = number_format($nilai_trans_neraca, 0, ',', '.');
+
+        // Hitung progres neraca
         $progresNeraca = $amount_file_neraca > 0 ? number_format(($complete_file_neraca / $amount_file_neraca) * 100, 2) : 0;
 
-        // menghitung proses distribusi
+        // Tampilkan hasil atau gunakan $nilai_trans_neraca, $amount_file_neraca, $complete_file_neraca sesuai kebutuhan
+
+        //4.  menghitung proses distribusi
         $complete_file_distribusi = 0;
         $amount_file_distribusi = 0;
         $progresDistribusi = 0;
+        $nilai_trans_distribusi = 0; // Inisialisasi $nilai_trans_distribusi dengan nilai awal 0
+
         $kegiatans = KegiatanAdministrasi::where('tahun', $session)->where('fungsi', 'Distribusi')->get();
+
         foreach ($kegiatans as $kegiatan) {
-            $amount_file_distribusi = $kegiatan->amount_file + $amount_file_distribusi;
-            $complete_file_distribusi = $kegiatan->complete_file + $complete_file_distribusi;
+            // Mengiterasi setiap akun yang terkait dengan kegiatan distribusi
+            $kegiatan->Akun()->each(function ($akun) use (&$nilai_trans_distribusi, &$amount_file_distribusi, &$complete_file_distribusi) {
+                // Mengiterasi setiap transaksi dalam akun
+                $akun->transaksi()->each(function ($transaksi) use (&$nilai_trans_distribusi) {
+                    // Ambil nilai transaksi dari transaksi saat ini
+                    $nilai = $transaksi->nilai_trans;
+
+                    // Periksa jika nilai transaksi tidak null dan tidak kosong
+                    if ($nilai !== null && $nilai !== '') {
+                        // Menghapus titik sebagai pemisah ribuan
+                        $nilai = str_replace('.', '', $nilai);
+
+                        // Konversi string ke nilai numerik (float)
+                        $numericTransNilai = (float) $nilai;
+
+                        // Tambahkan nilai transaksi ke $nilai_trans_distribusi
+                        $nilai_trans_distribusi += $numericTransNilai;
+                    }
+                });
+            });
+
+            // Tambahan perhitungan untuk variabel lainnya
+            $amount_file_distribusi += $kegiatan->amount_file;
+            $complete_file_distribusi += $kegiatan->complete_file;
         }
 
+        // Format nilai $nilai_trans_distribusi tanpa titik di belakang nol
+        $nilai_trans_distribusi = number_format($nilai_trans_distribusi, 0, ',', '.');
+
+        // Hitung progres distribusi
         $progresDistribusi = $amount_file_distribusi > 0 ? number_format(($complete_file_distribusi / $amount_file_distribusi) * 100, 2) : 0;
 
-        // menghitung proses sosial
+        // Tampilkan hasil atau gunakan $nilai_trans_distribusi, $amount_file_distribusi, $complete_file_distribusi sesuai kebutuhan
+
+        //5. menghitung proses sosial
         $complete_file_sosial = 0;
         $amount_file_sosial = 0;
         $progresSosial = 0;
+        $nilai_trans_sosial = 0; // Inisialisasi $nilai_trans_sosial dengan nilai awal 0
+
         $kegiatans = KegiatanAdministrasi::where('tahun', $session)->where('fungsi', 'Sosial')->get();
+
         foreach ($kegiatans as $kegiatan) {
-            $amount_file_sosial = $kegiatan->amount_file + $amount_file_sosial;
-            $complete_file_sosial = $kegiatan->complete_file + $complete_file_sosial;
+            // Mengiterasi setiap akun yang terkait dengan kegiatan sosial
+            $kegiatan->Akun()->each(function ($akun) use (&$nilai_trans_sosial, &$amount_file_sosial, &$complete_file_sosial) {
+                // Mengiterasi setiap transaksi dalam akun
+                $akun->transaksi()->each(function ($transaksi) use (&$nilai_trans_sosial) {
+                    // Ambil nilai transaksi dari transaksi saat ini
+                    $nilai = $transaksi->nilai_trans;
+
+                    // Periksa jika nilai transaksi tidak null dan tidak kosong
+                    if ($nilai !== null && $nilai !== '') {
+                        // Menghapus titik sebagai pemisah ribuan
+                        $nilai = str_replace('.', '', $nilai);
+
+                        // Konversi string ke nilai numerik (float)
+                        $numericTransNilai = (float) $nilai;
+
+                        // Tambahkan nilai transaksi ke $nilai_trans_sosial
+                        $nilai_trans_sosial += $numericTransNilai;
+                    }
+                });
+            });
+
+            // Tambahan perhitungan untuk variabel lainnya
+            $amount_file_sosial += $kegiatan->amount_file;
+            $complete_file_sosial += $kegiatan->complete_file;
         }
 
+        // Format nilai $nilai_trans_sosial tanpa titik di belakang nol
+        $nilai_trans_sosial = number_format($nilai_trans_sosial, 0, ',', '.');
+
+        // Hitung progres sosial
         $progresSosial = $amount_file_sosial > 0 ? number_format(($complete_file_sosial / $amount_file_sosial) * 100, 2) : 0;
 
 
-        // menghitung proses ipds
+
+        //6.  menghitung proses ipds
         $complete_file_ipds = 0;
         $amount_file_ipds = 0;
         $progresIpds = 0;
+        $nilai_trans_ipds = 0; // Inisialisasi $nilai_trans_ipds dengan nilai awal 0
+
         $kegiatans = KegiatanAdministrasi::where('tahun', $session)->where('fungsi', 'IPDS')->get();
+
         foreach ($kegiatans as $kegiatan) {
-            $amount_file_ipds = $kegiatan->amount_file + $amount_file_ipds;
-            $complete_file_ipds = $kegiatan->complete_file + $complete_file_ipds;
+            // Mengiterasi setiap akun yang terkait dengan kegiatan IPDS
+            $kegiatan->Akun()->each(function ($akun) use (&$nilai_trans_ipds, &$amount_file_ipds, &$complete_file_ipds) {
+                // Mengiterasi setiap transaksi dalam akun
+                $akun->transaksi()->each(function ($transaksi) use (&$nilai_trans_ipds) {
+                    // Ambil nilai transaksi dari transaksi saat ini
+                    $nilai = $transaksi->nilai_trans;
+
+                    // Periksa jika nilai transaksi tidak null dan tidak kosong
+                    if ($nilai !== null && $nilai !== '') {
+                        // Menghapus titik sebagai pemisah ribuan
+                        $nilai = str_replace('.', '', $nilai);
+
+                        // Konversi string ke nilai numerik (float)
+                        $numericTransNilai = (float) $nilai;
+
+                        // Tambahkan nilai transaksi ke $nilai_trans_ipds
+                        $nilai_trans_ipds += $numericTransNilai;
+                    }
+                });
+            });
+
+            // Tambahan perhitungan untuk variabel lainnya
+            $amount_file_ipds += $kegiatan->amount_file;
+            $complete_file_ipds += $kegiatan->complete_file;
         }
 
+        // Format nilai $nilai_trans_ipds tanpa titik di belakang nol
+        $nilai_trans_ipds = number_format($nilai_trans_ipds, 0, ',', '.');
+
+        // Hitung progres IPDS
         $progresIpds = $amount_file_ipds > 0 ? number_format(($complete_file_ipds / $amount_file_ipds) * 100, 2) : 0;
 
-        if (request('tahun')) {
-            session()->put('selected_year', request('tahun'));
-        }
 
-        if (!session('selected_year') || !request('tahun')) {
+
+
+        if (!session('selected_year')) {
             session()->put('selected_year', $currentYear);
         }
 
@@ -408,6 +588,17 @@ class AdministrasiController extends Controller
             'progresIpds' => $progresIpds,
             'amount_file_ipds' => $amount_file_ipds,
             'complete_file_ipds' => $complete_file_ipds,
+
+
+
+
+            // Data transaksi
+            'nilai_trans_umum' => $nilai_trans_umum,
+            'nilai_trans_produksi' => $nilai_trans_produksi,
+            'nilai_trans_distribusi' => $nilai_trans_distribusi,
+            'nilai_trans_sosial' => $nilai_trans_sosial,
+            'nilai_trans_ipds' => $nilai_trans_ipds,
+            'nilai_trans_neraca' => $nilai_trans_neraca
         ]);
     }
 }

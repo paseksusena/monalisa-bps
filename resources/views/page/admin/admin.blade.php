@@ -37,7 +37,6 @@
                         </a>
                         User
                     </button>
-                    @include('page.admin.create-excel')
                 </div>
                 @include('page.admin.users.create')
             </div>
@@ -92,8 +91,6 @@
                                             Admin
                                             @elseif($user->role === 'organik')
                                             Organik
-                                            @elseif($user->role === 'anorganik')
-                                            Anorganik
                                             @endif
                                         </td>
                                         <td class="py-2 whitespace-nowrap text-end text-sm font-medium">

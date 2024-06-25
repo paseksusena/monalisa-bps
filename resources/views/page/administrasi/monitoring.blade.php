@@ -40,14 +40,21 @@
                     <h4 class="font-medium text-lg text-gray-800 dark:text-neutral-200">Progres</h4>
 
                     <span class="mt-5 font-bold text-4xl text-gray-800 dark:text-neutral-200">
-                        {{$progresUmum}}%
+                        {{ $progresUmum }}%
                     </span>
 
                     <hr class="my-4 border-gray-600 dark:border-gray-600">
 
                     <h4 class="font-medium text-lg text-gray-800 dark:text-neutral-200">File Uploaded</h4>
                     <span class="mt-5 font-bold text-4xl text-gray-800 dark:text-neutral-200">
-                        {{$complete_file_umum}} / {{$amount_file_umum}}
+                        {{ $complete_file_umum }} / {{ $amount_file_umum }}
+                    </span>
+
+                    <hr class="my-4 border-gray-600 dark:border-gray-600">
+
+                    <h4 class="font-medium text-lg text-gray-800 dark:text-neutral-200">Total Nilai Transaksi</h4>
+                    <span class="mt-5 font-bold text-3xl text-gray-800 dark:text-neutral-200">
+                        Rp. {{ $nilai_trans_umum }}
                     </span>
 
                     <a class="mt-5 py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
@@ -67,14 +74,21 @@
                     </p>
                     <h4 class="font-medium text-lg text-gray-800 dark:text-neutral-200">Progres</h4>
                     <span class="mt-5 font-bold text-4xl text-gray-800 dark:text-neutral-200">
-                        {{$progresProduksi}}% 
+                        {{ $progresProduksi }}%
                     </span>
 
                     <hr class="my-4 border-gray-600 dark:border-gray-600">
 
                     <h4 class="font-medium text-lg text-gray-800 dark:text-neutral-200">File Uploaded</h4>
                     <span class="mt-5 font-bold text-4xl text-gray-800 dark:text-neutral-200">
-                        {{$complete_file_produksi}} / {{$amount_file_produksi}}
+                        {{ $complete_file_produksi }} / {{ $amount_file_produksi }}
+                    </span>
+
+                    <hr class="my-4 border-gray-600 dark:border-gray-600">
+
+                    <h4 class="font-medium text-lg text-gray-800 dark:text-neutral-200">Total Nilai Transaksi</h4>
+                    <span class="mt-5 font-bold text-3xl text-gray-800 dark:text-neutral-200">
+                        Rp. {{ $nilai_trans_produksi }}
                     </span>
 
                     <a class="mt-5 py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
@@ -93,14 +107,21 @@
                     </p>
                     <h4 class="font-medium text-lg text-gray-800 dark:text-neutral-200">Progres</h4>
                     <span class="mt-5 font-bold text-4xl text-gray-800 dark:text-neutral-200">
-                        {{$progresNeraca}}%
+                        {{ $progresNeraca }}%
                     </span>
 
                     <hr class="my-4 border-gray-600 dark:border-gray-600">
 
                     <h4 class="font-medium text-lg text-gray-800 dark:text-neutral-200">File Uploaded</h4>
                     <span class="mt-5 font-bold text-4xl text-gray-800 dark:text-neutral-200">
-                        {{$complete_file_neraca}} / {{$amount_file_neraca}}
+                        {{ $complete_file_neraca }} / {{ $amount_file_neraca }}
+                    </span>
+
+                    <hr class="my-4 border-gray-600 dark:border-gray-600">
+
+                    <h4 class="font-medium text-lg text-gray-800 dark:text-neutral-200">Total Nilai Transaksi</h4>
+                    <span class="mt-5 font-bold text-3xl text-gray-800 dark:text-neutral-200">
+                        Rp. {{ $nilai_trans_neraca }}
                     </span>
 
                     <a class="mt-5 py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
@@ -120,14 +141,20 @@
                     </p>
                     <h4 class="font-medium text-lg text-gray-800 dark:text-neutral-200">Progres</h4>
                     <span class="mt-5 font-bold text-4xl text-gray-800 dark:text-neutral-200">
-                        {{$progresDistribusi}}%
+                        {{ $progresDistribusi }}%
                     </span>
 
                     <hr class="my-4 border-gray-600 dark:border-gray-600">
 
                     <h4 class="font-medium text-lg text-gray-800 dark:text-neutral-200">File Uploaded</h4>
                     <span class="mt-5 font-bold text-4xl text-gray-800 dark:text-neutral-200">
-                        {{$complete_file_distribusi}} / {{$amount_file_distribusi}}
+                        {{ $complete_file_distribusi }} / {{ $amount_file_distribusi }}
+                    </span>
+                    <hr class="my-4 border-gray-600 dark:border-gray-600">
+
+                    <h4 class="font-medium text-lg text-gray-800 dark:text-neutral-200">Total Nilai Transaksi</h4>
+                    <span class="mt-5 font-bold text-3xl text-gray-800 dark:text-neutral-200">
+                        Rp. {{ $nilai_trans_distribusi }}
                     </span>
                     <a class="mt-5 py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
                         href="administrasi/kegiatan?fungsi=Distribusi">
@@ -145,16 +172,23 @@
                     </p>
                     <h4 class="font-medium text-lg text-gray-800 dark:text-neutral-200">Progres</h4>
                     <span class="mt-5 font-bold text-4xl text-gray-800 dark:text-neutral-200">
-                        {{$progresSosial}}%
+                        {{ $progresSosial }}%
                     </span>
 
                     <hr class="my-4 border-gray-600 dark:border-gray-600">
 
                     <h4 class="font-medium text-lg text-gray-800 dark:text-neutral-200">File Uploaded</h4>
                     <span class="mt-5 font-bold text-4xl text-gray-800 dark:text-neutral-200">
-                        {{$complete_file_sosial}} / {{$amount_file_sosial}}
+                        {{ $complete_file_sosial }} / {{ $amount_file_sosial }}
 
                     </span>
+                    <hr class="my-4 border-gray-600 dark:border-gray-600">
+
+                    <h4 class="font-medium text-lg text-gray-800 dark:text-neutral-200">Total Nilai Transaksi</h4>
+                    <span class="mt-5 font-bold text-3xl text-gray-800 dark:text-neutral-200">
+                        Rp. {{ $nilai_trans_sosial }}
+                    </span>
+                    P
                     </li>
                     </ul>
                     <a class="mt-5 py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
@@ -173,36 +207,35 @@
                     </p>
                     <h4 class="font-medium text-lg text-gray-800 dark:text-neutral-200">Progres</h4>
                     <span class="mt-5 font-bold text-4xl text-gray-800 dark:text-neutral-200">
-                        {{$progresIpds}}% 
+                        {{ $progresIpds }}%
                     </span>
 
                     <hr class="my-4 border-gray-600 dark:border-gray-600">
 
                     <h4 class="font-medium text-lg text-gray-800 dark:text-neutral-200">File Uploaded</h4>
                     <span class="mt-5 font-bold text-4xl text-gray-800 dark:text-neutral-200">
-                        {{$complete_file_ipds}} / {{$amount_file_ipds}}
+                        {{ $complete_file_ipds }} / {{ $amount_file_ipds }}
 
+                    </span>
+
+                    <hr class="my-4 border-gray-600 dark:border-gray-600">
+
+                    <h4 class="font-medium text-lg text-gray-800 dark:text-neutral-200">Total Nilai Transaksi</h4>
+                    <span class="mt-5 font-bold text-3xl text-gray-800 dark:text-neutral-200">
+                        Rp. {{ $nilai_trans_ipds }}
                     </span>
                     <a class="mt-5 py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
                         href="administrasi/kegiatan?fungsi=IPDS">
                         Selengkapnya
                     </a>
                 </div>
-
                 <!-- End Card -->
-
-
+                
             </div>
             <!-- End Grid -->
         </div>
     </div>
-
-
-
-
     <!-- ========== END MAIN CONTENT ========== -->
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
-
 </html>

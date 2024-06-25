@@ -33,12 +33,14 @@ class FileController extends Controller
         $filesQuery = File::where('transaksi_id', $transaksi->id)
             ->filter([
                 'status' => request('status'),
+                'ceklist' => request('ceklist'),
                 'search' => $search,
                 'transaksi' => $transaksi->id,
             ]);
 
-        $files = $filesQuery->paginate(200)
-            ->appends(['search' => $search, 'status' => request('status')]);
+        $files = $filesQuery->paginate(20000)
+            ->appends(['search' => $search, 'status' => request('status'), 'ceklist' => request('ceklist')]);
+
 
         $this->progres($transaksi->id);
         $this->progresAkun();
@@ -54,13 +56,18 @@ class FileController extends Controller
         if (request('status')) {
             $status = request('status');
         }
+        $ceklist = 'Semua';
+        if (request('ceklist')) {
+            $ceklist = request('ceklist');
+        }
         return view('page.administrasi.file.index', [
             'transaksi' => $transaksi,
             'fungsi' => $fungsi,
             'files' => $files,
             'kegiatan' => $kegiatan,
             'akun' => $akun,
-            'status' => $status
+            'status' => $status,
+            'ceklist' => $ceklist
         ]);
     }
 

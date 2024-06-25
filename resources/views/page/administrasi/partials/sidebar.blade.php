@@ -4,7 +4,7 @@
         <!-- Logo -->
         <a class="flex-none rounded-xl text-xl text-blue-500 inline-block ml-8 mt-1 font-extrabold focus:outline-none focus:opacity-80"
             href="/administrasi?tahun={{ session('selected_year') }}">
-            MONALISA
+            MONAKU
         </a>
         <!-- End Logo -->
     </div>
