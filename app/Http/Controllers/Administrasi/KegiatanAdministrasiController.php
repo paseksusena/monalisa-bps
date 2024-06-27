@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Administrasi;
 
 use App\Models\KegiatanAdministrasi;
 use App\Http\Requests\StoreKegiatanAdministrasiRequest;
-use App\Http\Requests\UpdateKegiatanAdministrasiRequest;
 use App\Http\Controllers\Controller;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\AdministrasiKegiatanImport;
@@ -15,54 +14,55 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
-
 class KegiatanAdministrasiController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        $searchResults = [];
 
         $currentYear = Carbon::now()->year;
-        $startYear = Carbon::createFromFormat('Y', $currentYear - 5)->year;
+        $startYear = $currentYear - 5;
         $years = range($startYear, $currentYear);
-        //jika tidak ada session selected_year pakai tahun sekarang
 
-        $amount_file = 0;
-        $complete_file = 0;
-        $progres = 0;
-
-        $currentYear = Carbon::now()->year;
-        $years = range($startYear, $currentYear);
-        //jika tidak ada session selected_year pakai tahun sekarang
+        // Jika tidak ada session selected_year, gunakan tahun sekarang
         if (!session('selected_year')) {
             session()->put('selected_year', $currentYear);
         }
 
         $selected_year = session('selected_year');
 
-        $search = request('search');;
-        $arrFungsi = ['Sosial', 'Produksi', 'Neraca', 'Umum', 'IPDS', 'Distribusi'];
+        $amount_file = 0;
+        $complete_file = 0;
+        $progres = 0;
+
         $fungsi = $this->getFungsi();
 
-        if (!in_array($fungsi, $arrFungsi)) {
-            // Handle the case when fungsi is not valid
+        if ($fungsi == 0) {
             return redirect('/administrasi');
         }
 
-        $previousQuery = request()->except(['search']);
-        $query = array_merge($previousQuery, ['search' => $search]);
-        $kegiatans = KegiatanAdministrasi::where('fungsi', $fungsi)
+        $order_nama = request('order-nama');
+        $order_progres = request('order-progres');
+
+        $kegiatanQuery = KegiatanAdministrasi::where('fungsi', $fungsi)
             ->where('tahun', $selected_year)
-            ->filter($query)
-            ->paginate(200)
-            ->appends(['search' => $search]);
+            ->filter(request()->except(['search']));
+
+        // Mengatur pengurutan berdasarkan nama jika parameter urutan nama tersedia
+        if ($order_nama) {
+            $kegiatanQuery->orderBy('nama', $order_nama);
+        }
+
+        // Mengatur pengurutan berdasarkan progres jika parameter urutan progres tersedia
+        if ($order_progres) {
+            $kegiatanQuery->orderBy('progres', $order_progres);
+        }
+
+        // Mendapatkan data kegiatan
+        $kegiatans = $kegiatanQuery->get();
 
         foreach ($kegiatans as $kegiatan) {
-            $amount_file = $kegiatan->amount_file + $amount_file;
-            $complete_file = $kegiatan->complete_file + $complete_file;
+            $amount_file += $kegiatan->amount_file;
+            $complete_file += $kegiatan->complete_file;
         }
 
         $progres = $amount_file > 0 ? number_format(($complete_file / $amount_file) * 100, 2) : 0;
@@ -71,33 +71,17 @@ class KegiatanAdministrasiController extends Controller
             'fungsi' => $fungsi,
             'kegiatans' => $kegiatans,
             'years' => $years,
-            'searchResults' => $searchResults,
             'amount_file' => $amount_file,
             'complete_file' => $complete_file,
-            'progres' => $progres
+            'progres' => $progres,
         ]);
     }
-
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-
-        $fungsi = request('fungsi');
-        return view('administrasi.kegiatan.create', [
-            'fungsi' => $fungsi
-
-        ]);
-    }
-
-    /**
-     * Store a newly created resource in storage.
+     * Menyimpan resource baru ke dalam storage.
      */
     public function store(StoreKegiatanAdministrasiRequest $request)
     {
         try {
-
             $requestValidasi = $request->validate([
                 'nama' => 'required|max:550',
                 'tahun' => 'required',
@@ -105,30 +89,24 @@ class KegiatanAdministrasiController extends Controller
             ]);
 
             $fungsi = $request->fungsi;
-
             $kegiatan = KegiatanAdministrasi::where('fungsi', $fungsi)->get();
             $find = $kegiatan->where('nama', $request->nama)->first();
+
             if ($find) {
                 return back()->with('error', 'Nama kegiatan ' . $request->nama . ' telah tersedia!');
             }
+
             KegiatanAdministrasi::create($requestValidasi);
         } catch (\Throwable $e) {
             // Tangkap pengecualian dan tampilkan pesan kesalahan
-            return redirect()->back()->with('error', 'Error saat input data:  ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Error saat input data: ' . $e->getMessage());
         }
         return redirect('/administrasi/kegiatan?fungsi=' . $fungsi)->with('success', 'Kegiatan ' . $request->nama . ' berhasil ditambahkan!');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(KegiatanAdministrasi $kegiatanAdministrasi)
-    {
-        //
-    }
 
     /**
-     * Show the form for editing the specified resource.
+     * Menampilkan form untuk mengedit kegiatan yang ditentukan.
      */
     public function edit($id)
     {
@@ -136,6 +114,9 @@ class KegiatanAdministrasiController extends Controller
         return response()->json($kegiatan);
     }
 
+    /**
+     * Memperbarui kegiatan yang ditentukan dalam storage.
+     */
     public function update(Request $request)
     {
         $requestValidasi = $request->validate([
@@ -145,7 +126,7 @@ class KegiatanAdministrasiController extends Controller
         $fungsi = $request->fungsi;
         $session = session('selected_year');
 
-
+        // Memeriksa apakah nama kegiatan sudah ada
         $existingKegiatan = KegiatanAdministrasi::where('fungsi', $fungsi)
             ->where('nama', $requestValidasi['nama'])
             ->where('id', '!=', $request->id)
@@ -155,14 +136,12 @@ class KegiatanAdministrasiController extends Controller
             return back()->with('error', 'Nama kegiatan ' . $requestValidasi['nama'] . ' telah tersedia!');
         }
 
-
         $kegiatan = KegiatanAdministrasi::findOrFail($request->id);
-        $oldFolderPath = 'public/administrasis/'  . $session . '/' . $fungsi . '/'  . $request->oldNama;
-        $newFolderPath = 'public/administrasis/' . $session . '/' .  $fungsi . '/'  . $request->nama;
-        // dd($request->oldNama);
-        // Rename the folder
-        if ($request->nama !== $request->oldNama) {
+        $oldFolderPath = 'public/administrasis/' . $session . '/' . $fungsi . '/' . $request->oldNama;
+        $newFolderPath = 'public/administrasis/' . $session . '/' . $fungsi . '/' . $request->nama;
 
+        // Mengubah nama folder jika nama kegiatan berubah
+        if ($request->nama !== $request->oldNama) {
             $akuns = Akun::where('kegiatan_id', $request->id)->get();
 
             foreach ($akuns as $akun) {
@@ -174,8 +153,8 @@ class KegiatanAdministrasiController extends Controller
                     foreach ($files as $file) {
                         // Mengganti jalur lama dengan jalur baru
                         $file = Str::of($file)->replace(
-                            'storage/administrasis/'  . $session .  '/'  . $fungsi . '/' . $request->oldNama,
-                            'storage/administrasis/' . $session  . '/' . $fungsi . '/'  . $request->oldNama
+                            'storage/administrasis/' . $session . '/' . $fungsi . '/' . $request->oldNama,
+                            'storage/administrasis/' . $session . '/' . $fungsi . '/' . $request->oldNama
                         );
                         $file_content = Storage::get($file);
                         $file_name_parts = explode("/", $file);
@@ -191,21 +170,11 @@ class KegiatanAdministrasiController extends Controller
         }
         $kegiatan->update($requestValidasi);
 
-
-
         return redirect('/administrasi/kegiatan?fungsi=' . $fungsi)->with('success', 'Kegiatan ' . $requestValidasi['nama'] . ' berhasil diubah!');
     }
 
     /**
-     * Update the specified resource in storage.
-     */
-    // public function update(UpdateKegiatanAdministrasiRequest $request, KegiatanAdministrasi $kegiatanAdministrasi)
-    // {
-    //     //
-    // }
-
-    /**
-     * Remove the specified resource from storage.
+     * Menghapus resource yang ditentukan dari storage.
      */
     public function destroy(KegiatanAdministrasi $kegiatanAdministrasi, StoreKegiatanAdministrasiRequest $request)
     {
@@ -216,6 +185,7 @@ class KegiatanAdministrasiController extends Controller
         $filePath = "storage/administrasis/$session/$fungsi/{$kegiatan->nama}";
         File::deleteDirectory($filePath);
 
+        // Menghapus data terkait dalam tabel akun dan transaksi
         $kegiatan->Akun()->each(function ($akun) {
             $akun->transaksi()->each(function ($transaksi) {
                 $transaksi->file()->delete();
@@ -228,8 +198,9 @@ class KegiatanAdministrasiController extends Controller
         return back()->with('success', 'Kegiatan ' . $kegiatan->nama . ' berhasil dihapus!');
     }
 
-
-
+    /**
+     * Menyimpan data dari file Excel ke dalam tabel kegiatan.
+     */
     public function storeExcel(StoreKegiatanAdministrasiRequest $request)
     {
         try {
@@ -238,8 +209,7 @@ class KegiatanAdministrasiController extends Controller
             $fileName = $file->getClientOriginalName();
             $file->move('DatakegiatanAdministrasi', $fileName);
 
-            // Move uploaded file to storage
-            $fileName = $file->getClientOriginalName();
+            // Mengimpor data dari file Excel
             Excel::import(new AdministrasiKegiatanImport($fungsi, $request->tahun), public_path('/DatakegiatanAdministrasi/' . $fileName));
         } catch (\Throwable $e) {
             // Tangkap pengecualian dan tampilkan pesan kesalahan
@@ -248,6 +218,9 @@ class KegiatanAdministrasiController extends Controller
         return redirect('/administrasi/kegiatan?fungsi=' . $fungsi)->with('success', 'Data Excel berhasil diimpor!');
     }
 
+    /**
+     * Mendapatkan nilai fungsi dari request.
+     */
     public function getFungsi()
     {
         $fungsi = request('fungsi');

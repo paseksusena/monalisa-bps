@@ -6,19 +6,16 @@ namespace App\Http\Controllers\Teknis;
 use App\Http\Controllers\Controller;
 use App\Models\PencacahanPetani;
 use Illuminate\Http\Request;
-use Carbon\Carbon;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\PencacahanPetaniImport;
 use App\Models\UserMitra;
 use App\Models\KegiatanTeknis;
-use App\Models\PemutakhiranPetani;
 
 
 class PencacahanPetaniController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     */
+     * Menampilkan daftar atau halaman pencacahan petani berdasarkan kegiatan teknis. */
     public function index()
     {
         $tgl_awal = null;
@@ -26,33 +23,38 @@ class PencacahanPetaniController extends Controller
         $kegiatan = request('kegiatan');
         $search = null;
 
+        // Mengatur pencarian jika ada
         if (request('search')) {
             $search = request('search');
         }
 
+        // Mengambil data pencacahan petani berdasarkan filter pencarian dan kegiatan
         $pencacahans = PencacahanPetani::filter(request(['search']))->where('kegiatan_id', $kegiatan)->get();
+
+        // Mengambil data pencacahan petani pertama berdasarkan kegiatan untuk mendapatkan tanggal awal dan akhir
         $pencacahan = PencacahanPetani::where('kegiatan_id', $kegiatan)->first();
+
+        // Mendapatkan data kegiatan teknis berdasarkan id kegiatan
         $kegiatan = KegiatanTeknis::where('id', $kegiatan)->first();
-        $this->progres_kegiatan($kegiatan->id);
+
+
+        // Jika data pencacahan ditemukan, atur tanggal awal dan akhir
         if ($pencacahan) {
             $tgl_akhir = $pencacahan->tgl_akhir;
             $tgl_awal = $pencacahan->tgl_awal;
         }
 
-
+        // Mengembalikan tampilan index dengan data pencarian, pencacahan, kegiatan, tanggal awal, dan tanggal akhir
         return view('page.teknis.petani.pencacahan.index', [
             'search' => $search,
             'pencacahans' => $pencacahans,
             'kegiatan' => $kegiatan,
             'tgl_awal' => $tgl_awal,
             'tgl_akhir' => $tgl_akhir,
-
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    // Tujuan function ini untuk mengambil tgl awal dan akhir dari pencacahan yang sudah dibuat terdahulu
     public function create($kegiatan_id)
     {
         $pencacahan = PencacahanPetani::where('kegiatan_id', $kegiatan_id)->first();
@@ -65,7 +67,7 @@ class PencacahanPetaniController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Function untuk menanambahkan data baru pencacahan 
      */
     public function store(Request $request)
     {
@@ -97,21 +99,15 @@ class PencacahanPetaniController extends Controller
             ]);
         }
 
+        // melakukan penambahan data baru
         PencacahanPetani::create($requestValidasi);
 
         return back()->with('success', 'Data berhasil ditambahkan');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(PencacahanPetani $pencacahanSatuan)
-    {
-        //
-    }
 
     /**
-     * Show the form for editing the specified resource.
+     * Function untuk menampilakan data yang akan diedit
      */
     public function edit($id)
     {
@@ -120,12 +116,11 @@ class PencacahanPetaniController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Function untuk melakukan update pencacahan petani
      */
     public function update(Request $request)
     {
-
-        // Validasi input
+        // Validasi input dari request
         $requestValidasi = $request->validate([
             'pml' => 'required|max:100|string',
             'id_pml' => 'required|max:30',
@@ -143,43 +138,57 @@ class PencacahanPetaniController extends Controller
             'nama_krt' => 'nullable|string',
         ]);
 
-        // Update data PencacahanPetani
+        // Update data PencacahanPetani berdasarkan ID
         PencacahanPetani::where('id', $request->id)->update($requestValidasi);
 
-        // Update data UserMitra
-        UserMitra::where('ppl_id', $request->id_ppl)->update([
-            'name' => $request->ppl,
-            'ppl_id' => $request->id_ppl
-        ]);
+        //Perbarui atau buat UserMitra
+        UserMitra::updateOrCreate(
+            ['ppl_id' => $request->id_ppl],
+            ['name' => $request->ppl]
+        );
+
+        // Ambil data PencacahanPetani setelah diupdate
         $pencacahan = PencacahanPetani::where('id', $request->id)->first();
 
+        // Tentukan status berdasarkan pengisian jenis komoditas dan nama KRT
         if (!empty($pencacahan->jenis_komoditas) && !empty($pencacahan->nama_krt)) {
             $pencacahan['status'] = true;
         } else {
             $pencacahan['status'] = false;
         }
+
+        // Simpan perubahan status
         $pencacahan->save();
 
+        // Kembali ke halaman sebelumnya dengan pesan sukses
         return back()->with('success', 'Pencacahan berhasil diupdate!');
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Menghapus data pencacahan petani dari penyimpanan.
      */
     public function destroy(Request $request)
     {
+        // Temukan data pencacahan petani berdasarkan ID
         $pencacahan = PencacahanPetani::find($request->id);
-        $sucsses = PencacahanPetani::destroy($pencacahan->id);
-        if ($sucsses) {
+
+        // Hapus data pencacahan petani berdasarkan ID
+        $success = PencacahanPetani::destroy($pencacahan->id);
+
+        // Memberikan respons sesuai hasil penghapusan data
+        if ($success) {
             return back()->with('success', 'Id-' . $request->id . " berhasil dihapus!");
         } else {
             return back()->with('error', 'Terdapat kesalahan, coba ulang lagi');
         }
     }
+    /**
+     * Menyimpan data pencacahan petani dari file Excel yang diunggah.
+     */
     public function store_excel(Request $request)
     {
         try {
-            // Validate the request
+            // Validasi request
             $request->validate([
                 'excel_file' => 'required|file|mimes:xlsx,xls,csv',
                 'kegiatan_id' => 'required|integer',
@@ -187,99 +196,32 @@ class PencacahanPetaniController extends Controller
                 'tgl_akhir' => 'required|date',
             ]);
 
-            // Move uploaded file to storage
+            // Pindahkan file yang diunggah ke penyimpanan
             $file = $request->file('excel_file');
             $fileName = time() . '_' . $file->getClientOriginalName();
             $file->move(public_path('ExcelTeknis'), $fileName);
 
             $filePath = public_path('ExcelTeknis/' . $fileName);
 
-            // Import the Excel file
-            Excel::import(new PencacahanPetaniImport(
-                $request->kegiatan_id,
-                $request->tgl_awal,
-                $request->tgl_akhir
-            ), $filePath);
+            // Impor file Excel
+            Excel::import(
+                new PencacahanPetaniImport(
+                    $request->kegiatan_id,
+                    $request->tgl_awal,
+                    $request->tgl_akhir
+                ),
+                $filePath
+            );
 
-            // Delete the file after import
+            // Hapus file setelah diimpor
             if (file_exists($filePath)) {
                 unlink($filePath);
             }
 
             return back()->with('success', 'Data berhasil diimpor!');
         } catch (\Exception $e) {
+            // Tangani kesalahan jika terjadi
             return redirect()->back()->withInput()->with('error', $e->getMessage());
         }
-    }
-
-    public function progres_kegiatan($kegiatan_id)
-    {
-        // Menghitung progres all pemutakhiran
-        $pemutakhirans = PemutakhiranPetani::where('kegiatan_id', $kegiatan_id)->get();
-
-        $beban_kerja_pemutakhiran_all = 0;
-        $ruta_progres_pemutakhiran = 0;
-
-        foreach ($pemutakhirans as $pemutakhiran) {
-            $beban_kerja_pemutakhiran_all += $pemutakhiran->beban_kerja;
-
-            foreach ($pemutakhiran->rutapetani as $ruta) {
-                $ruta_progres_pemutakhiran += $ruta->progres;
-            }
-        }
-
-        // Avoid division by zero
-        if ($beban_kerja_pemutakhiran_all > 0) {
-            $progres_pemutakhiran = ($ruta_progres_pemutakhiran / $beban_kerja_pemutakhiran_all) * 100;
-            $progres_pemutakhiran = floatval(number_format($progres_pemutakhiran, 1));
-        } else {
-            $progres_pemutakhiran = 0.0;
-        }
-
-        // Menghitung progres all pencacahan
-        $pencacahans = PencacahanPetani::where('kegiatan_id', $kegiatan_id)->get();
-
-        $beban_kerja_pencacahan_all = $pencacahans->count();
-        $progres_pencacahan = 0;
-        $progres_pencacahan2 = 0; // Initialize the variable outside the loop
-
-        foreach ($pencacahans as $pencacahan) {
-            if ($pencacahan->status == 1) {
-                $progres_pencacahan++;
-            }
-        }
-
-        $progres_pencacahan2 = $progres_pencacahan; // Ensure it is assigned here
-
-        // Avoid division by zero
-        if ($beban_kerja_pencacahan_all > 0) {
-            $progres_pencacahan = ($progres_pencacahan / $beban_kerja_pencacahan_all) * 100;
-            $progres_pencacahan = floatval(number_format($progres_pencacahan, 1));
-        } else {
-            $progres_pencacahan = 0.0;
-        }
-
-        // Menghitung rata-rata progres kegiatan
-        if (($beban_kerja_pemutakhiran_all + $beban_kerja_pencacahan_all) > 0) {
-            $progres_kegiatan = (($progres_pencacahan2 + $ruta_progres_pemutakhiran) / ($beban_kerja_pemutakhiran_all + $beban_kerja_pencacahan_all)) * 100;
-            $progres_kegiatan = floatval(number_format($progres_kegiatan, 1));
-        } else {
-            $progres_kegiatan = 0.0;
-        }
-
-
-        // Save the result
-        $kegiatan = KegiatanTeknis::find($kegiatan_id);
-        $kegiatan['progres'] = $progres_kegiatan;
-        $kegiatan->save();
-
-        return 0;
-
-        // Optionally, you can return the results if needed
-        // return [
-        //     'progres_pemutakhiran' => $progres_pemutakhiran,
-        //     'progres_pencacahan' => $progres_pencacahan,
-        //     'progres_kegiatan' => $progres_kegiatan
-        // ];
     }
 }

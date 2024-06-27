@@ -136,10 +136,11 @@ Route::middleware('auth')->group(function () {
 // Route Teknis Monalisa
 Route::middleware('auth')->group(function () {
 
+    Route::post('/teknis/kegiatan-ceklist/{id}', [KegiatanTeknisController::class, 'ceklist']);
     Route::get('/teknis/kegiatan',  [KegiatanTeknisController::class, 'index']);
     Route::post('/teknis/kegiatan', [KegiatanTeknisController::class, 'store']);
 
-    Route::get('/download-excel-template', [KegiatanTeknisController::class, 'downloadTemlate']);
+    Route::get('/download-excel-template', [KegiatanTeknisController::class, 'downloadTemplate']);
     Route::put('/teknis/kegiatan', [KegiatanTeknisController::class, 'update']);
     Route::get('/teknis/kegiatan-edit/{id}', [KegiatanTeknisController::class, 'edit']);
 
@@ -202,13 +203,40 @@ Route::middleware(['usermitra'])->group(function () {
     Route::post('/mitra/logout', [MitraController::class, 'logout'])->name('mitra.logout');
     Route::get('/mitra-pencacahan', [MitraController::class, 'index_pencacahan']);
 
-    //pemutakhiran
+    // Input Petani
+    Route::put('/mitra-pemutakhiran-petani', [PemutakhiranPetaniController::class, 'update']); //pemutakhiran
+    Route::put('/mitra-pencacahan-petani', [PencacahanPetaniController::class, 'update']); // pencacahan
+
+    // Input rumah tangga
+    Route::put('/mitra-pemutakhiran-rumah-tangga', [PemutakhiranRumahTanggaController::class, 'update']); //pemutakhiran
+    Route::put('/mitra-pencacahan-rumah-tangga', [PencacahanRumahTanggaController::class, 'update']); //pencacahan
+
+
+
+    // mengambi data yang akan diinput oleh mitra
     //rumah tangga
     Route::get('/mitra/rumah-tangga/pemutakhiran-input/{id}', [MitraController::class, 'input_pemutakhiran_rumah']);
+    Route::get('/mitra/rumah-tangga/pencacahan-input/{id}', [MitraController::class, 'input_pencacahan_rumah']);
+
+    //petani
+    Route::get('/mitra/petani/pemutakhiran-input/{id}', [MitraController::class, 'input_pemutakhiran_petani']);
+    Route::get('/mitra/petani/pencacahan-input/{id}', [MitraController::class, 'input_pencacahan_petani']);
+
+
+    //ceklist untuk perusahaan
+    Route::post('/teknis/kegiatan/perusahaan/pemutakhiran/ceklist-mitra/{id}', [PemutakhiranPerusahaanController::class, 'ceklist']); //pemutakhiran
+    Route::post('/teknis/kegiatan/perusahaan/pencacahan/ceklist-mitra/{id}', [PencacahanPerusahaanController::class, 'ceklist']);    //pencacahan
+
 });
 
 // Route Autentikasi Mitra
 Route::get('/mitra/login', [MitraController::class, 'login_mitra'])->name('usermitra.login');
 Route::post('/mitra/login', [MitraController::class, 'autentikasi']);
+
+
+//setting tahun
+Route::post('/set-year-session', [KegiatanTeknisController::class, 'setYearSession']);
+//search
+Route::get('/teknis/kegiatan/search', [KegiatanTeknisController::class, 'search']);
 
 require __DIR__ . '/auth.php';

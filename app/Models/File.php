@@ -38,11 +38,9 @@ class File extends Model
 
         $query->when($filters['ceklist'] ?? false, function ($query, $ceklist) {
             if ($ceklist == 'Sudah') {
-                return $query->where('ceklist', 1)->where('status', 1);
+                return $query->where('ceklist', 1);
             } elseif ($ceklist == 'Belum') {
-                return $query->where(function ($query) {
-                    $query->where('ceklist', 0)->orWhere('status', 0);
-                });
+                return $query->where('ceklist', 0);
             }
         });
 

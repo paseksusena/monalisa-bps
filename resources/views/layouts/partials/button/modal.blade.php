@@ -21,7 +21,8 @@
             <div class="flex flex-col space-y-4 p-4 overflow-y-auto">
                 <!-- Nama Kegiatan -->
                 <div class="col-span-2">
-                    <label for="name" class="block mb-2 text-sm font-bold text-gray-900 dark:text-white">Judul</label>
+                    <label for="name"
+                        class="block mb-2 text-sm font-bold text-gray-900 dark:text-white">Judul</label>
                     <input type="text" name="name" id="name"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                         placeholder="Tambahkan Judul..." required="">
@@ -164,9 +165,9 @@
                     class="flex justify-center items-center size-7 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-neutral-700"
                     data-hs-overlay="#modal-ubinan">
                     <span class="sr-only">Close</span>
-                    <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round">
+                    <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24"
+                        height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
                         <path d="M18 6 6 18"></path>
                         <path d="m6 6 12 12"></path>
                     </svg>
@@ -190,15 +191,15 @@
 </div>
 
 <script>
-document.querySelectorAll('[data-modal-target]').forEach(item => {
-    item.addEventListener('click', event => {
-        event.preventDefault();
-        const modalId = item.getAttribute('data-modal-target');
-        document.getElementById(modalId).classList.remove('hidden');
+    document.querySelectorAll('[data-modal-target]').forEach(item => {
+        item.addEventListener('click', event => {
+            event.preventDefault();
+            const modalId = item.getAttribute('data-modal-target');
+            document.getElementById(modalId).classList.remove('hidden');
+        });
     });
-});
 
-function closeModal(modalId) {
-    document.getElementById(modalId).classList.add('hidden');
-}
+    function closeModal(modalId) {
+        document.getElementById(modalId).classList.add('hidden');
+    }
 </script>

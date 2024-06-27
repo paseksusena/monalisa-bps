@@ -15,163 +15,45 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class AdministrasiController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
+    //untuk digunakan sebagai menampilkan halama utama dari administrtasi 
     public function index_administrasi()
     {
-        $searchNames[] = null;
-        $searchUrls[] = null;
-        $searchLinks[] = null;
-
 
         $session = session('selected_year');
 
-
-        if (request('search')) {
-            $search = request('search');
-
-
-            $files = File::where('judul', 'like', '%' . $search . '%')->get();
-            $transaksis = Transaksi::where('nama', 'like', '%' . $search . '%')->get();
-            $akuns = Akun::where('nama', 'like', '%' . $search . '%')->get();
-            $kegiatans = KegiatanAdministrasi::where('nama', 'like', '%' . $search . '%')->get();
-
-
-            foreach ($files as $file) {
-                $transaksiFile = $file->transaksi;
-                $akunFile = $transaksiFile->akun;
-                $kegiatanFile = $akunFile->kegiatanAdministrasi;
-                $fungsi = $kegiatanFile->fungsi;
-                if ($kegiatanFile->tahun === $session) {
-                    $searchLink = "/administrasi/file?transaksi=$transaksiFile->id&akun=$akunFile->id&kegiatan=$kegiatanFile->id&fungsi=$fungsi";
-                    $searchLinks[] = $searchLink; // Tetapkan nilai $fileLink ke dalam array
-                    $searchNames[] = $file->judul;
-                    $searchUrls[] =  $fungsi .  '/' . $kegiatanFile->nama . '/' . $akunFile->nama . '/' . $transaksiFile->nama . '/' . $file->namaFile;
-                }
-            }
-
-            foreach ($transaksis as $transaksi) {
-
-                $akunTranskasi = $transaksi->akun;
-                $kegiatanTransaksi = $akunTranskasi->kegiatanAdministrasi;
-                $fungsi = $kegiatanTransaksi->fungsi;
-                if ($kegiatanTransaksi->tahun === $session) {
-                    $searchLink = "/administrasi/file?transaksi=$transaksi->id&akun=$akunTranskasi->id&kegiatan=$kegiatanTransaksi->id&fungsi=$fungsi";
-                    $searchLinks[] = $searchLink; // Tetapkan nilai $fileLink ke dalam array
-                    $searchNames[] = $transaksi->nama;
-                    $searchUrls[] = $fungsi . '/' . $kegiatanTransaksi->nama . '/' . $akunTranskasi->nama . '/' . $transaksi->nama;
-                }
-            }
-
-            foreach ($akuns as $akun) {
-
-                $kegiatanAkun = $akun->kegiatanAdministrasi;
-                $fungsi = $kegiatanAkun->fungsi;
-
-                if ($kegiatanAkun->tahun === $session) {
-                    $searchLink = "/administrasi/transaksi?akun=$akun->id&kegiatan=$kegiatanAkun->id&fungsi=$fungsi";
-                    $searchLinks[] = $searchLink; // Tetapkan nilai $fileLink ke dalam array
-                    $searchNames[] = $akun->nama;
-                    $searchUrls[] = $fungsi . '/' . $kegiatanAkun->nama . '/' . $akun->nama;
-                }
-            }
-
-            // /administrasi/akun?kegiatan=44&periode=tahun-2024-tahunan-wB67t-1714014341&fungsi=Sosial
-
-            foreach ($kegiatans as $kegiatan) {
-                $fungsi = $kegiatan->fungsi;
-                if ($kegiatan->tahun === $session) {
-
-                    $searchLink = "/administrasi/akun?kegiatan=$kegiatan->id&fungsi=$fungsi";
-                    $searchLinks[] = $searchLink; // Tetapkan nilai $fileLink ke dalam array
-                    $searchNames[] = $kegiatan->nama;
-                    $searchUrls[] = $fungsi . '/'  . $kegiatan->nama;
-                }
-            }
-        }
-
+        //membuat reange tahun untuk fitur pilih tahun
         $currentYear = Carbon::now()->year;
         $startYear = Carbon::createFromFormat('Y', $currentYear - 5)->year;
         $years = range($startYear, $currentYear);
-        //jika tidak ada session selected_year pakai tahun sekarang
-
-        //jika tidak ada session selected_year pakai tahun sekarang
 
         if (request('tahun')) {
             session()->put('selected_year', request('tahun'));
         }
 
+        //jika tidak ada session selected_year dan tidak ada request tahun pakai tahun sekarang untuk session
         if (!session('selected_year') || !request('tahun')) {
             session()->put('selected_year', $currentYear);
         }
 
+        //melakukan return ke halaman page/administrasi/index
         return view('page.administrasi.index', [
             'years' => $years,
-            'searchNames' => $searchNames,
-            'searchLinks' => $searchLinks,
-            'searchUrls' => $searchUrls,
             'fungsi' => null,
-
 
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
-
-
+    //melakukam set tahun session
     public function setYearSession(Request $request)
     {
+        //melakukam input session
         $year = $request->input('year');
         $request->session()->put('selected_year', $year);
         return response()->json(['success' => true]);
     }
+
+    // melakukan search
     public function search(Request $request)
     {
         // Inisialisasi array untuk menyimpan hasil pencarian
@@ -185,13 +67,18 @@ class AdministrasiController extends Controller
         $kegiatans = KegiatanAdministrasi::where('nama', 'like', '%' . $searchTerm . '%')->where('tahun', $session)
             ->get();;
 
+
+        // Mencari files judul berdasarkan search  
         $files = File::where('judul', 'like', '%' . $searchTerm . '%')->get();
+        // Mencari transaksi nama, no_kwt berdasarkan search  
         $transaksis = Transaksi::where('nama', 'like', '%' . $searchTerm . '%')
             ->orWhere('no_kwt', 'like', '%' . $searchTerm . '%')
             ->get();
+
+        // Mencari akun nama berdasarkan search  
         $akuns = Akun::where('nama', 'like', '%' . $searchTerm . '%')->get();
 
-        // Loop melalui setiap hasil pencarian dan tambahkan ke array hasil pencarian
+        // melakukan perulangan untuk file, bertujuan untuk menampilkan nama, url, dan alamat file
         foreach ($files as $file) {
             if ($file->transaksi->akun->kegiatanAdministrasi->tahun == $session) {
                 $searchResults[] = [
@@ -202,6 +89,7 @@ class AdministrasiController extends Controller
             }
         }
 
+        // melakukan perulangan untuk transaksi, bertujuan untuk menampilkan nama, url, dan alamat transaksi
         foreach ($transaksis as $transaksi) {
             if ($transaksi->akun->kegiatanAdministrasi->tahun == $session) {
                 $searchResults[] = [
@@ -211,7 +99,7 @@ class AdministrasiController extends Controller
                 ];
             }
         }
-
+        // melakukan perulangan untuk akun, bertujuan untuk menampilkan nama, url, dan alamat akun
         foreach ($akuns as $akun) {
             if ($akun->kegiatanAdministrasi->tahun == $session) {
                 $searchResults[] = [
@@ -222,6 +110,7 @@ class AdministrasiController extends Controller
             }
         }
 
+        // melakukan perulangan untuk kegiatan, bertujuan untuk menampilkan nama, url, dan alamat kegiatan
         foreach ($kegiatans as $kegiatan) {
             if ($kegiatan->tahun == $session) {
                 $searchResults[] = [
@@ -237,14 +126,16 @@ class AdministrasiController extends Controller
     }
 
 
+    //membuat notifikasi tengat waktu
     public function getNotifications()
     {
+        // cari semua transaksi 
         $transaksis = Transaksi::all();
         $session = session('selected_year');
         $tgl_now = Carbon::now()->toDateString();
         $lateResults = [];
 
-        // Loop melalui setiap hasil pencarian dan tambahkan ke array hasil pencarian
+        // Perulangan transaksis untuk mencari nama, url, alamat, dan tgl akhir transaksi
         foreach ($transaksis as $transaksi) {
             if ($transaksi->akun->kegiatanAdministrasi->tahun == $session) {
                 if ($tgl_now > $transaksi->tgl_akhir) { // Perubahan kondisi ini
@@ -264,6 +155,7 @@ class AdministrasiController extends Controller
         return response()->json($lateResults);
     }
 
+    // download notif excel 
     public function download_notif_excel()
     {
 
@@ -272,14 +164,16 @@ class AdministrasiController extends Controller
         // Kirim hasil pencarian sebagai respons JSON
     }
 
-
+    //download templete xlsx untuk akun, transaksi, dan laci file
     public function downloadTemlate()
     {
+        // ambil request template
         $nameFile = request('template');
         $path = public_path('storage/template/' . $nameFile . '.xlsx');
         return response()->download($path);
     }
 
+    // function untuk menghitung progres fungsi, file terupload tiap fungsi, dan menghitung nilai transaksi tiap fungsi.
     public function monitoring()
     {
 
@@ -373,8 +267,6 @@ class AdministrasiController extends Controller
 
         // Hitung progres produksi
         $progresProduksi = $amount_file_produksi > 0 ? number_format(($complete_file_produksi / $amount_file_produksi) * 100, 2) : 0;
-
-
 
         //3.  menghitung proses NERACA
         $complete_file_neraca = 0;
@@ -547,8 +439,6 @@ class AdministrasiController extends Controller
         $progresIpds = $amount_file_ipds > 0 ? number_format(($complete_file_ipds / $amount_file_ipds) * 100, 2) : 0;
 
 
-
-
         if (!session('selected_year')) {
             session()->put('selected_year', $currentYear);
         }
@@ -578,7 +468,6 @@ class AdministrasiController extends Controller
             'amount_file_distribusi' => $amount_file_distribusi,
             'complete_file_distribusi' => $complete_file_distribusi,
 
-
             //sosial
             'progresSosial' => $progresSosial,
             'amount_file_sosial' => $amount_file_sosial,
@@ -589,10 +478,7 @@ class AdministrasiController extends Controller
             'amount_file_ipds' => $amount_file_ipds,
             'complete_file_ipds' => $complete_file_ipds,
 
-
-
-
-            // Data transaksi
+            // Data transaksi 
             'nilai_trans_umum' => $nilai_trans_umum,
             'nilai_trans_produksi' => $nilai_trans_produksi,
             'nilai_trans_distribusi' => $nilai_trans_distribusi,

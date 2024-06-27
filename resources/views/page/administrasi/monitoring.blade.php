@@ -62,8 +62,9 @@
                         Selengkapnya
                     </a>
                 </div>
+                <!-- End Card -->
 
-
+                <!-- Card -->
                 <div
                     class="flex flex-col border-2 text-center shadow-xl rounded-xl p-8 bg-slate-50 dark:border-blue-700 hover:border-blue-500 hover:transform hover:scale-105 transition-transform duration-300 ease-in-out">
                     <p class="mb-3">
@@ -96,7 +97,9 @@
                         Selengkapnya
                     </a>
                 </div>
+                <!-- End Card -->
 
+                <!-- Card -->
                 <div
                     class="flex flex-col border-2 text-center shadow-xl rounded-xl p-8 bg-slate-50 dark:border-blue-700 hover:border-blue-500 hover:transform hover:scale-105 transition-transform duration-300 ease-in-out">
                     <p class="mb-3">
@@ -129,8 +132,9 @@
                         Selengkapnya
                     </a>
                 </div>
+                <!-- End Card -->
 
-
+                <!-- Card -->
                 <div
                     class="flex flex-col border-2 text-center shadow-xl rounded-xl p-8 bg-slate-50 dark:border-blue-700 hover:border-blue-500 hover:transform hover:scale-105 transition-transform duration-300 ease-in-out">
                     <p class="mb-3">
@@ -161,7 +165,9 @@
                         Selengkapnya
                     </a>
                 </div>
+                <!-- End Card -->
 
+                <!-- Card -->
                 <div
                     class="flex flex-col border-2 text-center shadow-xl rounded-xl p-8 bg-slate-50 dark:border-blue-700 hover:border-blue-500 hover:transform hover:scale-105 transition-transform duration-300 ease-in-out">
                     <p class="mb-3">
@@ -188,7 +194,6 @@
                     <span class="mt-5 font-bold text-3xl text-gray-800 dark:text-neutral-200">
                         Rp. {{ $nilai_trans_sosial }}
                     </span>
-                    P
                     </li>
                     </ul>
                     <a class="mt-5 py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
@@ -196,7 +201,9 @@
                         Selengkapnya
                     </a>
                 </div>
+                <!-- End Card -->
 
+                <!-- Card -->
                 <div
                     class="flex flex-col border-2 text-center shadow-xl rounded-xl p-8 bg-slate-50 dark:border-blue-700 hover:border-blue-500 hover:transform hover:scale-105 transition-transform duration-300 ease-in-out">
                     <p class="mb-3">
@@ -230,12 +237,15 @@
                     </a>
                 </div>
                 <!-- End Card -->
-                
+
             </div>
             <!-- End Grid -->
         </div>
     </div>
     <!-- ========== END MAIN CONTENT ========== -->
 </body>
+
+<!-- Script Jquery Ajax -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
 </html>

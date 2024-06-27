@@ -14,29 +14,35 @@ use App\Models\UserMitra;
 
 class PemutakhiranPerusahaanController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
+    // function untuk menampilkan halaman  pemutakhiran perusahaan
     public function index()
     {
-
+        // Ambil kegiatan dari permintaan
         $kegiatan = request('kegiatan');
         $tgl_awal = null;
         $tgl_akhir = null;
         $search = null;
 
+        // Periksa apakah ada parameter pencarian dalam permintaan
         if (request('search')) {
             $search = request('search');
         }
 
+        // Filter dan ambil data pemutakhiran perusahaan berdasarkan kegiatan dan pencarian
         $pemutakhirans = PemutakhiranPerusahaan::filter(request(['search']))->where('kegiatan_id', $kegiatan)->get();
+
+        // Ambil data kegiatan berdasarkan ID kegiatan
         $kegiatan = KegiatanTeknis::where('id', $kegiatan)->first();
-        $find = PemutakhiranPerusahaan::where('kegiatan_id', $kegiatan)->first();
+
+        // Temukan pemutakhiran perusahaan pertama untuk mendapatkan tanggal awal dan akhir
+        $find = PemutakhiranPerusahaan::where('kegiatan_id', $kegiatan->id)->first();
         if ($find) {
             $tgl_akhir = $find->tgl_akhir;
             $tgl_awal = $find->tgl_awal;
         }
 
+        // Kembalikan tampilan dengan data yang ditemukan dengan alamat di bawah ini
         return view('page.teknis.perusahaan.pemutakhiran.index', [
             'search' => $search,
             'pemutakhirans' => $pemutakhirans,
@@ -46,24 +52,22 @@ class PemutakhiranPerusahaanController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    // function untuk menampilkan form create. Tujuannya untuk mengetahui apakah sudah ada pemutakhiran dibuat atau belum sebelumnya. Jika ada ambil tanggal awal dan akhirnya pemutakhiran sebelumnya
     public function create($kegiatan_id)
     {
+        // Cari data pemutakhiran perusahaan berdasarkan ID kegiatan
         $pemutakhiran = PemutakhiranPerusahaan::where('kegiatan_id', $kegiatan_id)->first();
 
+        // Jika data pemutakhiran ditemukan, kembalikan respon JSON dengan data tersebut
         if ($pemutakhiran) {
             return response()->json($pemutakhiran);
         } else {
+            // Jika tidak ada data pemutakhiran ditemukan, kembalikan respon JSON dengan nilai 0
             return response()->json(0);
         }
     }
 
-
-    /**
-     * Store a newly created resource in storage.
-     */
+    // Function untuk melakukan penyimpanan pemutakhiran perusahaan ke tabel pemutakhiran perusahaan
     public function store(Request $request)
     {
         // Validasi input request
@@ -83,10 +87,12 @@ class PemutakhiranPerusahaanController extends Controller
             'perusahaan' => 'required'
         ]);
 
-        // Cari UserMitra berdasarkan ppl_id
+
+        // DISINI MERUPAKAN PROSES PEMBUATAN AKUN MITRA
+        // Cari UserMitra berdasarkan id_ppl
         $find = UserMitra::where('ppl_id', $request->id_ppl)->first();
 
-        // Jika tidak difind, buat entri UserMitra baru
+        // Jika tidak ditemukan, buat entri UserMitra baru
         if (!$find) {
             UserMitra::create([
                 'name' => $request->ppl,
@@ -101,30 +107,23 @@ class PemutakhiranPerusahaanController extends Controller
         return back()->with('success', 'Berhasil diupload');
     }
 
-
-
-    /**
-     * Display the specified resource.
-     */
-    public function show($kegiatan_id)
-    {
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
+    // function untuk menampilkan data yang akan diedit
     public function edit($id)
     {
+        // Cari data PemutakhiranPerusahaan berdasarkan ID
         $pemutakhiran = PemutakhiranPerusahaan::find($id);
+
+        // Kembalikan data sebagai respons JSON
         return response()->json($pemutakhiran);
     }
 
     /**
-     * Update the specified resource in storage.
+     * Melaukan update putakhirkan di penyimpanan.
      */
     public function update(Request $request, PemutakhiranPerusahaan $pemutakhiranPerusahaan)
     {
-        $validateRequest = $request->validate([
+        // Validasi data masukan dari request
+        $validatedData = $request->validate([
             'kegiatan_id' => 'required',
             'id_pml' => 'required',
             'pml' => 'required|max:100',
@@ -135,63 +134,91 @@ class PemutakhiranPerusahaanController extends Controller
             'kecamatan' => 'required|max:20',
             'desa' => 'required|max:20',
             'kode_desa' => 'required|max:4',
-            'tgl_awal' => 'required',
-            'tgl_akhir' => 'required',
+            'tgl_awal' => 'required|date',
+            'tgl_akhir' => 'required|date',
             'perusahaan' => 'required'
         ]);
 
-        PemutakhiranPerusahaan::where('id', $request->id)->update($validateRequest);
+        // Update catatan PemutakhiranPerusahaan berdasarkan ID-nya
+        PemutakhiranPerusahaan::where('id', $request->id)->update($validatedData);
 
-        UserMitra::where('ppl_id', $request->id_ppl)->update([
-            'name' => $request->ppl,
-            'ppl_id' => $request->id_ppl
-        ]);
+        // Update atau buat entri baru untuk record UserMitra berdasarkan ppl_id
+        UserMitra::updateOrCreate(
+            ['ppl_id' => $validatedData['id_ppl']],
+            ['name' => $validatedData['ppl']]
+        );
 
-
-        return back()->with('success', 'Pemutakhiran berhasi di update!');
+        // Redirect kembali dengan pesan sukses
+        return back()->with('success', 'Pemutakhiran berhasil diupdate!');
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Hapus sumber daya yang diputakhirkan dari penyimpanan.
      */
     public function destroy(Request $request)
     {
+        // Cari PemutakhiranPerusahaan berdasarkan ID yang diberikan
         $pemutakhiran = PemutakhiranPerusahaan::find($request->id);
-        $sucsses = PemutakhiranPerusahaan::destroy($pemutakhiran->id);
-        if ($sucsses) {
-            return back()->with('success', 'Id-' . $request->id . " berhasil dihapus!");
+
+        // Jika pemutakhiran ditemukan, hapus berdasarkan ID-nya
+        if ($pemutakhiran) {
+            $success = $pemutakhiran->delete();
+
+            // Jika penghapusan berhasil
+            if ($success) {
+                return back()->with('success', 'ID-' . $request->id . ' berhasil dihapus!');
+            } else {
+                return back()->with('error', 'Terjadi kesalahan saat menghapus. Silakan coba lagi.');
+            }
         } else {
-            return back()->with('error', 'Terdapat kesalahan, coba ulang lagi');
+            return back()->with('error', 'Pemutakhiran dengan ID-' . $request->id . ' tidak ditemukan.');
         }
     }
 
+
+    /**
+     * Menyimpan data dari file Excel yang diunggah ke dalam database.
+     */
     public function store_excel(Request $request)
     {
         try {
+            // Validasi input request
+            $request->validate([
+                'excel_file' => 'required|file|mimes:xlsx,xls', // Validasi jenis file Excel yang diizinkan
+                'kegiatan_id' => 'required',
+                'tgl_awal' => 'required|date',
+                'tgl_akhir' => 'required|date',
+            ]);
 
-            // Move uploaded file to storage
+            // Pindahkan file yang diunggah ke direktori 'ExcelTeknis'
             $file = $request->file('excel_file');
             $fileName = $file->getClientOriginalName();
             $file->move('ExcelTeknis', $fileName);
 
-            // Get periode and parse dates
+            // Ambil periode dan parse tanggal
             $tgl_awal = Carbon::parse($request->tgl_awal);
             $tgl_akhir = Carbon::parse($request->tgl_akhir);
 
+            // Impor data dari Excel menggunakan kelas import yang telah dibuat
+            Excel::import(new PemutakhiranPerusahaanImport($request->kegiatan_id, $tgl_awal, $tgl_akhir), public_path('ExcelTeknis/' . $fileName));
 
-            Excel::import(new PemutakhiranPerusahaanImport($request->kegiatan_id, $tgl_awal, $tgl_akhir), public_path('/ExcelTeknis/' . $fileName));
-
-            $filePath = public_path('/ExcelTeknis/' . $fileName);
+            // Hapus file setelah selesai diimpor
+            $filePath = public_path('ExcelTeknis/' . $fileName);
             if (file_exists($filePath)) {
                 unlink($filePath);
             }
 
+            // Redirect kembali dengan pesan sukses
             return back()->with('success', 'Data berhasil diimpor!');
         } catch (\Exception $e) {
-            return redirect()->back()->withInput()->with('error', 'File yang dinput harus sesuai dengan file Excel.');
+            // Tangkap pengecualian jika terjadi kesalahan saat impor file
+            return redirect()->back()->withInput()->with('error', 'File yang diupload harus sesuai dengan format Excel yang valid.');
         }
     }
 
+    /**
+     * Memperbarui status ceklist pada entri PemutakhiranPerusahaan.
+     */
     public function ceklist(Request $request, $id)
     {
         try {
@@ -201,7 +228,7 @@ class PemutakhiranPerusahaanController extends Controller
             $file = PemutakhiranPerusahaan::findOrFail($id);
 
             // Ubah nilai ceklist sesuai dengan isChecked yang dikirimkan
-            $file->status = $isChecked ? 1 : 0; // Misalkan kolom status digunakan untuk menyimpan ceklist
+            $file->status = $isChecked ? 1 : 0; // Misalkan kolom 'status' digunakan untuk menyimpan ceklist
 
             // Simpan perubahan
             $file->save();

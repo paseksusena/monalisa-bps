@@ -1,3 +1,4 @@
+<!-- Modal Import Ecxel Rumah Tangga  -->
 <div id="hs-toggle-between-modals-pemutakhiran-rumah-tangga"
     class="hs-overlay hidden size-full fixed top-0 start-0 z-[80] overflow-x-hidden overflow-y-auto pointer-events-none">
     <div
@@ -5,7 +6,7 @@
         <div
             class="max-h-full overflow-hidden flex flex-col bg-white border shadow-sm rounded-xl pointer-events-auto
             dark:bg-neutral-800 dark:border-neutral-700 dark:shadow-neutral-700/70">
-            <div class="flex justify-between items-center py-3 px-4 border-b dark:border-neutral-700">
+            <div class="flex justify-between items-center py-3 px-4 border-b shadow-sm dark:border-neutral-700">
                 <h3 class="font-bold text-gray-800 dark:text-white">
                     Import Data
                 </h3>
@@ -21,14 +22,18 @@
                     </svg>
                 </button>
             </div>
-            <div class="p-4 overflow-y-auto">
+            <div class="px-4 overflow-y-auto">
                 <div class="space-y-4 ">
-                    <form method="POST" action="/teknis/kegiatan/rumah-tangga/pemutakhiran">
+                    <form method="POST" action="/mitra-pemutakhiran-rumah-tangga">
+                        <!-- mengirim data import -->
+                        excel
                         @csrf
                         @method('put')
 
                         <input type="hidden" id="kegiatan-edit" name="kegiatan_id">
                         <input type="hidden" name="id" id="id-edit">
+
+                        <!-- Tanggal Mulai -->
                         <div class="mb-5">
                             <label for="tgl_awal"
                                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Tanggal
@@ -158,18 +163,17 @@
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
                         </div>
 
-
-
                         <!-- Button Container -->
-                        <div class="sticky bottom-0 bg-white dark:bg-neutral-800 p-7 border-t dark:border-gray-700">
+                        <div
+                            class="sticky bottom-0 mt-auto bg-white dark:bg-neutral-800 p-4 border-t dark:border-gray-700">
                             <div class="flex justify-end items-center gap-x-2">
                                 <button type="button"
-                                    class="inline-flex justify-center items-center px-4 py-2 text-sm font-medium rounded-md border border-transparent bg-red-600 text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                                    class="inline-flex justify-center items-center px-4 py-2 text-sm font-semibold rounded-md border border-transparent bg-red-600 text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
                                     data-hs-overlay="#hs-toggle-between-modals-pemutakhiran-rumah-tangga">
                                     Batal
                                 </button>
                                 <button type="sumbit"
-                                    class="inline-flex justify-center items-center px-4 py-2 text-sm font-medium rounded-md border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                    class="inline-flex justify-center items-center px-4 py-2 text-sm font-semibold rounded-md border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                                     Import
                                 </button>
                             </div>
@@ -181,9 +185,8 @@
     </div>
 </div>
 
-
-
 <script>
+    // mengambil data inputasn dari teknis
     function openInputRumahTangga(button) {
         const id = button.getAttribute('data-id');
         console.log(id);

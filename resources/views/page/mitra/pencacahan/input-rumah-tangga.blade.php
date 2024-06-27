@@ -4,7 +4,7 @@
         class="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-lg sm:w-full m-3 sm:mx-auto h-[calc(100%-3.5rem)]">
         <div
             class="max-h-full overflow-hidden flex flex-col bg-white border shadow-sm rounded-xl pointer-events-auto dark:bg-neutral-800 dark:border-neutral-700 dark:shadow-neutral-700/70">
-            <div class="flex justify-between items-center py-3 px-4 border-b dark:border-neutral-700">
+            <div class="flex justify-between items-center py-3 px-4 border-b shadow-sm dark:border-neutral-700">
                 <h3 class="font-bold text-gray-800 dark:text-white">
                     Import Data
                 </h3>
@@ -20,9 +20,9 @@
                     </svg>
                 </button>
             </div>
-            <div class="p-4 overflow-y-auto">
+            <div class="px-4 overflow-y-auto">
                 <div class="space-y-4">
-                    <form method="POST" action="/teknis/kegiatan/rumah-tangga/pencacahan">
+                    <form method="POST" action="/mitra-pencacahan-rumah-tangga">
                         @csrf
                         @method('put')
 
@@ -123,15 +123,16 @@
                         @endfor
 
                         <!-- Button Container -->
-                        <div class="sticky bottom-0 bg-white dark:bg-neutral-800 p-7 border-t dark:border-gray-700">
+                        <div
+                            class="sticky bottom-0 mt-auto bg-white dark:bg-neutral-800 p-4 border-t dark:border-gray-700">
                             <div class="flex justify-end items-center gap-x-2">
                                 <button type="button"
-                                    class="inline-flex justify-center items-center px-4 py-2 text-sm font-medium rounded-md border border-transparent bg-red-600 text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                                    class="inline-flex justify-center items-center px-4 py-2 text-sm font-semibold rounded-md border border-transparent bg-red-600 text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
                                     data-hs-overlay="#hs-toggle-between-modals-pencacahan-rumah-tangga">
                                     Batal
                                 </button>
                                 <button type="sumbit"
-                                    class="inline-flex justify-center items-center px-4 py-2 text-sm font-medium rounded-md border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                    class="inline-flex justify-center items-center px-4 py-2 text-sm font-semibold rounded-md border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                                     Import
                                 </button>
                             </div>
@@ -139,6 +140,7 @@
                     </form>
                 </div>
             </div>
+
         </div>
     </div>
 </div>
@@ -160,7 +162,7 @@
         const desa = document.getElementById('desa-edit');
         const idPencacahan = document.getElementById('id-edit');
 
-        fetch(`/teknis/rumah-tangga-pencacahan-edit/${id}`)
+        fetch(`/mitra/rumah-tangga/pencacahan-input/${id}`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');

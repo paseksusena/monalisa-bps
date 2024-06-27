@@ -2,6 +2,7 @@
     class="sticky top-0 inset-x-0 flex flex-wrap sm:justify-start sm:flex-nowrap z-[48] w-full bg-white border-b text-sm py-2.5 sm:py-4 lg:ps-64 dark:bg-neutral-800 dark:border-neutral-700">
     <nav class="flex basis-full items-center w-full mx-auto px-4 sm:px-6" aria-label="Global">
         <div class="me-5 lg:me-0 lg:hidden">
+            <!-- humberger button -->
             <button id="hamburger-icon" class="lg:hidden block text-blue-500 focus:outline-none">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                     xmlns="http://www.w3.org/2000/svg">
@@ -13,7 +14,8 @@
 
         <div class="w-full flex items-center justify-between ms-auto sm:gap-x-3 sm:order-3">
             <!-- SearchBox -->
-            <div class="relative flex-grow-0 w-full sm:w-[400px] me-auto" data-hs-combo-box='{
+            <div class="relative flex-grow-0 w-full sm:w-[400px] me-auto"
+                data-hs-combo-box='{
                 "groupingType": "default",
                 "preventSelection": true,
                 "isOpenOnFocus": true,
@@ -22,15 +24,17 @@
                 <div class="relative">
                     <div class="absolute inset-y-0 start-0 flex items-center pointer-events-none z-20 ps-3.5">
                         <svg class="flex-shrink-0 size-4 text-gray-400 dark:text-white/60"
-                            xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round">
                             <circle cx="11" cy="11" r="8"></circle>
                             <path d="m21 21-4.3-4.3"></path>
                         </svg>
                     </div>
                     <input id="search"
                         class="py-3 ps-10 pe-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
-                        type="text" placeholder="Search..." value="" data-hs-combo-box-input="" autocomplete="off">
+                        type="text" placeholder="Search..." value="" data-hs-combo-box-input=""
+                        autocomplete="off">
                 </div>
 
                 <!-- SearchBox Dropdown -->
@@ -45,7 +49,7 @@
             </div>
             <!-- End SearchBox -->
 
-            <!-- Tombol Download -->
+            <!-- Tombol Download Template-->
             <div class="hs-dropdown relative inline-flex ml-4">
                 <div class="rounded-lg bg-gray-100 p-1">
                     <button id="dropdownDefaultButton" data-dropdown-toggle="dropdown"
@@ -61,7 +65,7 @@
                 </div>
             </div>
 
-            <!-- Dropdown menu -->
+            <!-- Dropdown menu template excel -->
             <div id="dropdown"
                 class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
                 <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
@@ -116,24 +120,35 @@
                 </ul>
             </div>
             <!-- End Tombol Download -->
+            <!-- End SearchBox -->
 
+            <!-- mengambil blade dari notifikasi -->
             @include('page.administrasi.partials.notification')
 
-            <!-- Tombol Home -->
+            <!-- style css terpisah pada tombol home -->
             <style>
-            @media (max-width: 640px) {
-                .hide-on-mobile {
-                    display: none;
+                @media (max-width: 640px) {
+                    .hide-on-mobile {
+                        display: none;
+                    }
                 }
-            }
             </style>
 
+            <!-- Tombol logout-->
             <div class="relative inline-flex mr-4 hide-on-mobile">
-                <button id="logout-button" type="button" class="py-1 px-2 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-red-600 text-white hover:bg-red-700 disabled:opacity-50 disabled:pointer-events-none">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(255, 255, 255, 1);transform: ;msFilter:;"><path d="M16 13v-2H7V8l-5 4 5 4v-3z"></path><path d="M20 3h-9c-1.103 0-2 .897-2 2v4h2V5h9v14h-9v-4H9v4c0 1.103.897 2 2 2h9c1.103 0 2-.897 2-2V5c0-1.103-.897-2-2-2z"></path></svg>
+                <button id="logout-button" type="button"
+                    class="py-1 px-2 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-red-600 text-white hover:bg-red-700 disabled:opacity-50 disabled:pointer-events-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        style="fill: rgba(255, 255, 255, 1);transform: ;msFilter:;">
+                        <path d="M16 13v-2H7V8l-5 4 5 4v-3z"></path>
+                        <path
+                            d="M20 3h-9c-1.103 0-2 .897-2 2v4h2V5h9v14h-9v-4H9v4c0 1.103.897 2 2 2h9c1.103 0 2-.897 2-2V5c0-1.103-.897-2-2-2z">
+                        </path>
+                    </svg>
                 </button>
             </div>
 
+            <!-- form logout mengarah ke route logout-->
             <form method="POST" action="{{ route('logout') }}" id="logout-form" style="display: none;">
                 @csrf
             </form>
@@ -157,46 +172,50 @@
                     });
                 });
             </script>
-            
+
         </div>
     </nav>
 </header>
 
+<!-- script jquery Ajax dan pencarian data-->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
-$(document).ready(function() {
-    $('#search').on('input', function() {
-        var searchValue = $(this).val();
-        var selectedYear = '{{ session("selected_year") }}';
-        $.ajax({
-            url: '/administrasi/kegiatan/search',
-            type: 'GET',
-            data: {
-                search: searchValue,
-                year: selectedYear
-            },
-            success: function(response) {
-                var dropdown = $('[data-hs-combo-box-output-items-wrapper]');
-                dropdown.empty();
-                response.forEach(function(item) {
-                    dropdown.append(
-                        '<div data-hs-combo-box-output-item="{&quot;group&quot;: {&quot;name&quot;: &quot;fungsi&quot;, &quot;title&quot;: &quot;Fungsi&quot;}}" tabindex="0"><a class="py-2 px-3 flex items-center gap-x-3 hover:bg-gray-100 rounded-lg focus:outline-none focus:bg-gray-100 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700" href="' +
-                        item.url +
-                        '"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M13 9h-2v3H8v2h3v3h2v-3h3v-2h-3z"></path><path d="M20 5h-8.586L9.707 3.293A.996.996 0 0 0 9 3H4c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2h16c1.103 0 2-.897 2-2V7c0-1.103-.897-2-2-2zM4 19V7h16l.002 12H4z"></path></svg><span class="text-sm font-semibold text-gray-800 dark:text-neutral-200" data-hs-combo-box-search-text="" data-hs-combo-box-value="">' +
-                        item.name +
-                        '</span></a></div><div class="ml-3 text-sm text-gray-500">' +
-                        item.alamat + '</div>');
-                });
-                if (response.length > 0) {
-                    $('[data-hs-combo-box-output]').show();
-                } else {
-                    $('[data-hs-combo-box-output]').hide();
+    $(document).ready(function() {
+        $('#search').on('input', function() { //input function search
+            var searchValue = $(this).val();
+            var selectedYear = '{{ session('selected_year') }}'; //mengambil sesi tahun
+            $.ajax({
+                url: '/administrasi/kegiatan/search', //url Ajax untuk search
+                type: 'GET', //method
+                data: {
+                    search: searchValue,
+                    year: selectedYear
+                },
+                success: function(
+                    response
+                ) { //function data tampil saat search yang mencakup url item, nama item dan alamat item.
+                    var dropdown = $('[data-hs-combo-box-output-items-wrapper]');
+                    dropdown.empty();
+                    response.forEach(function(item) {
+                        dropdown.append(
+                            '<div data-hs-combo-box-output-item="{&quot;group&quot;: {&quot;name&quot;: &quot;fungsi&quot;, &quot;title&quot;: &quot;Fungsi&quot;}}" tabindex="0"><a class="py-2 px-3 flex items-center gap-x-3 hover:bg-gray-100 rounded-lg focus:outline-none focus:bg-gray-100 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700" href="' +
+                            item.url +
+                            '"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M13 9h-2v3H8v2h3v3h2v-3h3v-2h-3z"></path><path d="M20 5h-8.586L9.707 3.293A.996.996 0 0 0 9 3H4c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2h16c1.103 0 2-.897 2-2V7c0-1.103-.897-2-2-2zM4 19V7h16l.002 12H4z"></path></svg><span class="text-sm font-semibold text-gray-800 dark:text-neutral-200" data-hs-combo-box-search-text="" data-hs-combo-box-value="">' +
+                            item.name +
+                            '</span></a></div><div class="ml-3 text-sm text-gray-500">' +
+                            item.alamat + '</div>');
+                    }); //data tampil ketika kondisi data > 0
+                    if (response.length > 0) {
+                        $('[data-hs-combo-box-output]').show();
+                    } else {
+                        $('[data-hs-combo-box-output]').hide();
+                    }
+                },
+                //handling error
+                error: function(xhr, status, error) {
+                    console.error(error);
                 }
-            },
-            error: function(xhr, status, error) {
-                console.error(error);
-            }
+            });
         });
     });
-});
 </script>

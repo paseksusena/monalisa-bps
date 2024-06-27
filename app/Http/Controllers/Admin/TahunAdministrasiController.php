@@ -12,21 +12,17 @@ use ZipArchive;
 
 class TahunAdministrasiController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index()
     {
-        $currentYear = Carbon::now()->year;
-        $startYear = Carbon::createFromFormat('Y', 2019)->year;
-        $years = range($startYear, $currentYear);
+        $currentYear = Carbon::now()->year; //mengambil data tahun sekarang
+        $startYear = Carbon::createFromFormat('Y', 2019)->year; //tahun di mulai dari 2019
+        $years = range($startYear, $currentYear); //set tahun sekarang dengan tahun mulai
 
-
-
-        foreach ($years as $year) {
+        foreach ($years as $year) { //perulangan setiap data progress tahunan
             $amount_file = 0;
             $complete_file = 0;
-            $kegiatans = KegiatanAdministrasi::where('tahun', $year)->get();
+            $kegiatans = KegiatanAdministrasi::where('tahun', $year)->get(); //dari kegiatan administrasi
             $progres[$year] = 0;
             $amount[$year] = 0;
             $complete[$year] = 0;
@@ -36,9 +32,10 @@ class TahunAdministrasiController extends Controller
                 $amount[$year] = $amount_file;
                 $complete[$year] = $complete_file;
             }
-            $progres[$year] = $amount_file > 0 ? number_format(($complete_file / $amount_file) * 100, 2) : 0;
+            $progres[$year] = $amount_file > 0 ? number_format(($complete_file / $amount_file) * 100, 2) : 0; //set kalikan 100%
         };
 
+        //kembali ke view (blade) dengan membawa beberapa parameter ini
         return view('page.admin.tambah-tahun', [
             'tahuns' => $years,
             'progres' => $progres,
@@ -48,58 +45,16 @@ class TahunAdministrasiController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
+    //fucntion untuk menghapus tahun administrasi
     public function destroy(Request $request)
     {
-
+        //mengambil tahun kegiatan administrasi
         $kegiatans = KegiatanAdministrasi::where('tahun', $request->tahun)->get();
 
-        $filePath = "storage/administrasis/$request->tahun";
-        File::deleteDirectory($filePath);
+        $filePath = "storage/administrasis/$request->tahun"; //lokasi directory yang akan dihapus
+        File::deleteDirectory($filePath); //hapus directory tersebut
 
-        foreach ($kegiatans as $kegiatan) {
+        foreach ($kegiatans as $kegiatan) { //perulangan, manghapus kegiatan,akun,transaksi,file.
             $kegiatan->Akun()->each(function ($akun) {
                 $akun->transaksi()->each(function ($transaksi) {
                     $transaksi->file()->delete();
@@ -111,9 +66,11 @@ class TahunAdministrasiController extends Controller
             $kegiatan->delete();
         }
 
+        //kembali ke halaman jika berhasil dihapus
         return back()->with('success', 'Tahun  ' . $request->tahun . ' berhasil dihapus!');
     }
 
+    //function download ZIP arsip tahunan
     public function download_zip(Request $request)
     {
         // Ambil request tahun
@@ -132,7 +89,7 @@ class TahunAdministrasiController extends Controller
             // Tambahkan file dari folder ke dalam file zip
             $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($folderPath));
 
-            foreach ($files as $file) {
+            foreach ($files as $file) { //perulangan, untuk mengambil beberapa file di directory
                 if (!$file->isDir()) {
                     $filePath = $file->getRealPath();
                     $relativePath = substr($filePath, strlen($folderPath) + 1);

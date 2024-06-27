@@ -3,20 +3,17 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreUserRequest;
-use App\Imports\UsersImport;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Maatwebsite\Excel\Facades\Excel;
 
 class UserController extends Controller
 {
     public function index()
     {
-        // Ambil semua data pengguna dengan pagination
-        $users = User::paginate(10);
+        // Ambil semua data pengguna dengan pagination dengan user tampil 20
+        $users = User::paginate(20);
 
         // Kirim data pengguna ke view
         return view('page.admin.admin', compact('users'));
@@ -25,6 +22,7 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
+        // validasi dengan request beberapa parameter
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
@@ -32,6 +30,7 @@ class UserController extends Controller
             'role' => 'required|in:admin,organik,anorganik',
         ]);
 
+        //memamnggil model untuk membuat user dengan beberapa parameter
         User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -39,9 +38,11 @@ class UserController extends Controller
             'role' => $request->role,
         ]);
 
+        //kembali ke halaman jika user ditambahkan
         return redirect()->route('admin.index')->with('success', 'User berhasil ditambahkan.');
     }
 
+    //function untuk menghapus user
     public function destroy(User $user)
     {
         // Validasi apakah user yang sedang login adalah administrator
@@ -49,13 +50,14 @@ class UserController extends Controller
             return redirect()->route('admin.index')->with('error', 'Anda tidak memiliki izin untuk menghapus pengguna');
         }
 
+        //kembali ke halaman jika user berhasil di hapus
         $user->delete();
         return redirect()->route('admin.index')->with('success', 'User berhasil dihapus');
     }
-
+    //function untuk update data user
     public function update(Request $request, User $user)
     {
-        $user = User::find($request->id);
+        $user = User::find($request->id); //mengambil Id user yang akan di edit
         $request->validate([
             'role' => 'required|in:admin,organik,anorganik'
         ]);
@@ -66,32 +68,18 @@ class UserController extends Controller
         }
 
         $user->update([
-            'role' => $request->role
+            'role' => $request->role //rubah role admin
         ]);
 
+        //kembali ke halaman jika user berhasil terupdate
         return redirect()->route('admin.index')->with('success', 'Peran pengguna berhasil diperbarui');
     }
 
+    //function edit
     public function edit($id)
     {
 
         $user = User::find($id);
         return response()->json($user);
-    }
-
-    public function storeExcel(StoreUserRequest $request)
-    {
-        try {
-            $file = $request->file('excel_file');
-            $fileName = $file->getClientOriginalName();
-            $file->move('uploads', $fileName);
-
-            // Import Excel file
-            Excel::import(new UsersImport, public_path('/uploads/' . $fileName));
-        } catch (\Throwable $e) {
-            // Tangkap pengecualian dan tampilkan pesan kesalahan
-            return redirect()->back()->with('error', 'Error saat mengimpor file: ' . $e->getMessage());
-        }
-        return redirect()->back()->with('success', 'Data Excel berhasil diimpor!');
     }
 }

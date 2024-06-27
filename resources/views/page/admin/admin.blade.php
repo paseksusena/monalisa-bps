@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>admin</title>
-    @vite(['resources/css/app.css','resources/js/app.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <html>
 
@@ -17,6 +17,7 @@
 
     <div class="p-4 mr-4 sm:ml-28">
         <!-- ========== Start ========== -->
+        <!-- halaman user -->
         <div class="flex flex-col">
             <div class="mt-20 mb-3 flex justify-between">
                 <span class="font-bold text-lg">
@@ -40,6 +41,7 @@
                 </div>
                 @include('page.admin.users.create')
             </div>
+            <!--  tabel user -->
             <div class="flex flex-col px-2 mb-8">
                 <div class="-m-1.5 overflow-x-auto shadow-md ">
                     <div class="min-w-full inline-block align-middle">
@@ -71,83 +73,96 @@
                                 </thead>
 
                                 <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-                                    @foreach($users as $key => $user)
-                                    <tr>
-                                        <td
-                                            class="px-6 py-2 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-gray-200">
-                                            {{ $key + 1 }}
-                                        </td>
-                                        <td
-                                            class="px-6 py-2 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
-                                            {{ $user->email }}
-                                        </td>
-                                        <td
-                                            class="px-6 py-2 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
-                                            {{ $user->name }}
-                                        </td>
-                                        <td
-                                            class="px-6 py-2 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
-                                            @if($user->role === 'admin')
-                                            Admin
-                                            @elseif($user->role === 'organik')
-                                            Organik
-                                            @endif
-                                        </td>
-                                        <td class="py-2 whitespace-nowrap text-end text-sm font-medium">
-                                            <div class="flex justify-end items-center gap-1 mr-2">
-                                                
+                                    @foreach ($users as $key => $user)
+                                        <tr>
+                                            <td
+                                                class="px-6 py-2 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-gray-200">
+                                                {{ $key + 1 }}
+                                            </td>
+                                            <td
+                                                class="px-6 py-2 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
+                                                {{ $user->email }}
+                                            </td>
+                                            <td
+                                                class="px-6 py-2 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
+                                                {{ $user->name }}
+                                            </td>
+                                            <td
+                                                class="px-6 py-2 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
+                                                @if ($user->role === 'admin')
+                                                    Admin
+                                                @elseif($user->role === 'organik')
+                                                    Organik
+                                                @endif
+                                            </td>
+                                            <td class="py-2 whitespace-nowrap text-end text-sm font-medium">
+                                                <div class="flex justify-end items-center gap-1 mr-2">
 
 
-                                                <button type="button" data-hs-overlay="#hs-focus-management-modaleditadmin" data-id="{{$user->id}}" onclick="openEditModalUser(this)"
-                                                    class="bg-blue-600 hover:bg-blue-700 text-white p-1 rounded focus:outline-none focus:shadow-outline">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" style="fill: rgba(255, 255, 255, 1);transform: ;msFilter:;"><path d="m7 17.013 4.413-.015 9.632-9.54c.378-.378.586-.88.586-1.414s-.208-1.036-.586-1.414l-1.586-1.586c-.756-.756-2.075-.752-2.825-.003L7 12.583v4.43zM18.045 4.458l1.589 1.583-1.597 1.582-1.586-1.585 1.594-1.58zM9 13.417l6.03-5.973 1.586 1.586-6.029 5.971L9 15.006v-1.589z"></path><path d="M5 21h14c1.103 0 2-.897 2-2v-8.668l-2 2V19H8.158c-.026 0-.053.01-.079.01-.033 0-.066-.009-.1-.01H5V5h6.847l2-2H5c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2z"></path></svg>
-                                            </button>
-                                                @include('page.admin.users.edit')
 
-                                                <!-- Tombol Hapus -->
-                                                <form action="{{ route('users.destroy', $user->id) }}" method="POST"
-                                                    id="deleteForm{{ $user->id }}">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="button" onclick="confirmDelete('{{ $user->id }}')"
-                                                        class="py-1 px-1 inline-flex items-center gap-x-2 text-sm font-semibold rounded border border-transparent bg-red-600 text-white hover:bg-red-700">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19"
-                                                            viewBox="0 0 24 24"
+                                                    <button type="button"
+                                                        data-hs-overlay="#hs-focus-management-modaleditadmin"
+                                                        data-id="{{ $user->id }}" onclick="openEditModalUser(this)"
+                                                        class="bg-blue-600 hover:bg-blue-700 text-white p-1 rounded focus:outline-none focus:shadow-outline">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="20"
+                                                            height="20" viewBox="0 0 24 24"
                                                             style="fill: rgba(255, 255, 255, 1);transform: ;msFilter:;">
                                                             <path
-                                                                d="M5 20a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8h2V6h-4V4a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v2H3v2h2zM9 4h6v2H9zM8 8h9v12H7V8z">
+                                                                d="m7 17.013 4.413-.015 9.632-9.54c.378-.378.586-.88.586-1.414s-.208-1.036-.586-1.414l-1.586-1.586c-.756-.756-2.075-.752-2.825-.003L7 12.583v4.43zM18.045 4.458l1.589 1.583-1.597 1.582-1.586-1.585 1.594-1.58zM9 13.417l6.03-5.973 1.586 1.586-6.029 5.971L9 15.006v-1.589z">
                                                             </path>
-                                                            <path d="M9 10h2v8H9zm4 0h2v8h-2z"></path>
+                                                            <path
+                                                                d="M5 21h14c1.103 0 2-.897 2-2v-8.668l-2 2V19H8.158c-.026 0-.053.01-.079.01-.033 0-.066-.009-.1-.01H5V5h6.847l2-2H5c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2z">
+                                                            </path>
                                                         </svg>
                                                     </button>
-                                                </form>
-                                                <!-- End Tombol Hapus -->
-                                            </div>
-                                        </td>
+                                                    @include('page.admin.users.edit')
+
+                                                    <!-- Tombol Hapus user -->
+                                                    <form action="{{ route('users.destroy', $user->id) }}"
+                                                        method="POST" id="deleteForm{{ $user->id }}">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="button"
+                                                            onclick="confirmDelete('{{ $user->id }}')"
+                                                            class="py-1 px-1 inline-flex items-center gap-x-2 text-sm font-semibold rounded border border-transparent bg-red-600 text-white hover:bg-red-700">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="19"
+                                                                height="19" viewBox="0 0 24 24"
+                                                                style="fill: rgba(255, 255, 255, 1);transform: ;msFilter:;">
+                                                                <path
+                                                                    d="M5 20a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8h2V6h-4V4a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v2H3v2h2zM9 4h6v2H9zM8 8h9v12H7V8z">
+                                                                </path>
+                                                                <path d="M9 10h2v8H9zm4 0h2v8h-2z"></path>
+                                                            </svg>
+                                                        </button>
+                                                    </form>
+                                                    <!-- End Tombol Hapus -->
+                                                </div>
+                                            </td>
 
 
-                                    </tr>
+                                        </tr>
                                     @endforeach
                                 </tbody>
                             </table>
                             {{ $users->links() }}
                             <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
                             <script>
-                            function confirmDelete(userId) {
-                                if (confirm("Apakah Anda yakin ingin menghapus pengguna ini?")) {
-                                    document.getElementById('deleteForm' + userId).submit();
+                                //menampilkan modal delet
+                                function confirmDelete(userId) {
+                                    if (confirm("Apakah Anda yakin ingin menghapus pengguna ini?")) {
+                                        document.getElementById('deleteForm' + userId).submit();
+                                    }
                                 }
-                            }
 
-                            @if(session('success'))
-                            Swal.fire({
-                                icon: 'success',
-                                title: '{{ session('
-                                success ') }}',
-                                showConfirmButton: false,
-                                timer: 2000
-                            });
-                            @endif
+                                @if (session('success'))
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: '{{ session('
+                                                                                                                                                                                                                                        success ') }}',
+                                        showConfirmButton: false,
+                                        timer: 2000
+                                    });
+                                @endif
                             </script>
 
                         </div>
@@ -158,7 +173,7 @@
         </div>
     </div>
 
-    <!-- ========== Start Modal ========== -->
+    <!-- ========== Modal form tambah user ========== -->
     <div id="hs-vertically-centered-modal"
         class="hs-overlay hidden size-full fixed top-0 start-0 z-[80] overflow-x-hidden overflow-y-auto pointer-events-none">
         <div
@@ -173,15 +188,15 @@
                         class="flex justify-center items-center size-7 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-neutral-700"
                         data-hs-overlay="#hs-vertically-centered-modal">
                         <span class="sr-only">Close</span>
-                        <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24"
+                            height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                             stroke-linecap="round" stroke-linejoin="round">
                             <path d="M18 6 6 18"></path>
                             <path d="m6 6 12 12"></path>
                         </svg>
                     </button>
                 </div>
-
+                <!-- tombol menyimpan data user -->
                 <div class="flex justify-end gap-x-2 pt-5 mx-4 mb-4">
                     <button type="button"
                         class="py-2 px-2 inline-flex items-center gap-x-1 text-sm font-semibold rounded-xl border border-transparent  bg-green-500 text-white hover:bg-green-700 disabled:opacity-50 disabled:pointer-events-none"
@@ -201,7 +216,7 @@
     <!-- ========== end Modal========== -->
 
     <!-- ========== Start Modal ========== -->
-
+    <!-- modal user  -->
     <div id="hs-toggle-between-modals-first-modal"
         class="hs-overlay hidden size-full fixed top-0 start-0 z-[80] overflow-x-hidden overflow-y-auto pointer-events-none">
         <div
@@ -217,17 +232,16 @@
                         class="flex justify-center items-center size-7 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-gray-700"
                         data-hs-overlay="#hs-toggle-between-modals-first-modal" data-hs-overlay-close="">
                         <span class="sr-only">Close</span>
-                        <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round">
+                        <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24"
+                            height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M18 6 6 18"></path>
                             <path d="m6 6 12 12"></path>
                         </svg>
                     </button>
                 </div>
-                    
-                
-                <!-- Form -->
+
+                <!-- form user -->
                 <div class="p-4 overflow-y-auto">
                     <div class="space-y-4">
                         <form class="mx-5 pt-4">
@@ -277,6 +291,7 @@
                         <!-- End Form -->
                     </div>
                 </div>
+                <!-- tombol edit user  -->
                 <div class="flex justify-end gap-x-2 pb-4 px-4">
                     <button type="button"
                         class="py-2 px-3 inline-flex items-center gap-x-1 text- font-semibold rounded-xl border border-transparent shadow-lg bg-blue-600  text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
@@ -297,6 +312,7 @@
         </div>
     </div>
 
+    <!-- modal edit user -->
     <div id="hs-toggle-between-modals-second-modal"
         class="hs-overlay hidden size-full fixed top-0 start-0 z-[80] overflow-x-hidden overflow-y-auto pointer-events-none">
         <div
@@ -311,14 +327,15 @@
                         class="flex justify-center items-center size-7 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-gray-700"
                         data-hs-overlay="#hs-toggle-between-modals-second-modal" data-hs-overlay-close="">
                         <span class="sr-only">Close</span>
-                        <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round">
+                        <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24"
+                            height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M18 6 6 18"></path>
                             <path d="m6 6 12 12"></path>
                         </svg>
                     </button>
                 </div>
+                <!-- form data user -->
                 <div class="p-4 overflow-y-auto">
                     <div class="space-y-4 ">
                         <!-- Form -->
@@ -399,12 +416,13 @@
                                                 </svg>
                                             </div>
                                         </div>
+                                        <!-- karakter paswword -->
                                         <p class="hidden text-xs text-red-600 mt-2" id="password-error">8+
                                             characters
                                             required
                                         </p>
                                     </div>
-
+                                    <!-- konfirmasi paswwword  -->
                                     <div class="relative z-0">
                                         <label for="confirm-password"
                                             class="block text-sm mb-2 mt-4 dark:text-white">Confirm
@@ -432,6 +450,8 @@
                         <!-- End Form -->
                     </div>
                 </div>
+
+                <!-- tombol batal dan simpan data user -->
                 <div class="flex justify-end gap-x-2 pt-5">
                     <button type="button"
                         class="py-2 px-3 inline-flex items-center gap-x-1 text-sm font-semibold rounded-xl border border-transparent shadow-lg bg-red-600 text-white hover:bg-red-700 disabled:opacity-50 disabled:pointer-events-none"
@@ -465,7 +485,3 @@
 
 
 </html>
-
-
-
-

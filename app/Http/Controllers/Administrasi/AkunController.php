@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Administrasi;
 
 use App\Models\Akun;
 use App\Http\Requests\StoreAkunRequest;
-use App\Http\Requests\UpdateAkunRequest;
 use App\Http\Controllers\Controller;
 use App\Models\KegiatanAdministrasi;
 use App\Imports\AkunImport;
@@ -15,60 +14,72 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
-
-
 class AkunController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    // menampilkan halaman akun, dengan alamat page/administrasi/akun/index
     public function index()
     {
         $search = request('search');
         $fungsi = $this->getFungsi();
-
         $kegiatan = $this->getKegiatan();
-        //melakukan penambahan parameter
-        $previousQuery = request()->except(['search']);
-        $query = array_merge($previousQuery, ['search' => $search]);
+
+        // Mendapatkan parameter urutan
+        $order_nama = request('order-nama');
+        $order_progres = request('order-progres');
 
         $this->progresKegiatan();
+
+        // Mendapatkan data akun berdasarkan kegiatan_id dan filter
+        $akunQuery = Akun::where('kegiatan_id', $kegiatan->id)->filter(request()->except(['search']));
+
+        // Mengatur pengurutan berdasarkan nama jika parameter urutan nama tersedia
+        if ($order_nama) {
+            $akunQuery->orderBy('nama', $order_nama);
+        }
+
+        // Mengatur pengurutan berdasarkan progres jika parameter urutan progres tersedia
+        if ($order_progres) {
+            $akunQuery->orderBy('progres', $order_progres);
+        }
+
+        // Mendapatkan data akun
+        $akuns = $akunQuery->get();
+
+        // Mengirimkan data ke view
         return view('page.administrasi.akun.index', [
             'kegiatan' => $kegiatan,
-            'akuns' => Akun::where('kegiatan_id', $kegiatan->id)
-                ->filter($query)
-                ->paginate(200)
-                ->appends(['search' => $search]),
-
+            'akuns' => $akuns,
             'fungsi' => $fungsi,
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
 
-
-    /**
-     * Store a newly created resource in storage.
-     */
+    // function untuk menyimpan akun 
     public function store(StoreAkunRequest $request)
     {
-        try {
 
+        try {
+            // melakukan validasi nama, kegiatan_id
             $requestValidasi = $request->validate([
                 'nama' => 'required|max:550',
                 'kegiatan_id' => 'required'
-
             ]);
+
+            //mengambil request fungsi dan kegiatan_id
             $fungsi = $request->fungsi;
             $kegiatan_id = $request->kegiatan_id;
 
+
+            //melakukan pencarian nama akun agar tidak dupikat
             $file = Akun::where('kegiatan_id', $kegiatan_id)->get();
             $find = $file->where('nama', $request->nama)->first();
+
+            //jika ditemukan nama yg sama return error 
             if ($find) {
                 return back()->with('error', 'Nama akun ' . $request->nama . ' telah tersedia!');
             }
+
+            //jika tidak buat di akun model
             Akun::create($requestValidasi);
         } catch (\Throwable $e) {
             // Tangkap pengecualian dan tampilkan pesan kesalahan
@@ -77,53 +88,46 @@ class AkunController extends Controller
         return redirect('/administrasi/akun?kegiatan=' . $kegiatan_id . '&fungsi=' . $fungsi)->with('success', 'Akun berhasil ditambahkan!');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Akun $akun)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
+    // function untuk menampilkan data yang akan di edit akun
     public function edit($id)
     {
-
         $akuns = Akun::find($id);
         return response()->json($akuns);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+    //function update untuk akun 
     public function update(Request $request)
     {
+        // melakuan request validasi nama
         $requestValidasi = $request->validate([
             'nama' => 'required|max:550',
         ]);
 
+        // ambil request fungsi, kegiatan, dan session
         $fungsi = $request->fungsi;
         $kegiatan = $request->kegiatan;
         $session  = session('selected_year');
 
-
+        //mencari nama akun yang sama dengan akun yang akan dibuat
         $existingAkun = Akun::where('kegiatan_id', $kegiatan)
             ->where('nama', $requestValidasi['nama'])
             ->where('id', '!=', $request->id)
             ->first();
 
+        // jika ada nama akun yang sama, maka return  error 
         if ($existingAkun) {
             return back()->with('error', 'Nama kegiatan ' . $requestValidasi['nama'] . ' telah tersedia!');
         }
+
+
         $kegiatan = KegiatanAdministrasi::where('id', $kegiatan)->first();
 
-
+        //membuat folder untuk akun
         $akun = Akun::findOrFail($request->id);
+
+        //proses membuat alamat folder akun 
         $oldFolderPath = 'public/administrasis/'  . $session  . '/' . $fungsi . '/' . $kegiatan->nama . '/' . $request->oldNama;
         $newFolderPath = 'public/administrasis/' . $session  . '/' . $fungsi . '/'  . $kegiatan->nama . '/' . $request->nama;
-        // dd($request->oldNama);
         // Rename the folder
         if ($request->nama !== $request->oldNama) {
 
@@ -138,6 +142,7 @@ class AkunController extends Controller
                         'storage/administrasis/' . $session  . '/' . $fungsi . '/' . $kegiatan->nama . '/' . $request->oldNama,
                         'storage/administrasis/' . $session  . '/' . $fungsi . '/' . $kegiatan->nama . '/' . $request->oldNama
                     );
+
                     $file_content = Storage::get($file);
                     $file_name_parts = explode("/", $file);
                     if (count($file_name_parts) > 0) {
@@ -149,53 +154,39 @@ class AkunController extends Controller
                 }
             }
         }
+        // melakukan update akun
         $akun->update($requestValidasi);
-
-
-
         return redirect('/administrasi/akun?fungsi=' . $fungsi . '&kegiatan=' . $kegiatan->id)->with('success', 'Akun ' . $requestValidasi['nama'] . ' berhasil diubah!');
     }
-    /**
-     * Remove the specified resource from storage.
-     */
+
+    //function untuk mengahpus
     public function destroy(Akun $akun, StoreAkunRequest $request)
     {
         $fungsi = $request->fungsi;
         $kegiatan = KegiatanAdministrasi::where('id', $request->kegiatan)->first();
         $session = session('selected_year');
 
-
+        //mencari file path yang akan dihapus
         $filePath = "storage/administrasis/$session/$fungsi/{$kegiatan->nama}/{$akun->nama}";
         File::deleteDirectory($filePath);
 
+        //melakukan penghapusan transaksi dan file di dalam akun 
         $akun->transaksi()->each(function ($transaksi) {
             $transaksi->file()->delete();
             $transaksi->delete();
         });
 
+        //menghapus akun
         $akun->delete();
         return back()->with('success', 'Akun ' . $akun->nama . ' berhasil dihapus!');
     }
 
-    public function exportExcel($id)
-    {
-        $fungsi = $this->getFungsi();
-        $kegiatan = $id;
-
-        $kegiatan = KegiatanAdministrasi::where('id', $kegiatan)->first();
-        return view('administrasi.akun.create-excel', [
-            'kegiatan' => $kegiatan,
-            'fungsi' => $fungsi,
-
-        ]);
-    }
-
+    // function untuk melakukan import akun menggunakan excel
     public function storeExcel(StoreAkunRequest $request)
     {
         try {
             $fungsi = $this->getFungsi();
             $kegiatan_id = $request->kegiatan_id;
-
 
             $file = $request->file('excel_file');
             $fileName = $file->getClientOriginalName();
@@ -204,6 +195,7 @@ class AkunController extends Controller
 
             // Move uploaded file to storage
             $fileName = $file->getClientOriginalName();
+            // memanggil import di AkunImport
             Excel::import(new AkunImport($kegiatan_id), $filePath);
             if (file_exists($filePath)) {
                 unlink($filePath);
@@ -213,47 +205,25 @@ class AkunController extends Controller
             return redirect()->back()->with('error', 'Error saat mengimpor file: ' . $e->getMessage());
         }
 
-        return redirect('/administrasi/akun?kegiatan=' . $kegiatan_id .  '&fungsi=' . $fungsi)->with('success', 'Akun berhasil diimpor!');
+        return back()->with('success', 'Akun berhasil diimpor!');
     }
 
+    //fungsi untuk mengambil kegiatan akun
     public function getKegiatan()
     {
         $kegiatan = KegiatanAdministrasi::where('id', request('kegiatan'))->first();
         return $kegiatan;
     }
 
+    //fungsi untuk mengambil fungsi akun
+
     public function getFungsi()
     {
         $fungsi = request('fungsi');
         return $fungsi;
     }
-    // public function progres($kegiatan_id)
-    // {
-    //     $akuns = Akun::where('kegiatan_id', $kegiatan_id)->get();
 
-    //     $totalFiles = 0;
-    //     $completeFile = 0;
-
-    //     foreach ($akuns as $akun) {
-    //         $totalFiles += $akun->amount_file;
-    //         $completeFile += $akun->complete_file;
-    //     }
-
-    //     // Check for division by zero
-    //     $progres = $totalFiles > 0 ? ($completeFile / $totalFiles) * 100 : 0;
-
-    //     // Update progress in the KegiatanAdministrasi table
-    //     $kegiatan = KegiatanAdministrasi::find($kegiatan_id);
-    //     if ($kegiatan) {
-    //         $kegiatan->progres = $progres;
-    //         $kegiatan->amount_file = $totalFiles;
-    //         $kegiatan->complete_file = $completeFile;
-    //         $kegiatan->save();
-    //     }
-
-    //     return 0;
-    // }
-
+    // menghitung progres kegiatan administrasi 
     public function progresKegiatan()
     {
 
@@ -283,10 +253,6 @@ class AkunController extends Controller
                 $kegiatan->save();
             }
         }
-
-
-
-
         return 0;
     }
 }

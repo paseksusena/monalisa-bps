@@ -11,16 +11,16 @@
 </head>
 
 <body class="bg-slate-50">
-
+    <!-- mengambil halaman blade pada header -->
     @include('layouts.partials.header')
-
+    <!-- mengambil halaman blade pada tab -->
     @include('page.teknis.partials.tab-header3')
 
     <div
         class="max-w-[90rem] px-2 pt-4 py-4 sm:px-6 lg:px-8 lg:py-4 mx-auto sm:max-w-[36rem] md:max-w-[48rem] lg:max-w-[72rem] xl:max-w-[90rem] ">
         <!-- ========== Pemutakhiran ========== -->
         <div id="basic-tabs-1" role="tabpanel" aria-labelledby="basic-tabs-item-1">
-            <!-- TABEL -->
+
             <div class="grid lg:grid-cols-1 gap-1 bg-gray-100 shadow-lg p-4 rounded-lg overflow-x-auto mb-10">
 
                 <div class="pt-2 flex flex-col">
@@ -36,30 +36,33 @@
                                     <path d="m21 21-4.3-4.3"></path>
                                 </svg>
                             </div>
+                            <!-- input hidden Id -->
                             <input type="hidden" name="kegiatan" value="{{ $kegiatan->id }}">
                             <input
                                 class="py-2 ps-10 pe-4 block w-full shadow-sm border-gray-200 rounded-l-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none bg-gray-50 dark:text-neutral-400 dark:placeholder-neutral-500"
-                                type="text" placeholder="Search" value="{{$search}}" name="search"
+                                type="text" placeholder="Search" value="{{ $search }}" name="search"
                                 data-hs-combo-box-input="">
                         </div>
-                        <button type="submit" class="py-2 px-4 bg-blue-500 text-white rounded-r-lg">Search</button>
+                        <!-- tombol search -->
+                        <button type="submit" class="py-1 px-2 bg-blue-500 text-white rounded-r-lg">Search</button>
                     </form>
                     <div class="flex items-center justify-between">
-                        <h1 class="font-semibold text-black sm:text-xl md:text-2xl lg:text-xl">
+                        <h1 class="font-semibold text-black sm:text-xl md:text-2xl lg:text-xl mt-4">
                             {{ $kegiatan->nama }} </h1>
-                        <!-- Tombol Import Data excel -->
                         <div class="text-center">
+                            <!-- Tombol download format excel -->
                             <button id="dropdownDefaultButton" data-dropdown-toggle="dropdown"
                                 class="py-2 px-4 inline-flex items-center gap-x-1 text-sm font-medium rounded-xl border border-green-500 bg-white text-green-500 hover:bg-green-50 disabled:opacity-50 disabled:pointer-events-none">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
-                                    style="fill: rgb(22, 212, 152);transform: ;msFilter:;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                                    viewBox="0 0 24 24" style="fill: rgb(22, 212, 152);transform: ;msFilter:;">
                                     <path d="m12 16 4-5h-3V4h-2v7H8z"></path>
                                     <path d="M20 18H4v-7H2v7c0 1.103.897 2 2 2h16c1.103 0 2-.897 2-2v-7h-2v7z"></path>
                                 </svg>
                                 Excel
                             </button>
+                            <!-- End Tombol download format excel -->
 
-                            <!-- Dropdown menu -->
+                            <!-- Dropdown downdload format -->
                             <div id="dropdown"
                                 class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-64 dark:bg-gray-700">
                                 <ul class="py-2 text-sm text-gray-700 dark:text-gray-200"
@@ -92,8 +95,8 @@
                                     </li>
                                 </ul>
                             </div>
+                            <!-- Tombol tambah data -->
                             <button type="button" data-id="{{ $kegiatan->id }}" onclick="openCreatePetani(this)"
-
                                 class="py-2 px-4 inline-flex items-center gap-x-1 text-sm font-medium rounded-xl border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
                                 data-hs-overlay="#hs-sign-out-alert1">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
@@ -106,9 +109,8 @@
                                 Data
                             </button>
                             <!-- End Tombol Data -->
-
+                            <!-- Tombol tambah data excel -->
                             <button type="button" data-id="{{ $kegiatan->id }}" onclick="openCreatePetaniExcel(this)"
-
                                 class="py-2 px-4 inline-flex items-center gap-x-1 text-sm font-medium rounded-xl border border-transparent bg-green-600 text-white hover:bg-green-700 disabled:opacity-50 disabled:pointer-events-none"
                                 data-hs-overlay="#hs-sign-out-alert">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
@@ -120,12 +122,12 @@
                                 </svg>
                                 Data Excel
                             </button>
-
+                            <!-- End Tombol tambah data excel -->
                         </div>
                     </div>
-
+                    <!-- Menampilkan tanggal kegiatan -->
                     <div class="pb-2">
-                        <p class="text-black text-xs font-medium">
+                        <p class="text-black text-xs font-medium mb-2">
                             {{ \Carbon\Carbon::parse($tgl_awal)->format('d/m/Y') }}
                             - {{ \Carbon\Carbon::parse($tgl_akhir)->format('d/m/Y') }}
                         </p>
@@ -136,8 +138,10 @@
                             <div
                                 class="p-1.5 min-w-full inline-block align-middle rounded-lg overflow-hidden bg-white ">
                                 <div class="overflow-hidden">
+                                    <!-- Table -->
                                     <table class="min-w-full divide-y divide-gray-200 rounded-lg dark:divide-gray-700">
                                         <thead class="bg-gray-50 dark:bg-gray-800">
+                                            <!-- Kolom table -->
                                             <tr class="border-b-2 border-gray-300">
                                                 <th scope="col"
                                                     class="px-6 py-3 text-start text-xs font-bold text-gray-500 uppercase">
@@ -153,7 +157,13 @@
                                                     Penyelesaian Ruta</th>
                                                 <th scope="col"
                                                     class="px-6 py-3 text-start text-xs font-bold text-gray-500 uppercase">
+                                                    ID PML</th>
+                                                <th scope="col"
+                                                    class="px-6 py-3 text-start text-xs font-bold text-gray-500 uppercase">
                                                     PML</th>
+                                                <th scope="col"
+                                                    class="px-6 py-3 text-start text-xs font-bold text-gray-500 uppercase">
+                                                    ID PPL</th>
                                                 <th scope="col"
                                                     class="px-6 py-3 text-start text-xs font-bold text-gray-500 uppercase">
                                                     PPL</th>
@@ -187,9 +197,11 @@
                                                     Action
                                                 </th>
                                             </tr>
+                                            <!-- End kolom Table -->
                                         </thead>
                                         <tbody>
                                             @foreach ($pemutakhirans as $pemutakhiran)
+                                                <!-- Perulangan data pada table -->
                                                 <tr
                                                     class="odd:bg-white even:bg-gray-100 hover:bg-gray-100 dark:odd:bg-gray-800 dark:even:bg-gray-700 dark:hover:bg-gray-700">
                                                     <td
@@ -207,7 +219,13 @@
                                                         {{ $pemutakhiran->penyelesaian_ruta }}%</td>
                                                     <td
                                                         class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
+                                                        {{ $pemutakhiran->id_pml }}</td>
+                                                    <td
+                                                        class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
                                                         {{ $pemutakhiran->pml }}</td>
+                                                    <td
+                                                        class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
+                                                        {{ $pemutakhiran->id_ppl }}</td>
                                                     <td
                                                         class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
                                                         {{ $pemutakhiran->ppl }}</td>
@@ -236,8 +254,10 @@
                                                         class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
                                                         {{ $pemutakhiran->keluarga_akhir }}</td>
                                                     <td class="px-6 py-3 flex justify-center items-center space-x-2">
+                                                        <!-- Tombole edit data -->
                                                         <a href="#" class="text-blue-600 hover:underline">
-                                                            <button type="button" data-hs-overlay="#hs-sign-out-alert4"
+                                                            <button type="button"
+                                                                data-hs-overlay="#hs-sign-out-alert4"
                                                                 data-id="{{ $pemutakhiran->id }}"
                                                                 onclick="openEditModal(this)"
                                                                 class="bg-blue-600 hover:bg-blue-700 text-white p-1 rounded focus:outline-none focus:shadow-outline">
@@ -254,10 +274,11 @@
                                                             </button>
                                                         </a>
 
-                                                        <!-- Modal Edit-->
+                                                        <!-- Mengambil halaman blade modal edit-->
                                                         @include('page.teknis.petani.pemutakhiran.edit')
 
-                                                        <form id="delete-pemutakhiran-petani{{$pemutakhiran->id}}"
+                                                        <!-- Tombol delete data -->
+                                                        <form id="delete-pemutakhiran-petani{{ $pemutakhiran->id }}"
                                                             action="/teknis/kegiatan/petani/pemutakhiran/{{ $pemutakhiran->id }}"
                                                             method="POST">
                                                             @csrf
@@ -280,22 +301,23 @@
 
                                                     </td>
                                                 </tr>
+                                                <!-- End Perulangan data pada table -->
                                             @endforeach
                                         </tbody>
                                     </table>
+                                    <!-- End Table -->
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Data excel-->
+                <!-- Mengambil halaman blade pada create excel -->
                 @include('page.teknis.petani.pemutakhiran.create-excel')
 
-                <!-- Data Manual-->
+                <!-- Mengambil halaman blade pada create data -->
                 @include('page.teknis.petani.pemutakhiran.create')
 
-                <!-- Modal Edit-->
             </div>
         </div>
     </div>
@@ -303,7 +325,7 @@
 
 </html>
 
-
+<!-- handling error -->
 @if ($errors->any())
     <div class="alert alert-danger">
         <ul>
@@ -315,13 +337,12 @@
 @endif
 
 
-
-
-
+<!-- Script Jquery Ajax untuk pengiriman dan permintaan data secara asinkronus -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- Script swwet alert -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <script>
-    function confirmDelete(id) {
+    function confirmDelete(id) { //alert Id untuk konfirmasi hapus
         Swal.fire({
             title: 'Apakah Anda yakin menghapus?',
             icon: 'warning',

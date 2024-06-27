@@ -1,5 +1,9 @@
-<form action="/administrasi/file/addFile?transaksi={{ $transaksi->id }}&akun={{ $akun->id }}&kegiatan={{ $kegiatan->id }}&fungsi={{ $fungsi }}"
-    method="post" enctype="multipart/form-data" class="flex items-center justify-between p-4 bg-white border rounded-lg border-gray-300" onsubmit="return validatePDFFile()">
+<!-- Form upload pdf -->
+<form
+    action="/administrasi/file/addFile?transaksi={{ $transaksi->id }}&akun={{ $akun->id }}&kegiatan={{ $kegiatan->id }}&fungsi={{ $fungsi }}"
+    method="post" enctype="multipart/form-data"
+    class="flex items-center justify-between p-4 bg-white border rounded-lg border-gray-300"
+    onsubmit="return validatePDFFile()">
     @csrf
     <!-- Input File Multiple -->
     <input type="hidden" name="transaksi_id" value="{{ $transaksi->id }}">
@@ -12,3 +16,4 @@
         Upload
     </button>
 </form>
+<!-- End Form upload pdf -->
