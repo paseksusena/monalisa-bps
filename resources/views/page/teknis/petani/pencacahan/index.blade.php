@@ -200,7 +200,7 @@
                                             @foreach ($pencacahans as $pencacahan)
                                                 <!-- Perulangan data pada table -->
                                                 <tr
-                                                    class="odd:bg-white even:bg-gray-100 hover:bg-gray-100 dark:odd:bg-gray-800 dark:even:bg-gray-700 dark:hover:bg-gray-700">
+                                                    class=" hover:bg-gray-100 dark:odd:bg-gray-800 dark:even:bg-gray-700 dark:hover:bg-gray-700">
                                                     <td
                                                         class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-gray-200">
                                                         {{ $loop->iteration }}</td>
@@ -239,7 +239,7 @@
                                                         class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
                                                         {{ $pencacahan->nama_krt }}</td>
                                                     <td
-                                                        class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
+                                                        class="px-6 py-4 whitespace-nowrap text-sm text-blue-600 font-semibold dark:text-gray-200">
                                                         {{ $pencacahan->status }}</td>
 
                                                     <td class="px-6 py-3 flex justify-center items-center space-x-2">

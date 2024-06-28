@@ -43,7 +43,7 @@
             </div>
             <!--  tabel user -->
             <div class="flex flex-col px-2 mb-8">
-                <div class="-m-1.5 overflow-x-auto shadow-md ">
+                <div class="-m-1.5 overflow-x-auto ">
                     <div class="min-w-full inline-block align-middle">
                         <div class="border rounded-sm overflow-hidden bg-white">
                             <table class="min-w-full divide-y ">
@@ -118,6 +118,7 @@
                                                     @include('page.admin.users.edit')
 
                                                     <!-- Tombol Hapus user -->
+                                                    <!-- Delete form -->
                                                     <form action="{{ route('users.destroy', $user->id) }}"
                                                         method="POST" id="deleteForm{{ $user->id }}">
                                                         @csrf
@@ -145,25 +146,38 @@
                                 </tbody>
                             </table>
                             {{ $users->links() }}
+                            <!-- Include SweetAlert -->
                             <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+                            <!-- SweetAlert and confirmDelete function -->
                             <script>
-                                //menampilkan modal delet
+                                //menampilkan modal delete
                                 function confirmDelete(userId) {
-                                    if (confirm("Apakah Anda yakin ingin menghapus pengguna ini?")) {
-                                        document.getElementById('deleteForm' + userId).submit();
-                                    }
+                                    Swal.fire({
+                                        title: 'Apakah Anda yakin?',
+                                        text: "Anda tidak akan dapat mengembalikan ini!",
+                                        icon: 'warning',
+                                        showCancelButton: true,
+                                        confirmButtonColor: '#3085d6',
+                                        cancelButtonColor: '#d33',
+                                        confirmButtonText: 'Ya, hapus!'
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            document.getElementById('deleteForm' + userId).submit();
+                                        }
+                                    });
                                 }
 
                                 @if (session('success'))
                                     Swal.fire({
                                         icon: 'success',
-                                        title: '{{ session('
-                                                                                                                                                                                                                                        success ') }}',
+                                        title: '{{ session('success') }}',
                                         showConfirmButton: false,
                                         timer: 2000
                                     });
                                 @endif
                             </script>
+
 
                         </div>
                     </div>

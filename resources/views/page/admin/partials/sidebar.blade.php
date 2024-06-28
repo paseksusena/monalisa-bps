@@ -110,18 +110,19 @@
 
                 <!-- button logout admin -->
                 <div class="mt-6 flex justify-center gap-x-4">
-                    <form method="POST" action="{{ route('logout') }}" id="logout-form">
-                        @csrf
-                        <button type="submit"
-                            class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-red-600 text-white shadow-sm hover:bg-red-700 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800">
-                            Tidak
-                        </button>
-                    </form>
+
                     <button type="button"
-                        class="py-2 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+                        class="py-2 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-red-600 text-white hover:bg-red-700 disabled:opacity-50 disabled:pointer-events-none"
                         data-hs-overlay="#hs-sign-out-alert">
                         Batal
                     </button>
+                    <form method="POST" action="{{ route('logout') }}" id="logout-form">
+                        @csrf
+                        <button type="submit"
+                            class="py-2 px-7 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white shadow-sm hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800">
+                            Ya
+                        </button>
+                    </form>
                 </div>
 
             </div>

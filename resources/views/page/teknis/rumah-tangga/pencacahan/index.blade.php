@@ -218,7 +218,7 @@
                                             @foreach ($pencacahans as $pencacahan)
                                                 <!-- Perulangan data pada tabel -->
                                                 <tr
-                                                    class="odd:bg-white even:bg-gray-100 hover:bg-gray-100 dark:odd:bg-gray-800 dark:even:bg-gray-700 dark:hover:bg-gray-700">
+                                                    class="hover:bg-gray-100 dark:odd:bg-gray-800 dark:even:bg-gray-700 dark:hover:bg-gray-700">
                                                     <td
                                                         class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-gray-200">
                                                         {{ $loop->iteration }}</td>
