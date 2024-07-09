@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string("nama", 550);
             $table->string("no_kwt");
+            $table->string("nilai_trans")->nullable();
             $table->foreignId("akun_id");
             $table->float('progres')->nullable()->default(0);
             $table->integer('amount_file')->nullable()->default(0);

@@ -1,13 +1,13 @@
-<!-- ========== Footer ========== -->
-<footer class="bg-gray-200 w-full">
+
+<!-- <footer class="bg-gray-200 w-full">
     <div class="w-full max-w-[85rem] py-10 px-4 sm:px-6 lg:px-8 lg:pt-20 mx-auto">
-        <!-- Grid -->
+       
         <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
             <div class="col-span-full lg:col-span-1">
                 <a
                     class="flex-none text-xl font-bold text-cyan-950 dark:focus:outline-none dark:focus:ring-1 aria-label="Brand">MONALISA</a>
             </div>
-            <!-- End Col -->
+
 
 
 
@@ -26,10 +26,10 @@
                         href="/teknis/kegiatan?fungsi=IPDS">IDPS</a></p>
             </div>
 
-            <!-- End Col -->
+     
 
             <div class="col-span-1">
-                <!-- Social Media -->
+            
                 <h2
                     class="inline-flex gap-x-2 mb-3 text-gray-800 hover:text-gray-700 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
                     Sosial Media</h2>
@@ -109,17 +109,17 @@
                         </svg>
                     </a>
                 </div>
-                <!-- End Social Brands -->
+           
             </div>
         </div>
-        <!-- End Grid -->
+       
 
         <div class="mt-5 sm:mt-12 grid gap-y-2 sm:gap-y-0 sm:flex sm:justify-between sm:items-center ">
             <div class="flex justify-between items-center">
                 <p class="text-sm text-gray-600">© 2024 Badan Pusat Statistik Kabupaten Buleleng</p>
             </div>
-            <!-- End Col -->
+        
         </div>
     </div>
-</footer>
-<!-- ========== End Footer ========== -->
+</footer> -->
+

@@ -1,4 +1,4 @@
-<header
+<!-- <header
     class="flex flex-wrap sticky top-0 sm:justify-start sm:flex-nowrap z-[9999] w-full bg-cyan-950 text-sm py-3 sm:py-0">
     <nav class="relative max-w-[85rem] w-full mx-auto px-4 sm:flex sm:items-center sm:justify-between sm:px-6 lg:px-8"
         aria-label="Global">
@@ -6,7 +6,7 @@
             <a class="flex-none text-xl font-semibold text-white" href="/" aria-label="monalisa">
                 <img class="h-10 w-57" src="{{ asset('storage/img/logo_monalisa.png') }}" alt="logo monalisa">
             </a>
-            <!-- Tombol toggle hamburger -->
+           
             <div class="sm:hidden">
                 <button type="button"
                     class="hs-collapse-toggle size-9 flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-white/20 text-white hover:border-white/40 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
@@ -49,7 +49,7 @@
                 <a class="font-medium text-white/[.8] hover:text-white sm:py-6" href="/mitra-pemutakhiran">Mitra</a>
 
                 <div class="flex md:order-2">
-                    <!-- SearchBox -->
+             
                     <div class="relative flex-grow-0 w-full sm:w-[200px] me-auto"
                         data-hs-combo-box='{
                 "groupingType": "default",
@@ -73,15 +73,15 @@
                                 autocomplete="off">
                         </div>
 
-                        <!-- SearchBox Dropdown -->
+                     
                         <div class="absolute z-50 w-full bg-white rounded-xl shadow-[0_10px_40px_10px_rgba(0,0,0,0.08)] dark:bg-neutral-800"
                             style="display: none;" data-hs-combo-box-output="">
                             <div class="max-h-[500px] p-2 overflow-y-auto overflow-hidden [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-neutral-700 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500"
                                 data-hs-combo-box-output-items-wrapper="">
-                                <!-- List of search results will be dynamically added here -->
+
                             </div>
                         </div>
-                        <!-- End SearchBox Dropdown -->
+                 
                     </div>
 
 
@@ -98,10 +98,10 @@
         @endauth
 
     </nav>
-</header>
+</header> -->
 
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
     $(document).ready(function() {
         $('#search').on('input', function() {
@@ -116,7 +116,7 @@
                 },
 
                 success: function(response) {
-                    console.log(response); // Log the response to the console
+                    console.log(response); 
                     var dropdown = $('[data-hs-combo-box-output-items-wrapper]');
                     dropdown.empty();
                     response.forEach(function(item) {
@@ -140,4 +140,4 @@
             });
         });
     });
-</script>
+</script> -->
