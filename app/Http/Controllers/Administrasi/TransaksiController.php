@@ -72,8 +72,10 @@ class TransaksiController extends Controller
         // Mendapatkan data transaksi
         $transaksis = $transaksisQuery->get();
 
+        $nilai_total_trans = $this->monitoring_nilai_transaksi($akun->id);
+
         // Mengirimkan data ke view
-        return view('page.administrasi.transaksi.index', compact('akun', 'transaksis', 'fungsi', 'kegiatan'));
+        return view('page.administrasi.transaksi.index', compact('akun', 'transaksis', 'fungsi', 'kegiatan', 'nilai_total_trans'));
     }
 
     /**
@@ -409,4 +411,35 @@ class TransaksiController extends Controller
         // Mengembalikan nilai 0 sebagai penanda bahwa proses selesai
         return 0;
     }
+
+    public function monitoring_nilai_transaksi($id){
+        $akuns = Akun::find($id);
+        $nilai_trans = 0;
+    
+        foreach($akuns->transaksi as $transaksi){
+            // Retrieve the transaction value
+            $nilai = $transaksi->nilai_trans;
+    
+            // Check if the transaction value is not null and not empty
+            if ($nilai !== null && $nilai !== '') {
+                // Remove dot as thousand separator
+                $nilai = str_replace('.', '', $nilai);
+    
+                // Convert string to numeric value (float)
+                $numericTransNilai = (float) $nilai;
+    
+                // Add transaction value to $nilai_trans
+                $nilai_trans += $numericTransNilai;
+            }
+        }
+    
+        // Debug to see the final total transaction value
+        $nilai_trans = number_format($nilai_trans, 0, ',', '.');
+
+
+    
+        // Return the total transaction value
+        return $nilai_trans;
+    }
+    
 }

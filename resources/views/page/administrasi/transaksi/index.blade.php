@@ -131,6 +131,12 @@
                                         {{ $akun->nama }}
                                     </h2>
                                 </div>
+                                <div>
+                                    <h1 class="text-base font-semibold text-gray-600">Total Nilai Transaksi</h1>
+                                    <h2 class="text-xl font-bold text-gray-800 dark:text-neutral-200">
+                                    Rp{{$nilai_total_trans}}
+                                    </h2>
+                                </div>
                             </div>
                             <!-- End Header -->
 

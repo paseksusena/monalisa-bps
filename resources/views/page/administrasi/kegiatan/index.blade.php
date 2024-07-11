@@ -79,6 +79,7 @@
 
                     <div class="flex items-center space-x-4">
                         <!-- Progres jumlah file -->
+
                         <div class="flex items-center bg-blue-100 rounded-full p-1">
                             <div class="py-1.5 px-1.5 bg-blue-500 text-white rounded-full text-sm mr-1">
                                 {{ $complete_file }}/{{ $amount_file }}
@@ -109,6 +110,12 @@
                                 <div>
                                     <h2 class="text-xl font-semibold text-gray-800 dark:text-neutral-200">
                                         {{ $fungsi }}
+                                    </h2>
+                                </div>
+                                <div>
+                                    <h1 class="text-base font-semibold text-gray-600">Total Nilai Transaksi</h1>
+                                    <h2 class="text-xl font-bold text-gray-800 dark:text-neutral-200">
+                                    Rp{{$nilai_trans_all}}
                                     </h2>
                                 </div>
                             </div>
@@ -145,6 +152,16 @@
                                                                 <i class="fas fa-sort ml-2"></i>
                                                             @endif
                                                         </a> </span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="size-px whitespace-nowrap">
+                                            <div class="px-0 py-3 text-start">
+                                                <div class="flex items-center gap-x-3">
+                                                    <span
+                                                        class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-2 mr-8">
+                                                        Nilai Transaksi
+                                                    </span>
                                                 </div>
                                             </div>
                                         </td>
@@ -223,6 +240,17 @@
                                                                     {{ $kgtn->nama }}</a>
                                                             </span>
                                                         </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+
+                                            <td class="size-px whitespace-nowrap">
+                                                <div class="px-1 py-3 text-start">
+                                                    <div class="flex items-center gap-x-3">
+                                                        <span
+                                                            class="text-sm font-medium text-gray-800 dark:text-neutral-200 ml-1 mr-1">
+                                                            Rp{{ $nilai_trans[$kgtn->id] ?? '0' }}
+                                                        </span>
                                                     </div>
                                                 </div>
                                             </td>

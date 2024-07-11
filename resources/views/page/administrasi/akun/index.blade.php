@@ -124,7 +124,12 @@
                                     <h2 class="text-xl font-semibold text-gray-800 dark:text-neutral-200">
                                         {{ $kegiatan->nama }}
                                     </h2>
-
+                                </div>
+                                <div>
+                                    <h1 class="text-base font-semibold text-gray-600">Total Nilai Transaksi</h1>
+                                    <h2 class="text-xl font-bold text-gray-800 dark:text-neutral-200">
+                                    Rp{{$nilai_trans_all}}
+                                    </h2>
                                 </div>
                             </div>
                             <!-- End Header -->
@@ -160,6 +165,16 @@
                                                                 <i class="fas fa-sort ml-2"></i>
                                                             @endif
                                                         </a>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="size-px whitespace-nowrap">
+                                            <div class="px-0 py-3 text-start">
+                                                <div class="flex items-center gap-x-3">
+                                                    <span
+                                                        class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-2 mr-8">
+                                                        Nilai Transaksi
                                                     </span>
                                                 </div>
                                             </div>
@@ -210,9 +225,12 @@
                                     </tr>
                                     <!-- End Kolom tabel -->
                                     @foreach ($akuns as $akun => $akn)
+
+
                                         <!-- Perulangan data pada tabel -->
                                         <tr class="hover:bg-gray-100 dark:hover:bg-neutral-700">
-                                            <td class="size-px whitespace-nowrap">
+
+                                        <td class="size-px whitespace-nowrap">
                                                 <div class="px-1 py-3 text-start">
                                                     <div class="flex items-center gap-x-3">
                                                         <span
@@ -243,6 +261,16 @@
                                                                     {{ $akn->nama }}</a>
                                                             </span>
                                                         </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="size-px whitespace-nowrap">
+                                                <div class="px-1 py-3 text-start">
+                                                    <div class="flex items-center gap-x-3">
+                                                        <span
+                                                            class="text-sm font-medium text-gray-800 dark:text-neutral-200 ml-1 mr-1">
+                                                            Rp{{ $nilai_trans[$akn->id] ?? '0' }}
+                                                        </span>
                                                     </div>
                                                 </div>
                                             </td>

@@ -44,12 +44,32 @@ class AkunController extends Controller
 
         // Mendapatkan data akun
         $akuns = $akunQuery->get();
+        $nilai_trans = [];
+        $nilai_trans_all = 0;
+        foreach ($kegiatan->akun as $akun) {
+            $transaksi_nilai = $this->monitoring_nilai_transaksi($akun->id);
+            // Jika monitoring_nilai_transaksi mengembalikan pesan error, lewati
+            
+            $nilai_trans[$akun->id] = $transaksi_nilai;
+            
+            $transaksi_nilai = str_replace('.', '', $transaksi_nilai);
+            $numericTransNilai = (float) $transaksi_nilai;
+
+            $nilai_trans_all = $nilai_trans_all + $transaksi_nilai;
+
+        }
+
+        $nilai_trans_all = number_format($nilai_trans_all, 0, ',', '.');
+
+
 
         // Mengirimkan data ke view
         return view('page.administrasi.akun.index', [
             'kegiatan' => $kegiatan,
             'akuns' => $akuns,
             'fungsi' => $fungsi,
+            'nilai_trans' => $nilai_trans,
+            'nilai_trans_all'=> $nilai_trans_all,
         ]);
     }
 
@@ -254,5 +274,67 @@ class AkunController extends Controller
             }
         }
         return 0;
+    }
+    public function monitoring_nilai_transaksi($id)
+    {
+        $akun = Akun::find($id);
+        $nilai_trans = 0;
+        $total_nilai = 0;
+            foreach ($akun->transaksi as $transaksi) {
+                $nilai = $transaksi->nilai_trans;
+
+                if ($nilai !== null && $nilai !== '') {
+                    $nilai = str_replace('.', '', $nilai);
+                    $numericTransNilai = (float) $nilai;
+                    $total_nilai += $numericTransNilai;
+                }
+            }
+
+            // Mengembalikan nilai setelah semua perulangan selesai
+            $nilai_trans += $total_nilai;
+
+            $nilai_trans = number_format($nilai_trans, 0, ',', '.');
+// dd($nilai_trans);
+
+
+            return $nilai_trans;
+        
+
+        // Format nilai akhir di luar perulangan
+
+    }
+
+
+
+
+    public function monitoring_nilai_transaksi_akun($id)
+    {
+        $kegiatans = KegiatanAdministrasi::find($id);
+
+        if ($kegiatans === null) {
+            return 'Data kegiatan tidak ditemukan.';
+        }
+
+        $nilai_trans = 0;
+
+        foreach ($kegiatans->akun as $akun) {
+            $total_nilai = 0; // Inisialisasi total nilai untuk setiap akun
+
+            foreach ($akun->transaksi as $transaksi) {
+                $nilai = $transaksi->nilai_trans;
+                if ($nilai !== null && $nilai !== '') {
+                    $nilai = str_replace('.', '', $nilai);
+                    $numericTransNilai = (float) $nilai;
+                    $total_nilai += $numericTransNilai;
+                }
+            }
+
+            $nilai_trans += $total_nilai; // Menambahkan total nilai akun ke nilai total keseluruhan
+        }
+
+        // Format nilai akhir di luar perulangan
+        $nilai_trans = number_format($nilai_trans, 0, ',', '.');
+
+        return $nilai_trans;
     }
 }

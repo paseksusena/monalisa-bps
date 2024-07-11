@@ -52,6 +52,28 @@ class FileController extends Controller
         $status = request('status') ?: 'Semua';
         $ceklist = request('ceklist') ?: 'Semua';
 
+
+
+
+
+        // untuk melihat file ada atau tidak
+
+        $fungsi = request('fungsi');
+        $session = session('selected_year');
+
+
+
+        foreach($transaksi->file as $file){
+            $path = public_path("storage/administrasis/{$session}/{$fungsi}/{$kegiatan->nama}/{$akun->nama}/{$transaksi->nama}/{$file->namaFile}");
+            if(!file_exists($path)){
+                $file->status = false;
+                $file->save();
+            }
+        }
+
+
+
+
         // Mengembalikan tampilan HTML dengan data yang diperlukan
         return view('page.administrasi.file.index', [
             'transaksi' => $transaksi,

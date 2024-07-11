@@ -67,6 +67,25 @@ class KegiatanAdministrasiController extends Controller
 
         $progres = $amount_file > 0 ? number_format(($complete_file / $amount_file) * 100, 2) : 0;
 
+        $nilai_trans = [];
+        $nilai_trans_all = 0;
+
+        foreach ($kegiatans as $kegiatan) {
+            $transaksi_nilai = $this->monitoring_nilai_transaksi($kegiatan->id);
+            // Jika monitoring_nilai_transaksi mengembalikan pesan error, lewati
+
+            $nilai_trans[$kegiatan->id] = $transaksi_nilai;
+            
+            $transaksi_nilai = str_replace('.', '', $transaksi_nilai);
+            $numericTransNilai = (float) $transaksi_nilai;
+
+            $nilai_trans_all = $nilai_trans_all + $transaksi_nilai;
+
+        }
+
+        $nilai_trans_all = number_format($nilai_trans_all, 0, ',', '.');
+
+
         return view('page.administrasi.kegiatan.index', [
             'fungsi' => $fungsi,
             'kegiatans' => $kegiatans,
@@ -74,6 +93,8 @@ class KegiatanAdministrasiController extends Controller
             'amount_file' => $amount_file,
             'complete_file' => $complete_file,
             'progres' => $progres,
+            'nilai_trans' => $nilai_trans,
+            'nilai_trans_all'=> $nilai_trans_all
         ]);
     }
     /**
@@ -225,5 +246,36 @@ class KegiatanAdministrasiController extends Controller
     {
         $fungsi = request('fungsi');
         return $fungsi;
+    }
+
+    public function monitoring_nilai_transaksi($id)
+    {
+        $kegiatans = KegiatanAdministrasi::find($id);
+
+        if ($kegiatans === null) {
+            return 'Data kegiatan tidak ditemukan.';
+        }
+
+        $nilai_trans = 0;
+
+        foreach ($kegiatans->akun as $akun) {
+            $total_nilai = 0; // Inisialisasi total nilai untuk setiap akun
+
+            foreach ($akun->transaksi as $transaksi) {
+                $nilai = $transaksi->nilai_trans;
+                if ($nilai !== null && $nilai !== '') {
+                    $nilai = str_replace('.', '', $nilai);
+                    $numericTransNilai = (float) $nilai;
+                    $total_nilai += $numericTransNilai;
+                }
+            }
+
+            $nilai_trans += $total_nilai; // Menambahkan total nilai akun ke nilai total keseluruhan
+        }
+
+        // Format nilai akhir di luar perulangan
+        $nilai_trans = number_format($nilai_trans, 0, ',', '.');
+
+        return $nilai_trans;
     }
 }

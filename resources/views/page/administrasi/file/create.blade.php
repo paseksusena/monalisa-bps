@@ -48,7 +48,7 @@
                     @enderror
                 </div>
                 <!-- Input untuk Penanggung jawab -->
-                <div>
+                <!-- <div>
                     <label for="penanggung_jwb"
                         class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Penanggung Jawab</label>
                     <input type="text" id="penanggung_jwb" name="penanggung_jwb" value="{{ old('penanggung_jwb') }}"
@@ -59,7 +59,19 @@
                             {{ $message }}
                         </div>
                     @enderror
-                </div>
+                </div> -->
+                <div class="mb-4">
+                        <label for="penanggung_jwb" class="block text-sm font-medium mb-2 dark:text-white">Penanggung Jawab</label>
+                        <select name="penanggung_jwb" id="penanggung_jwb"
+                            class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-neutral-900 dark:border-neutral-700 dark:placeholder-neutral-500 dark:text-neutral-400">
+                            <option value="Umum">Umum</option>
+                            <option value="Neraca">Neraca</option>
+                            <option value="Produksi">Produksi</option>
+                            <option value="IPDS">IPDS</option>
+                            <option value="Distribusi">Distribusi</option>
+                            <option value="Sosial">Sosial</option>
+                        </select>
+                    </div>
             </div>
             <!-- Tombol batal dan simpan-->
             <div class="flex justify-end items-center gap-x-2 py-3 px-4 border-t dark:border-gray-700">
