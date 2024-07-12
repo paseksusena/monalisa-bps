@@ -28,10 +28,6 @@ class KegiatanAdministrasi extends Model
         });
 
 
-        // $query->when($filters['periode'] ?? false, function ($query, $periode) {
-        //     return $query->whereHas('periodeAdministrasi', function ($query) use ($periode) {
-        //         $query->where('slug', $periode);
-        //     });
-        // });
+       
     }
 }

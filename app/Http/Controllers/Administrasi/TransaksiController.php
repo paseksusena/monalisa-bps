@@ -110,7 +110,11 @@ class TransaksiController extends Controller
         try {
             // Validasi data yang diterima dari request
             $requestValidasi = $request->validate([
-                'nama' => 'required|max:550',
+                'nama' => [
+                    'required',
+                    'max:550',
+                    'regex:/^[^\/<>:;|?*\\"\\]+$/'
+                ],
                 'tgl_akhir' => 'required',
                 'bln_arsip' => 'required',
                 'no_kwt' => 'required',
@@ -164,11 +168,16 @@ class TransaksiController extends Controller
     /**
      * Memperbarui data transaksi yang ada berdasarkan request yang diterima.
      */
+
     public function update(Request $request)
     {
         // Validasi request
         $requestValidasi = $request->validate([
-            'nama' => 'required|max:550',
+            'nama' => [
+                    'required',
+                    'max:550',
+                    // 'regex:/^[^\/<>:;|?*\\"\\]+$/'
+                ],
             'no_kwt' => 'required',
             'tgl_akhir' => 'required',
             'bln_arsip' => 'required',
@@ -200,38 +209,47 @@ class TransaksiController extends Controller
         $transaksi = Transaksi::findOrFail($request->id);
 
         // Menyiapkan path folder lama dan baru untuk penyimpanan file
-        $oldFolderPath = 'public/administrasis/' . $session . '/' . $fungsi . '/' . $kegiatan->nama . '/' . $akun->nama . '/' . $request->oldNama;
-        $newFolderPath = 'public/administrasis/' . $session . '/' . $fungsi . '/' . $kegiatan->nama . '/' . $akun->nama . '/' . $request->nama;
+        $oldFolderPath = 'public/administrasis/' . $kegiatan->tahun . '/' . $fungsi . '/' . $kegiatan->nama . '/' . $akun->nama . '/' . $request->oldNama;
+        $newFolderPath = 'public/administrasis/' . $kegiatan->tahun . '/' . $fungsi . '/' . $kegiatan->nama . '/' . $akun->nama . '/' . $request->nama;
 
         // Jika nama transaksi diubah, lakukan pengubahan path dan penyimpanan ulang file
         if ($request->nama !== $request->oldNama) {
-            $pathOld = ($oldFolderPath);
+            $pathOld = $oldFolderPath;
             $files = Storage::files($pathOld);
+
             foreach ($files as $file) {
-                // Mengganti jalur lama dengan jalur baru
-                $file = Str::of($file)->replace(
-                    'storage/administrasis/' . $session . '/' . $fungsi . '/' . $kegiatan->nama . '/' . $akun->nama . '/' . $request->oldNama,
-                    'storage/administrasis/' . $session . '/' . $fungsi . '/' . $kegiatan->nama . '/' . $akun->nama . '/' . $request->oldNama
+                $file_path_old = Str::of($file)->replace(
+                    'storage/administrasis/' . $kegiatan->tahun . '/' . $fungsi . '/' . $kegiatan->nama . '/' . $akun->nama . '/' . $request->oldNama,
+                    'storage/administrasis/' . $kegiatan->tahun . '/' . $fungsi . '/' . $kegiatan->nama . '/' . $akun->nama . '/' . $request->oldNama
                 );
-                $file_content = Storage::get($file);
-                $file_name_parts = explode("/", $file);
-                if (count($file_name_parts) > 0) {
-                    $file_name = $file_name_parts[count($file_name_parts) - 1];
-                    $file_path = ($newFolderPath . '/' . $file_name);
-                    $storage = Storage::put($file_path, $file_content);
-                    $delete = Storage::deleteDirectory($oldFolderPath);
+
+                // Membaca konten file
+                $file_content = Storage::get($file_path_old);
+
+                // Periksa apakah file content null
+                if ($file_content !== null) {
+                    $file_name_parts = explode("/", $file);
+                    if (count($file_name_parts) > 0) {
+                        $file_name = end($file_name_parts);
+                        $file_path_new = $newFolderPath . '/' . $file_name;
+
+                        // Simpan file ke lokasi baru
+                        Storage::put($file_path_new, $file_content);
+                    }
+                } else {
                 }
             }
+
+            // Hapus direktori lama jika tidak ada masalah
+            Storage::deleteDirectory($oldFolderPath);
         }
 
         // Memperbarui data transaksi dengan data yang valid dari request
         $transaksi->update($requestValidasi);
 
         // Redirect ke halaman index transaksi dengan menyertakan query string fungsi, kegiatan, dan akun
-        // return redirect('/administrasi/transaksi?fungsi=' . $fungsi . '&kegiatan=' . $kegiatan->id . '&akun=' . $akun->id)->with('success', $requestValidasi['nama'] . ' berhasil diubah!');
         return back()->with('success', $requestValidasi['nama'] . ' berhasil diubah!');
     }
-
 
     /**
      * Menghapus data transaksi yang telah dipilih dari penyimpanan.
@@ -247,7 +265,7 @@ class TransaksiController extends Controller
         $akun = Akun::where('id', $request->akun)->first();
 
         // Menyiapkan path folder untuk direktori file transaksi yang akan dihapus
-        $filePath = "storage/administrasis/$session/$fungsi/{$kegiatan->nama}/{$akun->nama}/{$transaksi->nama}";
+        $filePath = "storage/administrasis/$$kegiatan->tahun/$fungsi/{$kegiatan->nama}/{$akun->nama}/{$transaksi->nama}";
 
         // Menghapus direktori dan seluruh isinya dari penyimpanan
         File::deleteDirectory($filePath);
@@ -412,34 +430,34 @@ class TransaksiController extends Controller
         return 0;
     }
 
-    public function monitoring_nilai_transaksi($id){
+    public function monitoring_nilai_transaksi($id)
+    {
         $akuns = Akun::find($id);
         $nilai_trans = 0;
-    
-        foreach($akuns->transaksi as $transaksi){
+
+        foreach ($akuns->transaksi as $transaksi) {
             // Retrieve the transaction value
             $nilai = $transaksi->nilai_trans;
-    
+
             // Check if the transaction value is not null and not empty
             if ($nilai !== null && $nilai !== '') {
                 // Remove dot as thousand separator
                 $nilai = str_replace('.', '', $nilai);
-    
+
                 // Convert string to numeric value (float)
                 $numericTransNilai = (float) $nilai;
-    
+
                 // Add transaction value to $nilai_trans
                 $nilai_trans += $numericTransNilai;
             }
         }
-    
+
         // Debug to see the final total transaction value
         $nilai_trans = number_format($nilai_trans, 0, ',', '.');
 
 
-    
+
         // Return the total transaction value
         return $nilai_trans;
     }
-    
 }

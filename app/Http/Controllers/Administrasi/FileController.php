@@ -23,6 +23,8 @@ class FileController extends Controller
     // menampilkan halaman file,  alamat page/administrasi/file/index
     public function index(Request $request)
     {
+
+       
         // Mengambil parameter dari request
         $fungsi = request('fungsi');
         $kegiatan = KegiatanAdministrasi::findOrFail(request('kegiatan'));
@@ -57,16 +59,15 @@ class FileController extends Controller
 
 
         // untuk melihat file ada atau tidak
-
         $fungsi = request('fungsi');
-        $session = session('selected_year');
-
-
 
         foreach($transaksi->file as $file){
-            $path = public_path("storage/administrasis/{$session}/{$fungsi}/{$kegiatan->nama}/{$akun->nama}/{$transaksi->nama}/{$file->namaFile}");
+            $path = public_path("storage/administrasis/{$kegiatan->tahun}/{$fungsi}/{$kegiatan->nama}/{$akun->nama}/{$transaksi->nama}/{$file->namaFile}");
             if(!file_exists($path)){
                 $file->status = false;
+                $file->save();
+            }else {
+                $file->status = true;
                 $file->save();
             }
         }
@@ -127,19 +128,19 @@ class FileController extends Controller
     }
 
     //function untuk show atau preview file 
-    public function show($fungsi, $kegiatan, $akun, $transaksi, $filename)
-    {
-        // Path ke file PDF
-        $path = public_path("administrasis/{$fungsi}/{$kegiatan}/{$akun}/{$transaksi}/{$filename}");
+    // public function show($fungsi, $kegiatan, $akun, $transaksi, $filename)
+    // {
+    //     // Path ke file PDF
+    //     $path = public_path("administrasis/{$fungsi}/{$kegiatan}/{$akun}/{$transaksi}/{$filename}");
 
-        // Cek apakah file PDF ada
-        if (!file_exists($path)) {
-            dd('File not found');
-        }
+    //     // Cek apakah file PDF ada
+    //     if (!file_exists($path)) {
+    //         dd('File not found');
+    //     }
 
-        // Tampilkan file PDF
-        return response()->file($path, ['Content-Type' => 'application/pdf']);
-    }
+    //     // Tampilkan file PDF
+    //     return response()->file($path, ['Content-Type' => 'application/pdf']);
+    // }
 
     //function untuk menghapus laci file atau file 
     public function destroy(File $file, StoreFileRequest $request)
@@ -150,12 +151,11 @@ class FileController extends Controller
 
             // proses penghapus di folder
             //proses mencari alamat di direktori folder file
-            $session = session('selected_year');
             $fungsi = $request->fungsi;
             $kegiatan = KegiatanAdministrasi::where('id', $request->kegiatan)->first();
             $akun = Akun::where('id', $request->akun)->first();
             $transaksi = Transaksi::where('id', $request->transaksi)->first();
-            $filePath = "storage/administrasis/$session/$fungsi/{$kegiatan->nama}/{$akun->nama}/{$transaksi->nama}/{$file->namaFile}";
+            $filePath = "storage/administrasis/$kegiatan->tahun/$fungsi/{$kegiatan->nama}/{$akun->nama}/{$transaksi->nama}/{$file->namaFile}";
 
 
             //proses pengahapusa file pdf di direktori 
@@ -216,7 +216,8 @@ class FileController extends Controller
     {
         // Inisialisasi pesan kesalahan dan mengambil tahun dari session
         $errorMessage = '';
-        $session = session('selected_year');
+        
+
 
         // Loop melalui setiap file yang diunggah
         foreach ($request->file('files') as $uploadedFile) {
@@ -257,7 +258,7 @@ class FileController extends Controller
                 $namaFile = $fileInfo['basename'];
                 $ukuranFile = $uploadedFile->getSize(); // Ukuran dalam byte
                 $ukuranFileMB = round($ukuranFile / 1024 / 1024, 2); // Ubah ke megabyte
-                $path = public_path('storage/administrasis/' . $session . '/' . $request->fungsi . '/' . $kegiatan->nama . '/' . $akun->nama . '/' . $transaksi->nama); //proses penempatan file
+                $path = public_path('storage/administrasis/' . $kegiatan->tahun . '/' . $request->fungsi . '/' . $kegiatan->nama . '/' . $akun->nama . '/' . $transaksi->nama); //proses penempatan file
                 $uploadedFile->move($path, $namaFile);
                 $file->namaFile = $namaFile;
                 $file->ukuran_file = $ukuranFileMB;
@@ -280,15 +281,13 @@ class FileController extends Controller
         }
 
         // Jika sukses, kembalikan ke halaman administrasi file dengan pesan sukses
-        return redirect('/administrasi/file?transaksi=' . $transaksi->id . '&akun=' . $akun->id . '&kegiatan=' . $kegiatan->id . '&fungsi=' . $fungsi)->with('success', 'File berhasil ditambahkan!');
+        // return redirect('/administrasi/file?transaksi=' . $transaksi->id . '&akun=' . $akun->id . '&kegiatan=' . $kegiatan->id . '&fungsi=' . $fungsi)->with('success', 'File berhasil ditambahkan!');
+        return back()->with('success', 'File berhasil ditambahkan!');
     }
 
     //function untuk download file dalam folder transaksi 
     public function download()
     {
-        // Mengambil tahun yang dipilih dari session
-        $session = session('selected_year');
-
         // Mendapatkan parameter 'fungsi' dari request
         $fungsi = request('fungsi');
 
@@ -310,7 +309,7 @@ class FileController extends Controller
         $nama_file = request('nama_file');
 
         // Membentuk path file berdasarkan tahun dari session, fungsi, dan nama record
-        $path = public_path("storage/administrasis/$session/$fungsi/{$kegiatan->nama}/{$akun->nama}/{$transaksi->nama}/$nama_file");
+        $path = public_path("storage/administrasis/$kegiatan->tahun/$fungsi/{$kegiatan->nama}/{$akun->nama}/{$transaksi->nama}/$nama_file");
 
         // Memeriksa apakah file ada di path yang dibentuk
         if (!file_exists($path)) {
@@ -436,7 +435,6 @@ class FileController extends Controller
         $kegiatan = KegiatanAdministrasi::find($request->query('kegiatan'));
         $akun = Akun::find($request->query('akun'));
         $transaksi = Transaksi::find($request->query('transaksi'));
-        $session = session('selected_year');
 
         if (!$kegiatan || !$akun || !$transaksi) {
             return response()->json(['error' => 'Invalid parameters.'], 400);
@@ -445,7 +443,7 @@ class FileController extends Controller
         $nama_file = $request->query('nama_file');
 
         // Bentuk path file
-        $path = public_path("storage/administrasis/{$session}/{$fungsi}/{$kegiatan->nama}/{$akun->nama}/{$transaksi->nama}/{$nama_file}");
+        $path = public_path("storage/administrasis/{$kegiatan->tahun}/{$fungsi}/{$kegiatan->nama}/{$akun->nama}/{$transaksi->nama}/{$nama_file}");
 
         // Periksa apakah file ada
         if (!file_exists($path)) {

@@ -104,7 +104,11 @@ class KegiatanAdministrasiController extends Controller
     {
         try {
             $requestValidasi = $request->validate([
-                'nama' => 'required|max:550',
+                'nama' => [
+                    'required',
+                    'max:550',
+                    'regex:/^[^\/<>:;|?*\\"\\]+$/'
+                ],
                 'tahun' => 'required',
                 'fungsi' => 'required',
             ]);
@@ -141,8 +145,11 @@ class KegiatanAdministrasiController extends Controller
     public function update(Request $request)
     {
         $requestValidasi = $request->validate([
-            'nama' => 'required|max:550',
-        ]);
+            'nama' => [
+                'required',
+                'max:550',
+                'regex:/^[^\/<>:;|?*\\"\\]+$/'
+            ],        ]);
 
         $fungsi = $request->fungsi;
         $session = session('selected_year');

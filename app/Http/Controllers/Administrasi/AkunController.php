@@ -81,7 +81,12 @@ class AkunController extends Controller
         try {
             // melakukan validasi nama, kegiatan_id
             $requestValidasi = $request->validate([
-                'nama' => 'required|max:550',
+
+                'nama' => [
+                    'required',
+                    'max:550',
+                    'regex:/^[^\/<>:;|?*\\"\\]+$/'
+                ],
                 'kegiatan_id' => 'required'
             ]);
 
@@ -120,13 +125,17 @@ class AkunController extends Controller
     {
         // melakuan request validasi nama
         $requestValidasi = $request->validate([
-            'nama' => 'required|max:550',
+            'nama' => [
+                    'required',
+                    'max:550',
+                    'regex:/^[^\/<>:;|?*\\"\\]+$/'
+                ],
+
         ]);
 
         // ambil request fungsi, kegiatan, dan session
         $fungsi = $request->fungsi;
         $kegiatan = $request->kegiatan;
-        $session  = session('selected_year');
 
         //mencari nama akun yang sama dengan akun yang akan dibuat
         $existingAkun = Akun::where('kegiatan_id', $kegiatan)
@@ -146,8 +155,8 @@ class AkunController extends Controller
         $akun = Akun::findOrFail($request->id);
 
         //proses membuat alamat folder akun 
-        $oldFolderPath = 'public/administrasis/'  . $session  . '/' . $fungsi . '/' . $kegiatan->nama . '/' . $request->oldNama;
-        $newFolderPath = 'public/administrasis/' . $session  . '/' . $fungsi . '/'  . $kegiatan->nama . '/' . $request->nama;
+        $oldFolderPath = 'public/administrasis/'  . $kegiatan->tahun  . '/' . $fungsi . '/' . $kegiatan->nama . '/' . $request->oldNama;
+        $newFolderPath = 'public/administrasis/' . $kegiatan->tahun  . '/' . $fungsi . '/'  . $kegiatan->nama . '/' . $request->nama;
         // Rename the folder
         if ($request->nama !== $request->oldNama) {
 
@@ -159,8 +168,8 @@ class AkunController extends Controller
                 foreach ($files as $file) {
                     // Mengganti jalur lama dengan jalur baru
                     $file = Str::of($file)->replace(
-                        'storage/administrasis/' . $session  . '/' . $fungsi . '/' . $kegiatan->nama . '/' . $request->oldNama,
-                        'storage/administrasis/' . $session  . '/' . $fungsi . '/' . $kegiatan->nama . '/' . $request->oldNama
+                        'storage/administrasis/' . $kegiatan->tahun  . '/' . $fungsi . '/' . $kegiatan->nama . '/' . $request->oldNama,
+                        'storage/administrasis/' . $kegiatan->tahun  . '/' . $fungsi . '/' . $kegiatan->nama . '/' . $request->oldNama
                     );
 
                     $file_content = Storage::get($file);
@@ -184,10 +193,9 @@ class AkunController extends Controller
     {
         $fungsi = $request->fungsi;
         $kegiatan = KegiatanAdministrasi::where('id', $request->kegiatan)->first();
-        $session = session('selected_year');
 
         //mencari file path yang akan dihapus
-        $filePath = "storage/administrasis/$session/$fungsi/{$kegiatan->nama}/{$akun->nama}";
+        $filePath = "storage/administrasis/$kegiatan->tahun/$fungsi/{$kegiatan->nama}/{$akun->nama}";
         File::deleteDirectory($filePath);
 
         //melakukan penghapusan transaksi dan file di dalam akun 
@@ -306,35 +314,4 @@ class AkunController extends Controller
 
 
 
-
-    public function monitoring_nilai_transaksi_akun($id)
-    {
-        $kegiatans = KegiatanAdministrasi::find($id);
-
-        if ($kegiatans === null) {
-            return 'Data kegiatan tidak ditemukan.';
-        }
-
-        $nilai_trans = 0;
-
-        foreach ($kegiatans->akun as $akun) {
-            $total_nilai = 0; // Inisialisasi total nilai untuk setiap akun
-
-            foreach ($akun->transaksi as $transaksi) {
-                $nilai = $transaksi->nilai_trans;
-                if ($nilai !== null && $nilai !== '') {
-                    $nilai = str_replace('.', '', $nilai);
-                    $numericTransNilai = (float) $nilai;
-                    $total_nilai += $numericTransNilai;
-                }
-            }
-
-            $nilai_trans += $total_nilai; // Menambahkan total nilai akun ke nilai total keseluruhan
-        }
-
-        // Format nilai akhir di luar perulangan
-        $nilai_trans = number_format($nilai_trans, 0, ',', '.');
-
-        return $nilai_trans;
-    }
 }
