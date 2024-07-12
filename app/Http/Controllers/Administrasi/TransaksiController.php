@@ -188,7 +188,6 @@ class TransaksiController extends Controller
         $fungsi = $request->fungsi;
         $kegiatan = $request->kegiatan;
         $akun = $request->akun;
-        $session = session('selected_year');
 
         // Memeriksa apakah ada transaksi dengan nama yang sama di dalam akun yang sama
         $existingTransaksi = Transaksi::where('akun_id', $akun)
@@ -258,7 +257,6 @@ class TransaksiController extends Controller
     {
         // Mendapatkan nilai fungsi dan session
         $fungsi = $request->fungsi;
-        $session = session('selected_year');
 
         // Mengambil data kegiatan dan akun berdasarkan ID yang diterima dari request
         $kegiatan = KegiatanAdministrasi::where('id', $request->kegiatan)->first();
