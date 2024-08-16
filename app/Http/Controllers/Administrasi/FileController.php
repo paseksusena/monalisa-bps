@@ -66,10 +66,10 @@ class FileController extends Controller
             if(!file_exists($path)){
                 $file->status = false;
                 $file->save();
-            }else {
-                $file->status = true;
-                $file->save();
-            }
+            }//else {
+            //     $file->status = true;
+            //     $file->save();
+            // }
         }
 
 

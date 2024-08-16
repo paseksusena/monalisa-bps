@@ -29,6 +29,17 @@ class AkunController extends Controller
 
         $this->progresKegiatan();
 
+
+        //menghitung jumlah verifikasi
+        $verifikasi = $this->total_verifikasi($kegiatan->id);
+
+        // akses nilai verifikasi
+        $complete_verifikasis = $verifikasi['complete_verifikasis'];
+        $total_verifikasis = $verifikasi['total_verifikasis'];
+        $all_complete_verifikasis = $verifikasi['all_complete_verifikasis'];
+        $all_total_verifikasis = $verifikasi['all_total_verifikasis'];
+
+
         // Mendapatkan data akun berdasarkan kegiatan_id dan filter
         $akunQuery = Akun::where('kegiatan_id', $kegiatan->id)->filter(request()->except(['search']));
 
@@ -49,14 +60,13 @@ class AkunController extends Controller
         foreach ($kegiatan->akun as $akun) {
             $transaksi_nilai = $this->monitoring_nilai_transaksi($akun->id);
             // Jika monitoring_nilai_transaksi mengembalikan pesan error, lewati
-            
+
             $nilai_trans[$akun->id] = $transaksi_nilai;
-            
+
             $transaksi_nilai = str_replace('.', '', $transaksi_nilai);
             $numericTransNilai = (float) $transaksi_nilai;
 
             $nilai_trans_all = $nilai_trans_all + $transaksi_nilai;
-
         }
 
         $nilai_trans_all = number_format($nilai_trans_all, 0, ',', '.');
@@ -64,13 +74,17 @@ class AkunController extends Controller
 
 
         // Mengirimkan data ke view
-        return view('page.administrasi.akun.index', [
-            'kegiatan' => $kegiatan,
-            'akuns' => $akuns,
-            'fungsi' => $fungsi,
-            'nilai_trans' => $nilai_trans,
-            'nilai_trans_all'=> $nilai_trans_all,
-        ]);
+        return view('page.administrasi.akun.index', compact(
+            'kegiatan',
+            'akuns',
+            'fungsi',
+            'nilai_trans',
+            'nilai_trans_all',
+            'complete_verifikasis',
+            'total_verifikasis',
+            'all_complete_verifikasis',
+            'all_total_verifikasis'
+        ));
     }
 
 
@@ -85,7 +99,7 @@ class AkunController extends Controller
                 'nama' => [
                     'required',
                     'max:550',
-                    'regex:/^[^\/<>:;|?*\\"\\]+$/'
+                    'regex:/^[^\/<>:;|?*\\\\"]+$/'
                 ],
                 'kegiatan_id' => 'required'
             ]);
@@ -126,10 +140,10 @@ class AkunController extends Controller
         // melakuan request validasi nama
         $requestValidasi = $request->validate([
             'nama' => [
-                    'required',
-                    'max:550',
-                    'regex:/^[^\/<>:;|?*\\"\\]+$/'
-                ],
+                'required',
+                'max:550',
+                'regex:/^[^\/<>:;|?*\\\\"]+$/'
+            ],
 
         ]);
 
@@ -288,30 +302,63 @@ class AkunController extends Controller
         $akun = Akun::find($id);
         $nilai_trans = 0;
         $total_nilai = 0;
-            foreach ($akun->transaksi as $transaksi) {
-                $nilai = $transaksi->nilai_trans;
+        foreach ($akun->transaksi as $transaksi) {
+            $nilai = $transaksi->nilai_trans;
 
-                if ($nilai !== null && $nilai !== '') {
-                    $nilai = str_replace('.', '', $nilai);
-                    $numericTransNilai = (float) $nilai;
-                    $total_nilai += $numericTransNilai;
-                }
+            if ($nilai !== null && $nilai !== '') {
+                $nilai = str_replace('.', '', $nilai);
+                $numericTransNilai = (float) $nilai;
+                $total_nilai += $numericTransNilai;
             }
+        }
 
-            // Mengembalikan nilai setelah semua perulangan selesai
-            $nilai_trans += $total_nilai;
+        // Mengembalikan nilai setelah semua perulangan selesai
+        $nilai_trans += $total_nilai;
 
-            $nilai_trans = number_format($nilai_trans, 0, ',', '.');
-// dd($nilai_trans);
+        $nilai_trans = number_format($nilai_trans, 0, ',', '.');
+        // dd($nilai_trans);
 
 
-            return $nilai_trans;
-        
+        return $nilai_trans;
+
 
         // Format nilai akhir di luar perulangan
 
     }
 
+    public function total_verifikasi($id)
+    {
+        $akuns = Akun::where('kegiatan_id', $id)->get();
 
 
+        $complete_verifikasis = [];
+        $total_verifikasis = [];
+        $all_complete_verifikasis = 0;
+        $all_total_verifikasis = 0;
+
+        foreach ($akuns as $akun) {
+            $complete_verifikasi = 0;
+            $total_verifikasi = 0;
+
+            foreach ($akun->transaksi as $transaksi) {
+                foreach ($transaksi->file as $file) {
+                    if ($file->ceklist === 1) {
+                        $complete_verifikasi += 1;
+                    }
+                    $total_verifikasi += 1;
+                }
+            }
+
+            $complete_verifikasis[$akun->id] = $complete_verifikasi;
+            $total_verifikasis[$akun->id] = $total_verifikasi;
+            $all_complete_verifikasis += $complete_verifikasi;
+            $all_total_verifikasis += $total_verifikasi;
+        }
+        return [
+            'complete_verifikasis' => $complete_verifikasis,
+            'total_verifikasis' => $total_verifikasis,
+            'all_complete_verifikasis' => $all_complete_verifikasis,
+            'all_total_verifikasis' => $all_total_verifikasis,
+        ];
+    }
 }

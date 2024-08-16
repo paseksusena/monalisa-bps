@@ -94,6 +94,15 @@
                             </div>
                             <span class="text-gray-800 dark:text-gray-400 text-sm mr-2">Progress</span>
                         </div>
+
+                         {{-- presentase verifikasi --}}
+                         <div class="flex items-center bg-blue-100 rounded-full p-1">
+                            <div class="py-1.5 px-1.5 bg-blue-500 text-white rounded-full text-sm mr-1">
+                                {{ $all_complete_verifikasis }}/{{ $all_total_verifikasis }}
+
+                            </div>
+                            <span class="text-gray-800 dark:text-gray-400 text-sm mr-2">Verifikasi</span>
+                        </div>
                     </div>
 
                 </div>
@@ -198,12 +207,23 @@
                                             <div class="px-1 py-3 text-start">
                                                 <div class="flex items-center gap-x-3">
                                                     <span
+                                                        class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-1 mr-1">
+                                                        Verifikasi
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="size-px whitespace-nowrap">
+                                            <div class="px-1 py-3 text-start">
+                                                <div class="flex items-center gap-x-3">
+                                                    <span
                                                         class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-2 mr-8">
                                                         Action
                                                     </span>
                                                 </div>
                                             </div>
                                         </td>
+
                                     </tr>
                                     <!-- End Kolom tabel kegiatan -->
                                     @foreach ($kegiatans as $kegiatanAdministrasi => $kgtn)
@@ -352,6 +372,52 @@
                                                 <td></td>
                                                 <td></td>
                                             @endif
+
+                                            <td class="size-px whitespace-nowrap">
+                                                <div class="px-1 py-3 text-start">
+                                                    <div class="flex items-center gap-x-3">
+
+                                                        <span
+                                                            class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium rounded-full
+                                                        {{ $complete_verifikasis[$kgtn->id] == 0 ? 'bg-red-100 text-red-800' : '' }}
+                                                        {{ $complete_verifikasis[$kgtn->id] > 0 && $complete_verifikasis[$kgtn->id] !== $total_verifikasis[$kgtn->id] ? 'bg-yellow-100' : '' }}
+                                                        {{ $complete_verifikasis[$kgtn->id] == $total_verifikasis[$kgtn->id] ? 'bg-green-100 text-green-800' : '' }}
+
+                                                        dark:bg-red-500/10">
+
+
+                                                            @if ($complete_verifikasis[$kgtn->id] == 0)
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="14"
+                                                                    height="14" viewBox="0 0 24 24"
+                                                                    style="fill: rgba(253, 1, 1, 1);transform: ;msFilter:;">
+                                                                    <path
+                                                                        d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm4.207 12.793-1.414 1.414L12 13.414l-2.793 2.793-1.414-1.414L10.586 12 7.793 9.207l1.414-1.414L12 10.586l2.793-2.793 1.414 1.414L13.414 12l2.793 2.793z">
+
+                                                                </svg>
+                                                            @elseif($complete_verifikasis[$kgtn->id] > 0 && $complete_verifikasis[$kgtn->id] !== $total_verifikasis[$kgtn->id])
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="14"
+                                                                    height="14" viewBox="0 0 24 24"
+                                                                    style="fill:xrgb(59, 63, 13);transform: ;msFilter:;">
+                                                                    <path
+                                                                        d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm5 11H7v-2h10v2z">
+                                                                </svg>
+                                                            @else
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="15"
+                                                                    height="15" viewBox="0 0 24 24"
+                                                                    style="fill: rgba(28, 133, 17, 1);transform: ;msFilter:;">
+                                                                    <path
+                                                                        d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm-1.999 14.413-3.713-3.705L7.7 11.292l2.299 2.295 5.294-5.294 1.414 1.414-6.706 6.706z">
+                                                                    </path>
+                                                                </svg>
+                                                            @endif
+                                                            </path>
+
+                                                            {{ $complete_verifikasis[$kgtn->id] }}/{{ $total_verifikasis[$kgtn->id] }}
+                                                        </span>
+
+                                                    </div>
+                                                </div>
+                                            </td>
 
                                             <!-- Tombol edit dan hapus -->
                                             <td class="size-px whitespace-nowrap">

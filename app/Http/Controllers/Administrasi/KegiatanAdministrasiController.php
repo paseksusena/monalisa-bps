@@ -47,6 +47,18 @@ class KegiatanAdministrasiController extends Controller
             ->where('tahun', $selected_year)
             ->filter(request()->except(['search']));
 
+
+
+        //menghitung jumlah verifikasi
+        $verifikasi = $this->total_verifikasi($fungsi);
+
+        // akses nilai verifikasi
+        $complete_verifikasis = $verifikasi['complete_verifikasis'];
+        $total_verifikasis = $verifikasi['total_verifikasis'];
+        $all_complete_verifikasis = $verifikasi['all_complete_verifikasis'];
+        $all_total_verifikasis = $verifikasi['all_total_verifikasis'];
+
+
         // Mengatur pengurutan berdasarkan nama jika parameter urutan nama tersedia
         if ($order_nama) {
             $kegiatanQuery->orderBy('nama', $order_nama);
@@ -75,7 +87,7 @@ class KegiatanAdministrasiController extends Controller
             // Jika monitoring_nilai_transaksi mengembalikan pesan error, lewati
 
             $nilai_trans[$kegiatan->id] = $transaksi_nilai;
-            
+
             $transaksi_nilai = str_replace('.', '', $transaksi_nilai);
             $numericTransNilai = (float) $transaksi_nilai;
 
@@ -86,16 +98,20 @@ class KegiatanAdministrasiController extends Controller
         $nilai_trans_all = number_format($nilai_trans_all, 0, ',', '.');
 
 
-        return view('page.administrasi.kegiatan.index', [
-            'fungsi' => $fungsi,
-            'kegiatans' => $kegiatans,
-            'years' => $years,
-            'amount_file' => $amount_file,
-            'complete_file' => $complete_file,
-            'progres' => $progres,
-            'nilai_trans' => $nilai_trans,
-            'nilai_trans_all'=> $nilai_trans_all
-        ]);
+        return view('page.administrasi.kegiatan.index', compact(
+            'fungsi',
+            'kegiatans',
+            'years',
+            'amount_file',
+            'complete_file',
+            'progres',
+            'nilai_trans',
+            'nilai_trans_all',
+            'complete_verifikasis',
+            'total_verifikasis',
+            'all_complete_verifikasis',
+            'all_total_verifikasis'
+        ));
     }
     /**
      * Menyimpan resource baru ke dalam storage.
@@ -107,7 +123,7 @@ class KegiatanAdministrasiController extends Controller
                 'nama' => [
                     'required',
                     'max:550',
-                    'regex:/^[^\/<>:;|?*\\"\\]+$/'
+                    'regex:/^[^\/<>:;|?*\\\\"]+$/'
                 ],
                 'tahun' => 'required',
                 'fungsi' => 'required',
@@ -148,7 +164,7 @@ class KegiatanAdministrasiController extends Controller
             'nama' => [
                 'required',
                 'max:550',
-                'regex:/^[^\/<>:;|?*\\"\\]+$/'
+                'regex:/^[^\/<>:;|?*\\\\"]+$/'
             ],        ]);
 
         $fungsi = $request->fungsi;
@@ -284,5 +300,49 @@ class KegiatanAdministrasiController extends Controller
         $nilai_trans = number_format($nilai_trans, 0, ',', '.');
 
         return $nilai_trans;
+    }
+
+
+    public function total_verifikasi($fungsi)
+    {
+        $kegiatans = KegiatanAdministrasi::where('fungsi', $fungsi)->get();
+
+
+        $complete_verifikasis = [];
+        $total_verifikasis = [];
+        $all_complete_verifikasis = 0;
+        $all_total_verifikasis = 0;
+
+        foreach ($kegiatans as $kegiatan) {
+            $complete_verifikasi = 0;
+            $total_verifikasi = 0;
+            foreach ($kegiatan->akun as $akun) {
+                foreach ($akun->transaksi as $transaksi) {
+                    foreach ($transaksi->file as $file) {
+                        if ($file->ceklist === 1) {
+                            $complete_verifikasi += 1;
+                        }
+                        $total_verifikasi += 1;
+                    }
+
+                }
+            }
+
+            $complete_verifikasis[$kegiatan->id] = $complete_verifikasi;
+            $total_verifikasis[$kegiatan->id] = $total_verifikasi;
+            $all_complete_verifikasis += $complete_verifikasi;
+            $all_total_verifikasis += $total_verifikasi;
+
+
+        }
+        return [
+            'complete_verifikasis' => $complete_verifikasis,
+            'total_verifikasis' => $total_verifikasis,
+            'all_complete_verifikasis' => $all_complete_verifikasis,
+            'all_total_verifikasis' => $all_total_verifikasis,
+        ];
+
+
+
     }
 }
