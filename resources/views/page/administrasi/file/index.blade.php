@@ -288,6 +288,16 @@
                                                 <div class="flex items-center gap-x-3">
                                                     <span
                                                         class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-2 mr-8">
+                                                        Catatan
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="size-px whitespace-nowrap">
+                                            <div class="px-1 py-3 text-start">
+                                                <div class="flex items-center gap-x-3">
+                                                    <span
+                                                        class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-2 mr-8">
                                                         Update
                                                     </span>
                                                 </div>
@@ -520,6 +530,18 @@
                                             <td class="size-px whitespace-nowrap">
                                                 <div class="px-1 py-3 text-start">
                                                     <div class="flex items-center gap-x-3">
+                                                        <textarea
+                                                            class="text-sm font-medium text-gray-800 dark:text-neutral-200 bg-gray-100 dark:bg-neutral-700 border border-gray-300 dark:border-neutral-600 rounded-md p-2 w-full resize"
+                                                            placeholder="Isi catatan di sini" name="note" id="note-{{ $doc->id }}"
+                                                            oninput="saveNoteAutomatically({{ $doc->id }})"
+                                                            style="width: calc(100% - 0.5rem); margin-left: 0.25rem; margin-right: 0.25rem;">{{ $doc->catatan }}</textarea>
+                                                    </div>
+                                                </div>
+                                            </td>
+
+                                            <td class="size-px whitespace-nowrap">
+                                                <div class="px-1 py-3 text-start">
+                                                    <div class="flex items-center gap-x-3">
                                                         <span
                                                             class="text-sm font-medium text-gray-800 dark:text-neutral-200 ml-2 mr-8">
                                                             @if ($doc->status == 1)
@@ -579,6 +601,25 @@
                         });
                     });
                 });
+
+                function saveNoteAutomatically(id) {
+                    let noteValue = document.getElementById('note-' + id).value;
+
+                    $.ajax({
+                        url: `/administrasi/file/catatan/${id}`,
+                        type: 'POST',
+                        data: {
+                            catatanIsi: noteValue,
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+                            console.log('Catatan berhasil disimpan!');
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Error:', error);
+                        }
+                    });
+                }
 
                 //filter
                 $(document).ready(function() {

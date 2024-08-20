@@ -469,4 +469,14 @@ class FileController extends Controller
 
         return response()->json(['message' => $id, 'isChecked' => $isChecked]);
     }
+
+    public function catatan(Request $request, $id)
+    {
+        $catatanIsi = $request->catatanIsi;
+        $file = File::find($id);
+        $file->catatan = $catatanIsi;  // Menyimpan catatan
+        $file->save();
+
+        return response()->json(['message' => 'Catatan berhasil disimpan!', 'catatanIsi' => $catatanIsi]);
+    }
 }

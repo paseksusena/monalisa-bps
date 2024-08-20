@@ -122,6 +122,7 @@ Route::middleware('auth')->group(function () {
     //file
     Route::resource('/administrasi/file', FileController::class);
     Route::post('/administrasi/file/ceklist/{id}', [FileController::class, 'ceklist']);
+    Route::post('/administrasi/file/catatan/{id}', [FileController::class, 'catatan']);
     Route::get('/administrasi/file/create-excel/{id}', [FileController::class, 'exportExcel']);
     Route::post('/administrasi/file/store_excel', [FileController::class, 'stroreExcel']);
     Route::post('/administrasi/file/addFile', [FileController::class, 'addFile']);
