@@ -122,7 +122,7 @@
 
             <!-- mengambil blade dari notifikasi -->
             @include('page.administrasi.partials.notification')
-
+            @include('page.administrasi.partials.catatan')
             <!-- style css terpisah pada tombol home -->
             <style>
                 @media (max-width: 640px) {

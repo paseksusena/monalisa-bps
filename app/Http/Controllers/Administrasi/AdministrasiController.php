@@ -155,6 +155,28 @@ class AdministrasiController extends Controller
         return response()->json($lateResults);
     }
 
+    public function getCatatan()
+    {
+        $files = File::all();
+        $session = session('selected_year');
+        $catatanResults = [];
+
+        foreach ($files as $file) {
+            $transaksi = $file->transaksi;
+
+            if ($transaksi->akun->kegiatanAdministrasi->tahun == $session) {
+                $catatanResults[] = [
+                    'name' => $file->judul,
+                    'catatan' => $file->catatan,
+                    'url' => '/administrasi/file?transaksi=' . $transaksi->id . '&akun=' . $transaksi->akun->id . '&kegiatan=' . $transaksi->akun->kegiatanAdministrasi->id . '&fungsi=' . $transaksi->akun->kegiatanAdministrasi->fungsi,
+                    'alamat' => $file->transaksi->akun->kegiatanAdministrasi->fungsi . '/' . $file->transaksi->akun->kegiatanAdministrasi->nama . '/' . $file->transaksi->akun->nama . '/' . $file->transaksi->nama . '/' . $file->judul
+                ];
+            }
+        }
+
+        return response()->json($catatanResults);
+    }
+
     // download notif excel 
     public function download_notif_excel()
     {

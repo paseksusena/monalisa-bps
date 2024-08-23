@@ -92,6 +92,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/notifications', [AdministrasiController::class, 'getNotifications'])->name('notifications');
 
+    //catatan 
+    Route::get('/get-catatan', [AdministrasiController::class, 'getCatatan'])->name('get.catatan');
     //search 
     Route::get('/administrasi/kegiatan/search', [AdministrasiController::class, 'search']);
 
