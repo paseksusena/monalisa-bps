@@ -9,8 +9,17 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link rel="shortcut icon" href="{{ asset('storage/img/icontab.png') }}" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
-
+    <style>
+        /* Tambahkan CSS untuk membuat header tetap */
+        .sticky-header {
+            position: sticky;
+            top: 0;
+            background-color: white;
+            /* Sesuaikan warna latar belakang */
+            z-index: 10;
+            /* Agar tetap di atas konten lainnya */
+        }
+    </style>
 </head>
 
 <body>
@@ -46,7 +55,6 @@
                             {{ $kegiatan->nama }}
                         </a>
                     </li>
-
                 </ol>
             </nav>
 
@@ -123,7 +131,6 @@
                 </div>
             </div>
 
-
             <div class="flex flex-col">
                 <div class="-m-1.5 overflow-x-auto">
                     <div class="p-1.5 min-w-full inline-block align-middle">
@@ -140,290 +147,171 @@
                                 <div>
                                     <h1 class="text-base font-semibold text-gray-600">Total Nilai Transaksi</h1>
                                     <h2 class="text-xl font-bold text-gray-800 dark:text-neutral-200">
-                                    Rp{{$nilai_trans_all}}
+                                        Rp{{ $nilai_trans_all }}
                                     </h2>
                                 </div>
                             </div>
                             <!-- End Header -->
 
                             <!-- Table -->
-                            <table class="min-w-full divide-y divide-gray-200 dark:divide-neutral-700">
-                                <tbody class="divide-y divide-gray-200 dark:divide-neutral-700">
+                            <div class="max-h-160 overflow-y-auto">
+                                <table class="min-w-full divide-y divide-gray-200 dark:divide-neutral-700">
+
                                     <!-- Kolom tabel -->
-                                    <tr class="hover:bg-gray-100 dark:hover:bg-neutral-700">
-                                        <td class="size-px whitespace-nowrap">
-                                            <div class="px-1 py-3 text-start">
-                                                <div class="flex items-center gap-x-3">
-                                                    <span
-                                                        class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-2">
-                                                        Nomor
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="size-px whitespace-nowrap">
-                                            <div class="px-1 py-3 text-start">
-                                                <div class="flex items-center gap-x-3">
-                                                    <span
-                                                        class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-2 mr-8">
-                                                        <!-- proses mengirimkan request untuk sorting bagian nama akun -->
-                                                        <a href="{{ request()->fullUrlWithQuery(['order-nama' => request('order-nama') === 'asc' ? 'desc' : 'asc', 'order-progres' => null]) }}"
-                                                            class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-1 mr-1">
-                                                            Nama Akun @if (request('order-nama') === 'asc')
-                                                                <i class="fas fa-sort-up ml-2"></i>
-                                                            @elseif (request('order-nama') === 'desc')
-                                                                <i class="fas fa-sort-down ml-2"></i>
-                                                            @else
-                                                                <i class="fas fa-sort ml-2"></i>
-                                                            @endif
-                                                        </a>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="size-px whitespace-nowrap">
-                                            <div class="px-0 py-3 text-start">
-                                                <div class="flex items-center gap-x-3">
-                                                    <span
-                                                        class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-2 mr-8">
-                                                        Nilai Transaksi
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="size-px whitespace-nowrap">
-                                            <div class="px-1 py-3 text-start">
-                                                <div class="flex items-center gap-x-3">
-                                                    <span
-                                                        class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-2 mr-8">
-
-                                                        <!-- proses mengirimkan request untuk sorting bagian nama progres -->
-
-                                                        <a href="{{ request()->fullUrlWithQuery(['order-progres' => request('order-progres') === 'asc' ? 'desc' : 'asc', 'order-nama' => null]) }}"
-                                                            class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-1 mr-1">
-                                                            Progres @if (request('order-progres') === 'asc')
-                                                                <i class="fas fa-sort-up ml-2"></i>
-                                                            @elseif (request('order-progres') === 'desc')
-                                                                <i class="fas fa-sort-down ml-2"></i>
-                                                            @else
-                                                                <i class="fas fa-sort ml-2"></i>
-                                                            @endif
-                                                        </a>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="size-px whitespace-nowrap">
-                                            <div class="px-1 py-3 text-start">
-                                                <div class="flex items-center gap-x-3">
-                                                    <span
-                                                        class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-2 mr-8">
-                                                        File Progress
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="size-px whitespace-nowrap">
-                                            <div class="px-1 py-3 text-start">
-                                                <div class="flex items-center gap-x-3">
-                                                    <span
-                                                        class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-1 mr-1">
-                                                        Verifikasi
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </td>
-
-                                        <td class="size-px whitespace-nowrap">
-                                            <div class="px-1 py-3 text-start">
-                                                <div class="flex items-center gap-x-3">
-                                                    <span
-                                                        class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-2 mr-8">
-                                                        Action
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <!-- End Kolom tabel -->
-                                    @foreach ($akuns as $akun => $akn)
-
-
-                                        <!-- Perulangan data pada tabel -->
-                                        <tr class="hover:bg-gray-100 dark:hover:bg-neutral-700">
-
-                                        <td class="size-px whitespace-nowrap">
+                                    <thead class="sticky-header">
+                                        <tr>
+                                            <td class="size-px whitespace-nowrap">
                                                 <div class="px-1 py-3 text-start">
                                                     <div class="flex items-center gap-x-3">
                                                         <span
-                                                            class="text-sm font-medium text-gray-800 dark:text-neutral-200 ml-4 mr-8">
-                                                            {{ $akun + 1 }}
+                                                            class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-2">
+                                                            Nomor
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="size-px whitespace-nowrap">
+                                                <div class="px-1 py-3 text-start">
+                                                    <div class="flex items-center gap-x-3">
+                                                        <span
+                                                            class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-2 mr-8">
+                                                            <!-- proses mengirimkan request untuk sorting bagian nama akun -->
+                                                            <a href="{{ request()->fullUrlWithQuery(['order-nama' => request('order-nama') === 'asc' ? 'desc' : 'asc', 'order-progres' => null]) }}"
+                                                                class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-1 mr-1">
+                                                                Nama Akun @if (request('order-nama') === 'asc')
+                                                                    <i class="fas fa-sort-up ml-2"></i>
+                                                                @elseif (request('order-nama') === 'desc')
+                                                                    <i class="fas fa-sort-down ml-2"></i>
+                                                                @else
+                                                                    <i class="fas fa-sort ml-2"></i>
+                                                                @endif
+                                                            </a>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="size-px whitespace-nowrap">
+                                                <div class="px-0 py-3 text-start">
+                                                    <div class="flex items-center gap-x-3">
+                                                        <span
+                                                            class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-2 mr-8">
+                                                            Nilai Transaksi
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="size-px whitespace-nowrap">
+                                                <div class="px-1 py-3 text-start">
+                                                    <div class="flex items-center gap-x-3">
+                                                        <span
+                                                            class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-2 mr-8">
+
+                                                            <!-- proses mengirimkan request untuk sorting bagian nama progres -->
+
+                                                            <a href="{{ request()->fullUrlWithQuery(['order-progres' => request('order-progres') === 'asc' ? 'desc' : 'asc', 'order-nama' => null]) }}"
+                                                                class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-1 mr-1">
+                                                                Progres @if (request('order-progres') === 'asc')
+                                                                    <i class="fas fa-sort-up ml-2"></i>
+                                                                @elseif (request('order-progres') === 'desc')
+                                                                    <i class="fas fa-sort-down ml-2"></i>
+                                                                @else
+                                                                    <i class="fas fa-sort ml-2"></i>
+                                                                @endif
+                                                            </a>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="size-px whitespace-nowrap">
+                                                <div class="px-1 py-3 text-start">
+                                                    <div class="flex items-center gap-x-3">
+                                                        <span
+                                                            class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-2 mr-8">
+                                                            File Progress
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="size-px whitespace-nowrap">
+                                                <div class="px-1 py-3 text-start">
+                                                    <div class="flex items-center gap-x-3">
+                                                        <span
+                                                            class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-1 mr-1">
+                                                            Verifikasi
                                                         </span>
                                                     </div>
                                                 </div>
                                             </td>
 
                                             <td class="size-px whitespace-nowrap">
-                                                <div class="flex items-center space-x-2">
-                                                    <div class="ps-4 py-3">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="30"
-                                                            height="30" viewBox="0 0 24 24" fill="currentColor">
-                                                            <path d="M13 9h-2v3H8v2h3v3h2v-3h3v-2h-3z"></path>
-                                                            <path
-                                                                d="M20 5h-8.586L9.707 3.293A.996.996 0 0 0 9 3H4c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2h16c1.103 0 2-.897 2-2V7c0-1.103-.897-2-2-2zM4 19V7h16l.002 12H4z">
-                                                            </path>
-                                                        </svg>
+                                                <div class="px-1 py-3 text-start">
+                                                    <div class="flex items-center gap-x-3">
+                                                        <span
+                                                            class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-2 mr-8">
+                                                            Action
+                                                        </span>
                                                     </div>
-                                                    <div class="px-3 py-3 text-start">
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </thead>
+                                    <!-- End Kolom tabel -->
+                                    <tbody class="divide-y divide-gray-200 dark:divide-neutral-700">
+                                        @foreach ($akuns as $akun => $akn)
+                                            <!-- Perulangan data pada tabel -->
+                                            <tr class="hover:bg-gray-100 dark:hover:bg-neutral-700">
+
+                                                <td class="size-px whitespace-nowrap">
+                                                    <div class="px-1 py-3 text-start">
                                                         <div class="flex items-center gap-x-3">
                                                             <span
-                                                                class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-2 mr-8">
-                                                                <a
-                                                                    href="/administrasi/transaksi?akun={{ $akn->id }}&kegiatan={{ $kegiatan->id }}&fungsi={{ $fungsi }}">
-                                                                    {{ $akn->nama }}</a>
+                                                                class="text-sm font-medium text-gray-800 dark:text-neutral-200 ml-4 mr-8">
+                                                                {{ $akun + 1 }}
                                                             </span>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            </td>
-                                            <td class="size-px whitespace-nowrap">
-                                                <div class="px-1 py-3 text-start">
-                                                    <div class="flex items-center gap-x-3">
-                                                        <span
-                                                            class="text-sm font-medium text-gray-800 dark:text-neutral-200 ml-1 mr-1">
-                                                            Rp{{ $nilai_trans[$akn->id] ?? '0' }}
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            </td>
+                                                </td>
 
-                                            @if ($akn->progres == 100)
                                                 <td class="size-px whitespace-nowrap">
-                                                    <div class="px-1 py-3 mr-10">
-                                                        <span
-                                                            class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-green-100 text-green-800 rounded-full dark:bg-green-500/10 dark:text-green-500">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="15"
-                                                                height="15" viewBox="0 0 24 24"
-                                                                style="fill: rgba(28, 133, 17, 1);transform: ;msFilter:;">
+                                                    <div class="flex items-center space-x-2">
+                                                        <div class="ps-4 py-3">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="30"
+                                                                height="30" viewBox="0 0 24 24"
+                                                                fill="currentColor">
+                                                                <path d="M13 9h-2v3H8v2h3v3h2v-3h3v-2h-3z"></path>
                                                                 <path
-                                                                    d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm-1.999 14.413-3.713-3.705L7.7 11.292l2.299 2.295 5.294-5.294 1.414 1.414-6.706 6.706z">
+                                                                    d="M20 5h-8.586L9.707 3.293A.996.996 0 0 0 9 3H4c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2h16c1.103 0 2-.897 2-2V7c0-1.103-.897-2-2-2zM4 19V7h16l.002 12H4z">
                                                                 </path>
                                                             </svg>
-                                                            {{ $akn->progres }}%
-                                                        </span>
+                                                        </div>
+                                                        <div class="px-3 py-3 text-start">
+                                                            <div class="flex items-center gap-x-3">
+                                                                <span
+                                                                    class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-2 mr-8">
+                                                                    <a
+                                                                        href="/administrasi/transaksi?akun={{ $akn->id }}&kegiatan={{ $kegiatan->id }}&fungsi={{ $fungsi }}">
+                                                                        {{ $akn->nama }}</a>
+                                                                </span>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </td>
                                                 <td class="size-px whitespace-nowrap">
-                                                    <div class="px-1 py-3 mr-10">
-                                                        <span
-                                                            class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-green-100 text-green-800 rounded-full dark:bg-green-500/10 dark:text-green-500">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="15"
-                                                                height="15" viewBox="0 0 24 24"
-                                                                style="fill: rgba(28, 133, 17, 1);transform: ;msFilter:;">
-                                                                <path
-                                                                    d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm-1.999 14.413-3.713-3.705L7.7 11.292l2.299 2.295 5.294-5.294 1.414 1.414-6.706 6.706z">
-                                                                </path>
-                                                            </svg>
-                                                            {{ $akn->complete_file }}/{{ $akn->amount_file }}
-                                                        </span>
+                                                    <div class="px-1 py-3 text-start">
+                                                        <div class="flex items-center gap-x-3">
+                                                            <span
+                                                                class="text-sm font-medium text-gray-800 dark:text-neutral-200 ml-1 mr-1">
+                                                                Rp{{ $nilai_trans[$akn->id] ?? '0' }}
+                                                            </span>
+                                                        </div>
                                                     </div>
                                                 </td>
-                                            @elseif ($akn->progres > 0 && $akn->progres < 100)
-                                                <td class="size-px whitespace-nowrap">
-                                                    <div class="px-1 py-3 mr-10">
-                                                        <span
-                                                            class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-yellow-100 text-teal-800 rounded-full dark:bg-teal-500/10 dark:text-teal-500">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="14"
-                                                                height="14" viewBox="0 0 24 24"
-                                                                style="fill: rgb(59, 63, 13);transform: ;msFilter:;">
-                                                                <path
-                                                                    d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm5 11H7v-2h10v2z">
-                                                                </path>
-                                                            </svg>
-                                                            {{ $akn->progres }}%
-                                                        </span>
-                                                    </div>
-                                                </td>
-                                                <td class="size-px whitespace-nowrap">
-                                                    <div class="px-1 py-3 mr-10">
-                                                        <span
-                                                            class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-yellow-100 text-teal-800 rounded-full dark:bg-teal-500/10 dark:text-teal-500">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="14"
-                                                                height="14" viewBox="0 0 24 24"
-                                                                style="fill: rgb(59, 63, 13);transform: ;msFilter:;">
-                                                                <path
-                                                                    d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm5 11H7v-2h10v2z">
-                                                                </path>
-                                                            </svg>
-                                                            {{ $akn->complete_file }}/{{ $akn->amount_file }}
-                                                        </span>
-                                                    </div>
-                                                </td>
-                                            @elseif ($akn->progres <= 0)
-                                                <td class="size-px whitespace-nowrap">
-                                                    <div class="px-1 py-3 mr-10">
-                                                        <span
-                                                            class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-red-100 text-red-800 rounded-full dark:bg-red-500/10 dark:text-red-500">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="14"
-                                                                height="14" viewBox="0 0 24 24"
-                                                                style="fill: rgba(253, 1, 1, 1);transform: ;msFilter:;">
-                                                                <path
-                                                                    d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm4.207 12.793-1.414 1.414L12 13.414l-2.793 2.793-1.414-1.414L10.586 12 7.793 9.207l1.414-1.414L12 10.586l2.793-2.793 1.414 1.414L13.414 12l2.793 2.793z">
-                                                                </path>
-                                                            </svg>
-                                                            {{ $akn->progres }}%
-                                                        </span>
-                                                    </div>
-                                                </td>
-                                                <td class="size-px whitespace-nowrap">
-                                                    <div class="px-1 py-3 mr-10">
-                                                        <span
-                                                            class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-red-100 text-red-800 rounded-full dark:bg-red-500/10 dark:text-red-500">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="14"
-                                                                height="14" viewBox="0 0 24 24"
-                                                                style="fill: rgba(253, 1, 1, 1);transform: ;msFilter:;">
-                                                                <path
-                                                                    d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm4.207 12.793-1.414 1.414L12 13.414l-2.793 2.793-1.414-1.414L10.586 12 7.793 9.207l1.414-1.414L12 10.586l2.793-2.793 1.414 1.414L13.414 12l2.793 2.793z">
-                                                                </path>
-                                                            </svg>
-                                                            {{ $akn->complete_file }}/{{ $akn->amount_file }}
-                                                        </span>
-                                                    </div>
-                                                </td>
-                                            @else
-                                                <td></td>
-                                                <td></td>
-                                            @endif
 
-                                            <td class="size-px whitespace-nowrap">
-                                                <div class="px-1 py-3 text-start">
-                                                    <div class="flex items-center gap-x-3">
-
-                                                        <span
-                                                            class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium rounded-full
-                                                        {{ $complete_verifikasis[$akn->id] == 0 ? 'bg-red-100 text-red-800' : '' }}
-                                                        {{ $complete_verifikasis[$akn->id] > 0 && $complete_verifikasis[$akn->id] !== $total_verifikasis[$akn->id] ? 'bg-yellow-100' : '' }}
-                                                        {{ $complete_verifikasis[$akn->id] == $total_verifikasis[$akn->id] ? 'bg-green-100 text-green-800' : '' }}
-
-                                                        dark:bg-red-500/10">
-
-
-                                                            @if ($complete_verifikasis[$akn->id] == 0)
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="14"
-                                                                    height="14" viewBox="0 0 24 24"
-                                                                    style="fill: rgba(253, 1, 1, 1);transform: ;msFilter:;">
-                                                                    <path
-                                                                        d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm4.207 12.793-1.414 1.414L12 13.414l-2.793 2.793-1.414-1.414L10.586 12 7.793 9.207l1.414-1.414L12 10.586l2.793-2.793 1.414 1.414L13.414 12l2.793 2.793z">
-
-                                                                </svg>
-                                                            @elseif($complete_verifikasis[$akn->id] > 0 && $complete_verifikasis[$akn->id] !== $total_verifikasis[$akn->id])
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="14"
-                                                                    height="14" viewBox="0 0 24 24"
-                                                                    style="fill:xrgb(59, 63, 13);transform: ;msFilter:;">
-                                                                    <path
-                                                                        d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm5 11H7v-2h10v2z">
-                                                                </svg>
-                                                            @else
+                                                @if ($akn->progres == 100)
+                                                    <td class="size-px whitespace-nowrap">
+                                                        <div class="px-1 py-3 mr-10">
+                                                            <span
+                                                                class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-green-100 text-green-800 rounded-full dark:bg-green-500/10 dark:text-green-500">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="15"
                                                                     height="15" viewBox="0 0 24 24"
                                                                     style="fill: rgba(28, 133, 17, 1);transform: ;msFilter:;">
@@ -431,69 +319,194 @@
                                                                         d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm-1.999 14.413-3.713-3.705L7.7 11.292l2.299 2.295 5.294-5.294 1.414 1.414-6.706 6.706z">
                                                                     </path>
                                                                 </svg>
-                                                            @endif
-                                                            </path>
+                                                                {{ $akn->progres }}%
+                                                            </span>
+                                                        </div>
+                                                    </td>
+                                                    <td class="size-px whitespace-nowrap">
+                                                        <div class="px-1 py-3 mr-10">
+                                                            <span
+                                                                class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-green-100 text-green-800 rounded-full dark:bg-green-500/10 dark:text-green-500">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="15"
+                                                                    height="15" viewBox="0 0 24 24"
+                                                                    style="fill: rgba(28, 133, 17, 1);transform: ;msFilter:;">
+                                                                    <path
+                                                                        d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm-1.999 14.413-3.713-3.705L7.7 11.292l2.299 2.295 5.294-5.294 1.414 1.414-6.706 6.706z">
+                                                                    </path>
+                                                                </svg>
+                                                                {{ $akn->complete_file }}/{{ $akn->amount_file }}
+                                                            </span>
+                                                        </div>
+                                                    </td>
+                                                @elseif ($akn->progres > 0 && $akn->progres < 100)
+                                                    <td class="size-px whitespace-nowrap">
+                                                        <div class="px-1 py-3 mr-10">
+                                                            <span
+                                                                class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-yellow-100 text-teal-800 rounded-full dark:bg-teal-500/10 dark:text-teal-500">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="14"
+                                                                    height="14" viewBox="0 0 24 24"
+                                                                    style="fill: rgb(59, 63, 13);transform: ;msFilter:;">
+                                                                    <path
+                                                                        d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm5 11H7v-2h10v2z">
+                                                                    </path>
+                                                                </svg>
+                                                                {{ $akn->progres }}%
+                                                            </span>
+                                                        </div>
+                                                    </td>
+                                                    <td class="size-px whitespace-nowrap">
+                                                        <div class="px-1 py-3 mr-10">
+                                                            <span
+                                                                class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-yellow-100 text-teal-800 rounded-full dark:bg-teal-500/10 dark:text-teal-500">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="14"
+                                                                    height="14" viewBox="0 0 24 24"
+                                                                    style="fill: rgb(59, 63, 13);transform: ;msFilter:;">
+                                                                    <path
+                                                                        d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm5 11H7v-2h10v2z">
+                                                                    </path>
+                                                                </svg>
+                                                                {{ $akn->complete_file }}/{{ $akn->amount_file }}
+                                                            </span>
+                                                        </div>
+                                                    </td>
+                                                @elseif ($akn->progres <= 0)
+                                                    <td class="size-px whitespace-nowrap">
+                                                        <div class="px-1 py-3 mr-10">
+                                                            <span
+                                                                class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-red-100 text-red-800 rounded-full dark:bg-red-500/10 dark:text-red-500">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="14"
+                                                                    height="14" viewBox="0 0 24 24"
+                                                                    style="fill: rgba(253, 1, 1, 1);transform: ;msFilter:;">
+                                                                    <path
+                                                                        d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm4.207 12.793-1.414 1.414L12 13.414l-2.793 2.793-1.414-1.414L10.586 12 7.793 9.207l1.414-1.414L12 10.586l2.793-2.793 1.414 1.414L13.414 12l2.793 2.793z">
+                                                                    </path>
+                                                                </svg>
+                                                                {{ $akn->progres }}%
+                                                            </span>
+                                                        </div>
+                                                    </td>
+                                                    <td class="size-px whitespace-nowrap">
+                                                        <div class="px-1 py-3 mr-10">
+                                                            <span
+                                                                class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-red-100 text-red-800 rounded-full dark:bg-red-500/10 dark:text-red-500">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="14"
+                                                                    height="14" viewBox="0 0 24 24"
+                                                                    style="fill: rgba(253, 1, 1, 1);transform: ;msFilter:;">
+                                                                    <path
+                                                                        d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm4.207 12.793-1.414 1.414L12 13.414l-2.793 2.793-1.414-1.414L10.586 12 7.793 9.207l1.414-1.414L12 10.586l2.793-2.793 1.414 1.414L13.414 12l2.793 2.793z">
+                                                                    </path>
+                                                                </svg>
+                                                                {{ $akn->complete_file }}/{{ $akn->amount_file }}
+                                                            </span>
+                                                        </div>
+                                                    </td>
+                                                @else
+                                                    <td></td>
+                                                    <td></td>
+                                                @endif
 
-                                                            {{ $complete_verifikasis[$akn->id] }}/{{ $total_verifikasis[$akn->id] }}
-                                                        </span>
+                                                <td class="size-px whitespace-nowrap">
+                                                    <div class="px-1 py-3 text-start">
+                                                        <div class="flex items-center gap-x-3">
 
+                                                            <span
+                                                                class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium rounded-full
+                                                        {{ $complete_verifikasis[$akn->id] == 0 ? 'bg-red-100 text-red-800' : '' }}
+                                                        {{ $complete_verifikasis[$akn->id] > 0 && $complete_verifikasis[$akn->id] !== $total_verifikasis[$akn->id] ? 'bg-yellow-100' : '' }}
+                                                        {{ $complete_verifikasis[$akn->id] == $total_verifikasis[$akn->id] ? 'bg-green-100 text-green-800' : '' }}
+
+                                                        dark:bg-red-500/10">
+
+
+                                                                @if ($complete_verifikasis[$akn->id] == 0)
+                                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                                        width="14" height="14"
+                                                                        viewBox="0 0 24 24"
+                                                                        style="fill: rgba(253, 1, 1, 1);transform: ;msFilter:;">
+                                                                        <path
+                                                                            d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm4.207 12.793-1.414 1.414L12 13.414l-2.793 2.793-1.414-1.414L10.586 12 7.793 9.207l1.414-1.414L12 10.586l2.793-2.793 1.414 1.414L13.414 12l2.793 2.793z">
+
+                                                                    </svg>
+                                                                @elseif($complete_verifikasis[$akn->id] > 0 && $complete_verifikasis[$akn->id] !== $total_verifikasis[$akn->id])
+                                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                                        width="14" height="14"
+                                                                        viewBox="0 0 24 24"
+                                                                        style="fill:xrgb(59, 63, 13);transform: ;msFilter:;">
+                                                                        <path
+                                                                            d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm5 11H7v-2h10v2z">
+                                                                    </svg>
+                                                                @else
+                                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                                        width="15" height="15"
+                                                                        viewBox="0 0 24 24"
+                                                                        style="fill: rgba(28, 133, 17, 1);transform: ;msFilter:;">
+                                                                        <path
+                                                                            d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm-1.999 14.413-3.713-3.705L7.7 11.292l2.299 2.295 5.294-5.294 1.414 1.414-6.706 6.706z">
+                                                                        </path>
+                                                                    </svg>
+                                                                @endif
+                                                                </path>
+
+                                                                {{ $complete_verifikasis[$akn->id] }}/{{ $total_verifikasis[$akn->id] }}
+                                                            </span>
+
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </td>
+                                                </td>
 
-                                            <!-- Tombol hapus dan edit -->
-                                            <td class="size-px whitespace-nowrap">
-                                                <div class="px-3 py-1.5 flex space-x-2">
-                                                    <form id="delete-form-{{ $akn->id }}"
-                                                        action="/administrasi/akun/{{ $akn->id }}"
-                                                        method="POST">
-                                                        @csrf
-                                                        @method('delete')
-                                                        <input type="hidden" value="{{ $fungsi }}"
-                                                            name="fungsi">
-                                                        <input type="hidden" value="{{ $kegiatan->id }}"
-                                                            name="kegiatan">
-                                                        <button type="button"
-                                                            onclick="confirmDelete({{ $akn->id }})"
-                                                            class="bg-red-600 hover:bg-red-700 text-white p-1 rounded focus:outline-none focus:shadow-outline">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="20"
-                                                                height="20" viewBox="0 0 24 24"
-                                                                style="fill: rgba(255, 252, 252, 1);transform: ;msFilter:;">
-                                                                <path
-                                                                    d="M5 20a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8h2V6h-4V4a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v2H3v2h2zM9 4h6v2H9zM8 8h9v12H7V8z">
-                                                                </path>
-                                                                <path d="M9 10h2v8H9zm4 0h2v8h-2z"></path>
-                                                            </svg>
-                                                        </button>
-                                                    </form>
-                                                    <a href="#" class="text-blue-600 hover:underline">
-                                                        <button type="button" data-hs-overlay="#edit-akun"
-                                                            data-id="{{ $akn->id }}"
-                                                            onclick="openEditModal(this)"
-                                                            class="bg-blue-600 hover:bg-blue-700 text-white p-1 rounded focus:outline-none focus:shadow-outline">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="20"
-                                                                height="20" viewBox="0 0 24 24"
-                                                                style="fill: rgba(255, 255, 255, 1);transform: ;msFilter:;">
-                                                                <path
-                                                                    d="m7 17.013 4.413-.015 9.632-9.54c.378-.378.586-.88.586-1.414s-.208-1.036-.586-1.414l-1.586-1.586c-.756-.756-2.075-.752-2.825-.003L7 12.583v4.43zM18.045 4.458l1.589 1.583-1.597 1.582-1.586-1.585 1.594-1.58zM9 13.417l6.03-5.973 1.586 1.586-6.029 5.971L9 15.006v-1.589z">
-                                                                </path>
-                                                                <path
-                                                                    d="M5 21h14c1.103 0 2-.897 2-2v-8.668l-2 2V19H8.158c-.026 0-.053.01-.079.01-.033 0-.066-.009-.1-.01H5V5h6.847l2-2H5c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2z">
-                                                                </path>
-                                                            </svg>
-                                                        </button>
-                                                    </a>
-                                                    <!-- memanggil blade pada akun edit -->
-                                                    @include('page.administrasi.akun.edit')
-                                                </div>
-                                            </td>
+                                                <!-- Tombol hapus dan edit -->
+                                                <td class="size-px whitespace-nowrap">
+                                                    <div class="px-3 py-1.5 flex space-x-2">
+                                                        <form id="delete-form-{{ $akn->id }}"
+                                                            action="/administrasi/akun/{{ $akn->id }}"
+                                                            method="POST">
+                                                            @csrf
+                                                            @method('delete')
+                                                            <input type="hidden" value="{{ $fungsi }}"
+                                                                name="fungsi">
+                                                            <input type="hidden" value="{{ $kegiatan->id }}"
+                                                                name="kegiatan">
+                                                            <button type="button"
+                                                                onclick="confirmDelete({{ $akn->id }})"
+                                                                class="bg-red-600 hover:bg-red-700 text-white p-1 rounded focus:outline-none focus:shadow-outline">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="20"
+                                                                    height="20" viewBox="0 0 24 24"
+                                                                    style="fill: rgba(255, 252, 252, 1);transform: ;msFilter:;">
+                                                                    <path
+                                                                        d="M5 20a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8h2V6h-4V4a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v2H3v2h2zM9 4h6v2H9zM8 8h9v12H7V8z">
+                                                                    </path>
+                                                                    <path d="M9 10h2v8H9zm4 0h2v8h-2z"></path>
+                                                                </svg>
+                                                            </button>
+                                                        </form>
+                                                        <a href="#" class="text-blue-600 hover:underline">
+                                                            <button type="button" data-hs-overlay="#edit-akun"
+                                                                data-id="{{ $akn->id }}"
+                                                                onclick="openEditModal(this)"
+                                                                class="bg-blue-600 hover:bg-blue-700 text-white p-1 rounded focus:outline-none focus:shadow-outline">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="20"
+                                                                    height="20" viewBox="0 0 24 24"
+                                                                    style="fill: rgba(255, 255, 255, 1);transform: ;msFilter:;">
+                                                                    <path
+                                                                        d="m7 17.013 4.413-.015 9.632-9.54c.378-.378.586-.88.586-1.414s-.208-1.036-.586-1.414l-1.586-1.586c-.756-.756-2.075-.752-2.825-.003L7 12.583v4.43zM18.045 4.458l1.589 1.583-1.597 1.582-1.586-1.585 1.594-1.58zM9 13.417l6.03-5.973 1.586 1.586-6.029 5.971L9 15.006v-1.589z">
+                                                                    </path>
+                                                                    <path
+                                                                        d="M5 21h14c1.103 0 2-.897 2-2v-8.668l-2 2V19H8.158c-.026 0-.053.01-.079.01-.033 0-.066-.009-.1-.01H5V5h6.847l2-2H5c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2z">
+                                                                    </path>
+                                                                </svg>
+                                                            </button>
+                                                        </a>
+                                                        <!-- memanggil blade pada akun edit -->
+                                                        @include('page.administrasi.akun.edit')
+                                                    </div>
+                                                </td>
 
-                                        </tr>
-                                        <!-- End Perulangan data pada tabel -->
-                                    @endforeach
-                                </tbody>
-                            </table>
-
+                                            </tr>
+                                            <!-- End Perulangan data pada tabel -->
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>

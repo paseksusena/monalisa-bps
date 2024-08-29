@@ -8,7 +8,17 @@
     <title>Administrasi</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link rel="shortcut icon" href="{{ asset('storage/img/icontab.png') }}" type="image/x-icon">
-
+    <style>
+        /* Tambahkan CSS untuk membuat header tetap */
+        .sticky-header {
+            position: sticky;
+            top: 0;
+            background-color: white;
+            /* Sesuaikan warna latar belakang */
+            z-index: 10;
+            /* Agar tetap di atas konten lainnya */
+        }
+    </style>
 </head>
 
 <body>
@@ -152,422 +162,437 @@
                             <!-- End Header -->
 
                             <!-- Table -->
-                            <table class="min-w-full divide-y divide-gray-200 dark:divide-neutral-700">
-                                <tbody class="divide-y divide-gray-200 dark:divide-neutral-700">
+                            <div class="max-h-160 overflow-y-auto">
+                                <table class="min-w-full divide-y divide-gray-200 dark:divide-neutral-700">
                                     <!-- Kolom table -->
-                                    <tr class="hover:bg-gray-100 dark:hover:bg-neutral-700">
-                                        <td class="size-px whitespace-nowrap">
-                                            <div class="px-1 py-3 text-start">
-                                                <div class="flex items-center gap-x-3">
-                                                    <span
-                                                        class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-2">
-                                                        Nomor
-                                                    </span>
+                                    <thead class="sticky-header">
+                                        <tr>
+                                            <td class="size-px whitespace-nowrap">
+                                                <div class="px-1 py-3 text-start">
+                                                    <div class="flex items-center gap-x-3">
+                                                        <span
+                                                            class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-2">
+                                                            Nomor
+                                                        </span>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </td>
+                                            </td>
 
-                                        <td class="size-px whitespace-nowrap">
-                                            <div class="px-1 py-3 text-start">
-                                                <div class="flex items-center gap-x-3">
-                                                    <span
-                                                        class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-2 mr-8">
-                                                        Nama File
-                                                    </span>
+                                            <td class="size-px whitespace-nowrap">
+                                                <div class="px-1 py-3 text-start">
+                                                    <div class="flex items-center gap-x-3">
+                                                        <span
+                                                            class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-2 mr-8">
+                                                            Nama File
+                                                        </span>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </td>
-                                        <td class="size-px whitespace-nowrap">
-                                            <div class="px-1 py-3 text-start">
-                                                <div class="flex items-center gap-x-3">
-                                                    <span
-                                                        class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-2 mr-8">
-                                                        Penanggung Jawab
-                                                    </span>
+                                            </td>
+                                            <td class="size-px whitespace-nowrap">
+                                                <div class="px-1 py-3 text-start">
+                                                    <div class="flex items-center gap-x-3">
+                                                        <span
+                                                            class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-2 mr-8">
+                                                            Penanggung Jawab
+                                                        </span>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </td>
-                                        <td class="size-px whitespace-nowrap">
-                                            <div class="px-1 py-3 text-start">
-                                                <div class="flex items-center gap-x-3">
-                                                    <div class="hs-dropdown hs-dropdown-example relative inline-flex">
-                                                        <button id="hs-dropdown-example" type="button"
-                                                            class="hs-dropdown-toggle py-3 px-2 inline-flex items-center gap-x-2 text-sm font-medium">
-                                                            <span
-                                                                class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 flex justify-between items-center w-full">
-                                                                <span>
-                                                                    Status
-                                                                    <br>
-                                                                    <span
-                                                                        class="text-sm font-medium text-gray-500 dark:text-neutral-200">{{ $status }}</span>
+                                            </td>
+                                            <td class="size-px whitespace-nowrap">
+                                                <div class="px-1 py-3 text-start">
+                                                    <div class="flex items-center gap-x-3">
+                                                        <div
+                                                            class="hs-dropdown hs-dropdown-example relative inline-flex">
+                                                            <button id="hs-dropdown-example" type="button"
+                                                                class="hs-dropdown-toggle py-3 px-2 inline-flex items-center gap-x-2 text-sm font-medium">
+                                                                <span
+                                                                    class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 flex justify-between items-center w-full">
+                                                                    <span>
+                                                                        Status
+                                                                        <br>
+                                                                        <span
+                                                                            class="text-sm font-medium text-gray-500 dark:text-neutral-200">{{ $status }}</span>
+                                                                    </span>
+                                                                    <svg class="hs-dropdown-open:rotate-180 size-4 text-gray-700 dark:text-neutral-600 ml-2"
+                                                                        xmlns="http://www.w3.org/2000/svg"
+                                                                        width="24" height="24"
+                                                                        viewBox="0 0 24 24" fill="none"
+                                                                        stroke="currentColor" stroke-width="2"
+                                                                        stroke-linecap="round"
+                                                                        stroke-linejoin="round">
+                                                                        <path d="m6 9 6 6 6-6"></path>
+                                                                    </svg>
                                                                 </span>
-                                                                <svg class="hs-dropdown-open:rotate-180 size-4 text-gray-700 dark:text-neutral-600 ml-2"
-                                                                    xmlns="http://www.w3.org/2000/svg" width="24"
-                                                                    height="24" viewBox="0 0 24 24" fill="none"
-                                                                    stroke="currentColor" stroke-width="2"
-                                                                    stroke-linecap="round" stroke-linejoin="round">
-                                                                    <path d="m6 9 6 6 6-6"></path>
-                                                                </svg>
-                                                            </span>
-                                                        </button>
+                                                            </button>
 
-                                                        <div class="hs-dropdown-menu transition-[opacity,margin] duration hs-dropdown-open:opacity-100 opacity-0 w-56 hidden z-10 mt-2 min-w-60 bg-white shadow-md rounded-lg p-2 dark:bg-neutral-800 dark:border dark:border-neutral-700 dark:divide-neutral-700"
-                                                            aria-labelledby="hs-dropdown-example">
-                                                            <a class="filter-option flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700"
-                                                                href="#" data-status="Semua">
-                                                                Semua
-                                                            </a>
-                                                            <a class="filter-option flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700"
-                                                                href="#" data-status="Sudah">
-                                                                Sudah
-                                                            </a>
-                                                            <a class="filter-option flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700"
-                                                                href="#" data-status="Belum">
-                                                                Belum
-                                                            </a>
+                                                            <div class="hs-dropdown-menu transition-[opacity,margin] duration hs-dropdown-open:opacity-100 opacity-0 w-56 hidden z-10 mt-2 min-w-60 bg-white shadow-md rounded-lg p-2 dark:bg-neutral-800 dark:border dark:border-neutral-700 dark:divide-neutral-700"
+                                                                aria-labelledby="hs-dropdown-example">
+                                                                <a class="filter-option flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700"
+                                                                    href="#" data-status="Semua">
+                                                                    Semua
+                                                                </a>
+                                                                <a class="filter-option flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700"
+                                                                    href="#" data-status="Sudah">
+                                                                    Sudah
+                                                                </a>
+                                                                <a class="filter-option flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700"
+                                                                    href="#" data-status="Belum">
+                                                                    Belum
+                                                                </a>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </td>
-                                        <td class="size-px whitespace-nowrap">
-                                            <div class="px-1 py-3 text-start">
-                                                <div class="flex items-center gap-x-3">
-                                                    <span
-                                                        class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-2 mr-8">
-                                                        Action
-                                                    </span>
+                                            </td>
+                                            <td class="size-px whitespace-nowrap">
+                                                <div class="px-1 py-3 text-start">
+                                                    <div class="flex items-center gap-x-3">
+                                                        <span
+                                                            class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-2 mr-8">
+                                                            Action
+                                                        </span>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </td>
-                                        <td class="size-px whitespace-nowrap">
-                                            <div class="px-1 py-3 text-start">
-                                                <div class="flex items-center gap-x-3">
-                                                    <div class="hs-dropdown hs-dropdown-example relative inline-flex">
-                                                        <button id="hs-dropdown-example" type="button"
-                                                            class="hs-dropdown-toggle py-3 px-2 inline-flex items-center gap-x-2 text-sm font-medium">
-                                                            <span
-                                                                class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 flex justify-between items-center w-full">
-                                                                <span>
-                                                                    Verifikasi
-                                                                    <br>
-                                                                    <span
-                                                                        class="text-sm font-medium text-gray-500 dark:text-neutral-200">{{ $ceklist }}</span>
+                                            </td>
+                                            <td class="size-px whitespace-nowrap">
+                                                <div class="px-1 py-3 text-start">
+                                                    <div class="flex items-center gap-x-3">
+                                                        <div
+                                                            class="hs-dropdown hs-dropdown-example relative inline-flex">
+                                                            <button id="hs-dropdown-example" type="button"
+                                                                class="hs-dropdown-toggle py-3 px-2 inline-flex items-center gap-x-2 text-sm font-medium">
+                                                                <span
+                                                                    class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 flex justify-between items-center w-full">
+                                                                    <span>
+                                                                        Verifikasi
+                                                                        <br>
+                                                                        <span
+                                                                            class="text-sm font-medium text-gray-500 dark:text-neutral-200">{{ $ceklist }}</span>
+                                                                    </span>
+                                                                    <svg class="hs-dropdown-open:rotate-180 size-4 text-gray-700 dark:text-neutral-600 ml-2"
+                                                                        xmlns="http://www.w3.org/2000/svg"
+                                                                        width="24" height="24"
+                                                                        viewBox="0 0 24 24" fill="none"
+                                                                        stroke="currentColor" stroke-width="2"
+                                                                        stroke-linecap="round"
+                                                                        stroke-linejoin="round">
+                                                                        <path d="m6 9 6 6 6-6"></path>
+                                                                    </svg>
                                                                 </span>
-                                                                <svg class="hs-dropdown-open:rotate-180 size-4 text-gray-700 dark:text-neutral-600 ml-2"
-                                                                    xmlns="http://www.w3.org/2000/svg" width="24"
-                                                                    height="24" viewBox="0 0 24 24" fill="none"
-                                                                    stroke="currentColor" stroke-width="2"
-                                                                    stroke-linecap="round" stroke-linejoin="round">
-                                                                    <path d="m6 9 6 6 6-6"></path>
-                                                                </svg>
-                                                            </span>
-                                                        </button>
-
-                                                        <div class="hs-dropdown-menu transition-[opacity,margin] duration hs-dropdown-open:opacity-100 opacity-0 w-56 hidden z-10 mt-2 min-w-60 bg-white shadow-md rounded-lg p-2 dark:bg-neutral-800 dark:border dark:border-neutral-700 dark:divide-neutral-700"
-                                                            aria-labelledby="hs-dropdown-example">
-                                                            <a class="filter-option-ceklist flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700"
-                                                                href="#" data-ceklist="Semua">
-                                                                Semua
-                                                            </a>
-                                                            <a class="filter-option-ceklist flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700"
-                                                                href="#" data-ceklist="Sudah">
-                                                                Sudah
-                                                            </a>
-                                                            <a class="filter-option-ceklist flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700"
-                                                                href="#" data-ceklist="Belum">
-                                                                Belum
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="size-px whitespace-nowrap">
-                                            <div class="px-1 py-3 text-start">
-                                                <div class="flex items-center gap-x-3">
-                                                    <span
-                                                        class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-2 mr-8">
-                                                        Catatan
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="size-px whitespace-nowrap">
-                                            <div class="px-1 py-3 text-start">
-                                                <div class="flex items-center gap-x-3">
-                                                    <span
-                                                        class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-2 mr-8">
-                                                        Update
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="size-px whitespace-nowrap">
-                                            <div class="px-1 py-3 text-start">
-                                                <div class="flex items-center gap-x-3">
-                                                    <span
-                                                        class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-2 mr-8">
-                                                        Ukuran File
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <!-- End Kolom table -->
-                                    @foreach ($files as $file => $doc)
-                                        <!-- Perulangan data pada table -->
-                                        <tr class="hover:bg-gray-100 dark:hover:bg-neutral-700">
-                                            <td class="size-px whitespace-nowrap">
-                                                <div class="px-1 py-3 text-start">
-                                                    <div class="flex items-center gap-x-3">
-                                                        <span
-                                                            class="text-sm font-medium text-gray-800 dark:text-neutral-200 ml-4 mr-8">
-                                                            {{ $file + 1 }}
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            </td>
-
-                                            <td class="size-px whitespace-nowrap">
-                                                @if ($doc->status == 0)
-                                                    <div class="px-1 py-3 flex items-center gap-x-3">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="30"
-                                                            height="30" viewBox="0 0 24 24" fill="currentColor">
-                                                            <path d="M13 9h-2v3H8v2h3v3h2v-3h3v-2h-3z"></path>
-                                                            <path
-                                                                d="M20 5h-8.586L9.707 3.293A.996.996 0 0 0 9 3H4c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2h16c1.103 0 2-.897 2-2V7c0-1.103-.897-2-2-2zM4 19V7h16l.002 12H4z">
-                                                            </path>
-                                                        </svg>
-                                                        <span
-                                                            class="text-sm font-medium text-gray-800 dark:text-neutral-200">
-                                                            {{ $doc->judul }}
-                                                        </span>
-                                                    </div>
-                                                @else
-                                                    <div class="px-1 py-3 flex items-center gap-x-3">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="30"
-                                                            height="30" viewBox="0 0 24 24"
-                                                            style="fill: rgba(224, 17, 17, 1);transform: ;msFilter:;">
-                                                            <path
-                                                                d="M8.267 14.68c-.184 0-.308.018-.372.036v1.178c.076.018.171.023.302.023.479 0 .774-.242.774-.651 0-.366-.254-.586-.704-.586zm3.487.012c-.2 0-.33.018-.407.036v2.61c.077.018.201.018.313.018.817.006 1.349-.444 1.349-1.396.006-.83-.479-1.268-1.255-1.268z">
-                                                            </path>
-                                                            <path
-                                                                d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zM9.498 16.19c-.309.29-.765.42-1.296.42a2.23 2.23 0 0 1-.308-.018v1.426H7v-3.936A7.558 7.558 0 0 1 8.219 14c.557 0 .953.106 1.22.319.254.202.426.533.426.923-.001.392-.131.723-.367.948zm3.807 1.355c-.42.349-1.059.515-1.84.515-.468 0-.799-.03-1.024-.06v-3.917A7.947 7.947 0 0 1 11.66 14c.757 0 1.249.136 1.633.426.415.308.675.799.675 1.504 0 .763-.279 1.29-.663 1.615zM17 14.77h-1.532v.911H16.9v.734h-1.432v1.604h-.906V14.03H17v.74zM14 9h-1V4l5 5h-4z">
-                                                            </path>
-                                                        </svg>
-                                                        <span
-                                                            class="text-sm font-medium text-gray-800 dark:text-neutral-200">
-                                                            {{ $doc->namaFile }}
-                                                        </span>
-                                                    </div>
-                                                @endif
-                                            </td>
-
-
-                                            <td class="size-px whitespace-nowrap">
-                                                <div class="px-1 py-3 text-start">
-                                                    <div class="flex items-center gap-x-3">
-                                                        <span
-                                                            class="text-sm font-medium text-gray-800 dark:text-neutral-200 ml-2 mr-8">
-                                                            {{ $doc->penanggung_jwb }}
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            </td>
-
-                                            <td class="size-px whitespace-nowrap">
-                                                @if ($doc->status == 0)
-                                                    <div class="px-1 py-3 text-start">
-                                                        <div class="flex items-center gap-x-3">
-                                                            <span
-                                                                class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-bold bg-red-300 text-red-800 rounded-full dark:bg-red-500/10 dark:text-red-500">
-                                                                <svg class="size-2.5 text-neutral-700"
-                                                                    xmlns="http://www.w3.org/2000/svg" width="16"
-                                                                    height="16" fill="none" viewBox="0 0 24 24"
-                                                                    stroke="currentColor">
-                                                                    <circle cx="12" cy="12" r="10"
-                                                                        class="fill-red-600" />
-                                                                    <path stroke-linecap="round"
-                                                                        stroke-linejoin="round" stroke-width="2"
-                                                                        d="M6 18L18 6M6 6l12 12"
-                                                                        class="text-red-300" />
-                                                                </svg>
-                                                                Belum
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                @else
-                                                    <div class="px-1 py-3 text-start">
-                                                        <div class="flex items-center gap-x-3">
-                                                            <span
-                                                                class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-bold bg-green-200 text-green-800 rounded-full dark:bg-green-500/10 dark:text-green-500">
-                                                                <svg class="size-2.5"
-                                                                    xmlns="http://www.w3.org/2000/svg" width="16"
-                                                                    height="16" fill="currentColor"
-                                                                    viewBox="0 0 16 16">
-                                                                    <path
-                                                                        d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-                                                                </svg>
-                                                                Sudah
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                @endif
-                                            </td>
-
-                                            <td class="size-px whitespace-nowrap">
-                                                <div class="flex items-center space-x-2">
-                                                    <form id="delete-form-{{ $doc->id }}"
-                                                        action="/administrasi/file/{{ $doc->id }}"
-                                                        method="POST">
-                                                        @csrf
-                                                        @method('delete')
-                                                        <input type="hidden" value="{{ $fungsi }}"
-                                                            name="fungsi">
-                                                        <input type="hidden" value="{{ $kegiatan->id }}"
-                                                            name="kegiatan">
-                                                        <input type="hidden" value="{{ $akun->id }}"
-                                                            name="akun">
-                                                        <input type="hidden" value="{{ $transaksi->id }}"
-                                                            name="transaksi">
-                                                        <button type="button"
-                                                            onclick="confirmDelete({{ $doc->id }})"
-                                                            class="bg-red-600 hover:bg-red-700 text-white p-1 rounded focus:outline-none focus:shadow-outline">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="20"
-                                                                height="20" viewBox="0 0 24 24"
-                                                                style="fill: rgba(255, 252, 252, 1);transform: ;msFilter:;">
-                                                                <path
-                                                                    d="M5 20a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8h2V6h-4V4a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v2H3v2h2zM9 4h6v2H9zM8 8h9v12H7V8z">
-                                                                </path>
-                                                                <path d="M9 10h2v8H9zm4 0h2v8h-2z">
-                                                                </path>
-                                                            </svg>
-                                                        </button>
-                                                    </form>
-                                                    @if ($doc->status == 1)
-                                                        <a href="/download-file?nama_file={{ $doc->namaFile }}&transaksi={{ $transaksi->id }}&akun={{ $akun->id }}&kegiatan={{ $kegiatan->id }}&fungsi={{ $fungsi }}"
-                                                            class="text-blue-600 hover:underline">
-                                                            <button type="button"
-                                                                class="bg-blue-600 hover:bg-blue-700 text-white p-1 rounded focus:outline-none focus:shadow-outline">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="20"
-                                                                    height="20" viewBox="0 0 24 24"
-                                                                    style="fill: rgba(255, 255, 255, 1);transform: ;msFilter:;">
-                                                                    <path d="M19 9h-4V3H9v6H5l7 8zM4 19h16v2H4z"></path>
-                                                                </svg>
                                                             </button>
-                                                        </a>
 
-                                                        <a href="{{ route('view-file', [
-                                                            'nama_file' => $doc->namaFile,
-                                                            'transaksi' => $transaksi->id,
-                                                            'akun' => $akun->id,
-                                                            'kegiatan' => $kegiatan->id,
-                                                            'fungsi' => $fungsi,
-                                                        ]) }}"
-                                                            target="_blank" class="text-gray-600 hover:underline">
-                                                            <button type="button"
-                                                                class="bg-cyan-700 hover:bg-cyan-700 text-white p-1 rounded focus:outline-none focus:shadow-outline">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="20"
-                                                                    height="20" fill="currentColor"
-                                                                    class="bi bi-eye" viewBox="0 0 16 16">
-                                                                    <path
-                                                                        d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z" />
-                                                                    <path
-                                                                        d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0" />
-                                                                </svg>
-                                                            </button>
-                                                        </a>
-                                                    @endif
-                                                    <a></a>
-                                                </div>
-                                            </td>
-
-                                            <td class="size-px whitespace-nowrap">
-                                                @if (auth()->check() && auth()->user()->isOrganik())
-                                                    <div class="px-1 py-3 text-start">
-                                                        @if ($doc->ceklist == 1)
-                                                            <div class="flex items-center">
-                                                                <input disabled checked id="disabled-checked-checkbox"
-                                                                    type="checkbox" value=""
-                                                                    class="w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                                            <div class="hs-dropdown-menu transition-[opacity,margin] duration hs-dropdown-open:opacity-100 opacity-0 w-56 hidden z-10 mt-2 min-w-60 bg-white shadow-md rounded-lg p-2 dark:bg-neutral-800 dark:border dark:border-neutral-700 dark:divide-neutral-700"
+                                                                aria-labelledby="hs-dropdown-example">
+                                                                <a class="filter-option-ceklist flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700"
+                                                                    href="#" data-ceklist="Semua">
+                                                                    Semua
+                                                                </a>
+                                                                <a class="filter-option-ceklist flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700"
+                                                                    href="#" data-ceklist="Sudah">
+                                                                    Sudah
+                                                                </a>
+                                                                <a class="filter-option-ceklist flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700"
+                                                                    href="#" data-ceklist="Belum">
+                                                                    Belum
+                                                                </a>
                                                             </div>
-                                                        @else
-                                                            <div class="flex items-center">
-                                                                <input disabled id="disabled-checkbox" type="checkbox"
-                                                                    value=""
-                                                                    class="w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                                            </div>
-                                                        @endiF
-                                                    </div>
-                                                @endif
-
-                                                @if (auth()->check() && auth()->user()->isAdmin())
-                                                    @if ($doc->ceklist == 0)
-                                                        <div class="flex items-center">
-                                                            <input type="hidden" value="{{ $doc->id }}"
-                                                                name="id" class="ceklist_id">
-                                                            <input
-                                                                class="link-checkbox w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                                                                type="checkbox" value="">
-                                                            <label for="link-checkbox"
-                                                                class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Verifikasi</label>
                                                         </div>
-                                                    @else
-                                                        <div class="flex items-center">
-                                                            <input type="hidden" value="{{ $doc->id }}"
-                                                                name="id" class="ceklist_id">
-                                                            <input
-                                                                class="link-checkbox w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                                                                type="checkbox" value="" checked>
-                                                            <label for="link-checkbox"
-                                                                class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Verifikasi</label>
-                                                        </div>
-                                                    @endif
-                                                @endif
-                                            </td>
-
-                                            <td class="size-px whitespace-nowrap">
-                                                <div class="px-1 py-3 text-start">
-                                                    <div class="flex items-center gap-x-3">
-                                                        <textarea
-                                                            class="text-sm font-medium text-gray-800 dark:text-neutral-200 bg-gray-100 dark:bg-neutral-700 border border-gray-300 dark:border-neutral-600 rounded-md p-2 w-full resize"
-                                                            placeholder="Isi catatan di sini" name="note" id="note-{{ $doc->id }}"
-                                                            oninput="saveNoteAutomatically({{ $doc->id }})"
-                                                            style="width: calc(100% - 0.5rem); margin-left: 0.25rem; margin-right: 0.25rem;">{{ $doc->catatan }}</textarea>
                                                     </div>
                                                 </div>
                                             </td>
-
                                             <td class="size-px whitespace-nowrap">
                                                 <div class="px-1 py-3 text-start">
                                                     <div class="flex items-center gap-x-3">
                                                         <span
-                                                            class="text-sm font-medium text-gray-800 dark:text-neutral-200 ml-2 mr-8">
-                                                            @if ($doc->status == 1)
-                                                                {{ $doc->update }}
-                                                            @else
-                                                            @endif
+                                                            class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-2 mr-8">
+                                                            Catatan
                                                         </span>
                                                     </div>
                                                 </div>
                                             </td>
-
                                             <td class="size-px whitespace-nowrap">
                                                 <div class="px-1 py-3 text-start">
                                                     <div class="flex items-center gap-x-3">
                                                         <span
-                                                            class="text-sm font-medium text-gray-800 dark:text-neutral-200 ml-2 mr-8">
-                                                            {{ $doc->ukuran_file }} Mb
+                                                            class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-2 mr-8">
+                                                            Update
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="size-px whitespace-nowrap">
+                                                <div class="px-1 py-3 text-start">
+                                                    <div class="flex items-center gap-x-3">
+                                                        <span
+                                                            class="text-sm font-extrabold text-gray-800 dark:text-neutral-200 ml-2 mr-8">
+                                                            Ukuran File
                                                         </span>
                                                     </div>
                                                 </div>
                                             </td>
                                         </tr>
-                                        <!-- End perulangan data pada table -->
-                                    @endforeach
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <!-- End Kolom table -->
+                                    <tbody class="divide-y divide-gray-200 dark:divide-neutral-700">
+                                        @foreach ($files as $file => $doc)
+                                            <!-- Perulangan data pada table -->
+                                            <tr class="hover:bg-gray-100 dark:hover:bg-neutral-700">
+                                                <td class="size-px whitespace-nowrap">
+                                                    <div class="px-1 py-3 text-start">
+                                                        <div class="flex items-center gap-x-3">
+                                                            <span
+                                                                class="text-sm font-medium text-gray-800 dark:text-neutral-200 ml-4 mr-8">
+                                                                {{ $file + 1 }}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </td>
+
+                                                <td class="size-px whitespace-nowrap">
+                                                    @if ($doc->status == 0)
+                                                        <div class="px-1 py-3 flex items-center gap-x-3">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="30"
+                                                                height="30" viewBox="0 0 24 24"
+                                                                fill="currentColor">
+                                                                <path d="M13 9h-2v3H8v2h3v3h2v-3h3v-2h-3z"></path>
+                                                                <path
+                                                                    d="M20 5h-8.586L9.707 3.293A.996.996 0 0 0 9 3H4c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2h16c1.103 0 2-.897 2-2V7c0-1.103-.897-2-2-2zM4 19V7h16l.002 12H4z">
+                                                                </path>
+                                                            </svg>
+                                                            <span
+                                                                class="text-sm font-medium text-gray-800 dark:text-neutral-200">
+                                                                {{ $doc->judul }}
+                                                            </span>
+                                                        </div>
+                                                    @else
+                                                        <div class="px-1 py-3 flex items-center gap-x-3">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="30"
+                                                                height="30" viewBox="0 0 24 24"
+                                                                style="fill: rgba(224, 17, 17, 1);transform: ;msFilter:;">
+                                                                <path
+                                                                    d="M8.267 14.68c-.184 0-.308.018-.372.036v1.178c.076.018.171.023.302.023.479 0 .774-.242.774-.651 0-.366-.254-.586-.704-.586zm3.487.012c-.2 0-.33.018-.407.036v2.61c.077.018.201.018.313.018.817.006 1.349-.444 1.349-1.396.006-.83-.479-1.268-1.255-1.268z">
+                                                                </path>
+                                                                <path
+                                                                    d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zM9.498 16.19c-.309.29-.765.42-1.296.42a2.23 2.23 0 0 1-.308-.018v1.426H7v-3.936A7.558 7.558 0 0 1 8.219 14c.557 0 .953.106 1.22.319.254.202.426.533.426.923-.001.392-.131.723-.367.948zm3.807 1.355c-.42.349-1.059.515-1.84.515-.468 0-.799-.03-1.024-.06v-3.917A7.947 7.947 0 0 1 11.66 14c.757 0 1.249.136 1.633.426.415.308.675.799.675 1.504 0 .763-.279 1.29-.663 1.615zM17 14.77h-1.532v.911H16.9v.734h-1.432v1.604h-.906V14.03H17v.74zM14 9h-1V4l5 5h-4z">
+                                                                </path>
+                                                            </svg>
+                                                            <span
+                                                                class="text-sm font-medium text-gray-800 dark:text-neutral-200">
+                                                                {{ $doc->namaFile }}
+                                                            </span>
+                                                        </div>
+                                                    @endif
+                                                </td>
+
+
+                                                <td class="size-px whitespace-nowrap">
+                                                    <div class="px-1 py-3 text-start">
+                                                        <div class="flex items-center gap-x-3">
+                                                            <span
+                                                                class="text-sm font-medium text-gray-800 dark:text-neutral-200 ml-2 mr-8">
+                                                                {{ $doc->penanggung_jwb }}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </td>
+
+                                                <td class="size-px whitespace-nowrap">
+                                                    @if ($doc->status == 0)
+                                                        <div class="px-1 py-3 text-start">
+                                                            <div class="flex items-center gap-x-3">
+                                                                <span
+                                                                    class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-bold bg-red-300 text-red-800 rounded-full dark:bg-red-500/10 dark:text-red-500">
+                                                                    <svg class="size-2.5 text-neutral-700"
+                                                                        xmlns="http://www.w3.org/2000/svg"
+                                                                        width="16" height="16" fill="none"
+                                                                        viewBox="0 0 24 24" stroke="currentColor">
+                                                                        <circle cx="12" cy="12" r="10"
+                                                                            class="fill-red-600" />
+                                                                        <path stroke-linecap="round"
+                                                                            stroke-linejoin="round" stroke-width="2"
+                                                                            d="M6 18L18 6M6 6l12 12"
+                                                                            class="text-red-300" />
+                                                                    </svg>
+                                                                    Belum
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    @else
+                                                        <div class="px-1 py-3 text-start">
+                                                            <div class="flex items-center gap-x-3">
+                                                                <span
+                                                                    class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-bold bg-green-200 text-green-800 rounded-full dark:bg-green-500/10 dark:text-green-500">
+                                                                    <svg class="size-2.5"
+                                                                        xmlns="http://www.w3.org/2000/svg"
+                                                                        width="16" height="16"
+                                                                        fill="currentColor" viewBox="0 0 16 16">
+                                                                        <path
+                                                                            d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+                                                                    </svg>
+                                                                    Sudah
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    @endif
+                                                </td>
+
+                                                <td class="size-px whitespace-nowrap">
+                                                    <div class="flex items-center space-x-2">
+                                                        <form id="delete-form-{{ $doc->id }}"
+                                                            action="/administrasi/file/{{ $doc->id }}"
+                                                            method="POST">
+                                                            @csrf
+                                                            @method('delete')
+                                                            <input type="hidden" value="{{ $fungsi }}"
+                                                                name="fungsi">
+                                                            <input type="hidden" value="{{ $kegiatan->id }}"
+                                                                name="kegiatan">
+                                                            <input type="hidden" value="{{ $akun->id }}"
+                                                                name="akun">
+                                                            <input type="hidden" value="{{ $transaksi->id }}"
+                                                                name="transaksi">
+                                                            <button type="button"
+                                                                onclick="confirmDelete({{ $doc->id }})"
+                                                                class="bg-red-600 hover:bg-red-700 text-white p-1 rounded focus:outline-none focus:shadow-outline">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="20"
+                                                                    height="20" viewBox="0 0 24 24"
+                                                                    style="fill: rgba(255, 252, 252, 1);transform: ;msFilter:;">
+                                                                    <path
+                                                                        d="M5 20a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8h2V6h-4V4a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v2H3v2h2zM9 4h6v2H9zM8 8h9v12H7V8z">
+                                                                    </path>
+                                                                    <path d="M9 10h2v8H9zm4 0h2v8h-2z">
+                                                                    </path>
+                                                                </svg>
+                                                            </button>
+                                                        </form>
+                                                        @if ($doc->status == 1)
+                                                            <a href="/download-file?nama_file={{ $doc->namaFile }}&transaksi={{ $transaksi->id }}&akun={{ $akun->id }}&kegiatan={{ $kegiatan->id }}&fungsi={{ $fungsi }}"
+                                                                class="text-blue-600 hover:underline">
+                                                                <button type="button"
+                                                                    class="bg-blue-600 hover:bg-blue-700 text-white p-1 rounded focus:outline-none focus:shadow-outline">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                                        width="20" height="20"
+                                                                        viewBox="0 0 24 24"
+                                                                        style="fill: rgba(255, 255, 255, 1);transform: ;msFilter:;">
+                                                                        <path d="M19 9h-4V3H9v6H5l7 8zM4 19h16v2H4z">
+                                                                        </path>
+                                                                    </svg>
+                                                                </button>
+                                                            </a>
+
+                                                            <a href="{{ route('view-file', [
+                                                                'nama_file' => $doc->namaFile,
+                                                                'transaksi' => $transaksi->id,
+                                                                'akun' => $akun->id,
+                                                                'kegiatan' => $kegiatan->id,
+                                                                'fungsi' => $fungsi,
+                                                            ]) }}"
+                                                                target="_blank" class="text-gray-600 hover:underline">
+                                                                <button type="button"
+                                                                    class="bg-cyan-700 hover:bg-cyan-700 text-white p-1 rounded focus:outline-none focus:shadow-outline">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                                        width="20" height="20"
+                                                                        fill="currentColor" class="bi bi-eye"
+                                                                        viewBox="0 0 16 16">
+                                                                        <path
+                                                                            d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z" />
+                                                                        <path
+                                                                            d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0" />
+                                                                    </svg>
+                                                                </button>
+                                                            </a>
+                                                        @endif
+                                                        <a></a>
+                                                    </div>
+                                                </td>
+
+                                                <td class="size-px whitespace-nowrap">
+                                                    @if (auth()->check() && auth()->user()->isOrganik())
+                                                        <div class="px-1 py-3 text-start">
+                                                            @if ($doc->ceklist == 1)
+                                                                <div class="flex items-center">
+                                                                    <input disabled checked
+                                                                        id="disabled-checked-checkbox" type="checkbox"
+                                                                        value=""
+                                                                        class="w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                                                </div>
+                                                            @else
+                                                                <div class="flex items-center">
+                                                                    <input disabled id="disabled-checkbox"
+                                                                        type="checkbox" value=""
+                                                                        class="w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                                                </div>
+                                                            @endiF
+                                                        </div>
+                                                    @endif
+
+                                                    @if (auth()->check() && auth()->user()->isAdmin())
+                                                        @if ($doc->ceklist == 0)
+                                                            <div class="flex items-center">
+                                                                <input type="hidden" value="{{ $doc->id }}"
+                                                                    name="id" class="ceklist_id">
+                                                                <input
+                                                                    class="link-checkbox w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                                                                    type="checkbox" value="">
+                                                                <label for="link-checkbox"
+                                                                    class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Verifikasi</label>
+                                                            </div>
+                                                        @else
+                                                            <div class="flex items-center">
+                                                                <input type="hidden" value="{{ $doc->id }}"
+                                                                    name="id" class="ceklist_id">
+                                                                <input
+                                                                    class="link-checkbox w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                                                                    type="checkbox" value="" checked>
+                                                                <label for="link-checkbox"
+                                                                    class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Verifikasi</label>
+                                                            </div>
+                                                        @endif
+                                                    @endif
+                                                </td>
+
+                                                <td class="size-px whitespace-nowrap">
+                                                    <div class="px-1 py-3 text-start">
+                                                        <div class="flex items-center gap-x-3">
+                                                            <textarea
+                                                                class="text-sm font-medium text-gray-800 dark:text-neutral-200 bg-gray-100 dark:bg-neutral-700 border border-gray-300 dark:border-neutral-600 rounded-md p-2 w-full resize"
+                                                                placeholder="Isi catatan di sini" name="note" id="note-{{ $doc->id }}"
+                                                                oninput="saveNoteAutomatically({{ $doc->id }})"
+                                                                style="width: calc(100% - 0.5rem); margin-left: 0.25rem; margin-right: 0.25rem;">{{ $doc->catatan }}</textarea>
+                                                        </div>
+                                                    </div>
+                                                </td>
+
+                                                <td class="size-px whitespace-nowrap">
+                                                    <div class="px-1 py-3 text-start">
+                                                        <div class="flex items-center gap-x-3">
+                                                            <span
+                                                                class="text-sm font-medium text-gray-800 dark:text-neutral-200 ml-2 mr-8">
+                                                                @if ($doc->status == 1)
+                                                                    {{ $doc->update }}
+                                                                @else
+                                                                @endif
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </td>
+
+                                                <td class="size-px whitespace-nowrap">
+                                                    <div class="px-1 py-3 text-start">
+                                                        <div class="flex items-center gap-x-3">
+                                                            <span
+                                                                class="text-sm font-medium text-gray-800 dark:text-neutral-200 ml-2 mr-8">
+                                                                {{ $doc->ukuran_file }} Mb
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <!-- End perulangan data pada table -->
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>

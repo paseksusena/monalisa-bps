@@ -15,7 +15,9 @@ export default {
         extend: {
             fontFamily: {
                 sans: ["Figtree", ...defaultTheme.fontFamily.sans],
-            },
+            },  maxHeight: {
+                '160': '45rem', 
+              },
         },
     },
 
