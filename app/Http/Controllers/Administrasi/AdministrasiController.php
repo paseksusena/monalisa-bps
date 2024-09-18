@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Administrasi;
 
+use App\Exports\CatatanExport;
 use App\Exports\notifikasiExport;
 use App\Http\Controllers\Controller;
 use App\Models\Akun;
@@ -182,6 +183,14 @@ class AdministrasiController extends Controller
     {
 
         return Excel::download(new notifikasiExport, 'notifikasi-administrasi.xlsx');
+
+        // Kirim hasil pencarian sebagai respons JSON
+    }
+
+    public function download_catatan_excel()
+    {
+
+        return Excel::download(new CatatanExport, 'catatan.xlsx');
 
         // Kirim hasil pencarian sebagai respons JSON
     }

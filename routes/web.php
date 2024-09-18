@@ -90,6 +90,12 @@ Route::middleware('auth')->group(function () {
     //download excel notif
     Route::get('/download-notifinasi-excel',  [AdministrasiController::class, 'download_notif_excel']);
 
+    //download excel catatan
+    Route::get('/download-catatan-excel',  [AdministrasiController::class, 'download_catatan_excel']);
+
+    //download excel catatan
+    Route::get('/download-file-excel/{id}', [FileController::class, 'download_file_excel'])->name('download.file.excel');
+
     Route::get('/notifications', [AdministrasiController::class, 'getNotifications'])->name('notifications');
 
     //catatan 

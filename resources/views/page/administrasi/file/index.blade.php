@@ -129,6 +129,15 @@
 
                                 <div>
                                     <div class="inline-flex gap-x-2">
+                                        <a href="/download-file-excel/{{ $transaksi->id }}"
+                                            class="py-2 px-2 pr-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-xl border border-transparent bg-cyan-600 text-white hover:bg-cyan-700 disabled:opacity-50 disabled:pointer-events-none">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                                                viewBox="0 0 24 24"
+                                                style="fill: rgba(255, 255, 255, 1);transform: ;msFilter:;">
+                                                <path d="M19 9h-4V3H9v6H5l7 8zM4 19h16v2H4z"></path>
+                                            </svg>
+                                            Excel
+                                        </a>
                                         <button type="button"
                                             class="py-2 px-2 pr-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-xl border border-transparent bg-green-600 text-white hover:bg-green-700 disabled:opacity-50 disabled:pointer-events-none"
                                             data-hs-overlay="#hs-sign-out-alert">

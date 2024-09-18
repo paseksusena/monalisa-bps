@@ -9,7 +9,7 @@ use App\Models\Transaksi;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 
-class NotifikasiExport implements FromCollection, WithMapping, WithHeadings
+class notifikasiExport implements FromCollection, WithMapping, WithHeadings
 {
     /**
      * @return \Illuminate\Support\Collection

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Administrasi;
 
+use App\Exports\FileCatatanExport;
 use App\Models\Akun;
 use App\Models\File;
 use App\Http\Requests\StoreFileRequest;
@@ -478,5 +479,17 @@ class FileController extends Controller
         $file->save();
 
         return response()->json(['message' => 'Catatan berhasil disimpan!', 'catatanIsi' => $catatanIsi]);
+    }
+
+    public function download_file_excel(Request $request, $id)
+    {
+
+        $transaksi = Transaksi::find($id);
+        $akun = Akun::where('id', $transaksi->akun_id)->first();
+        $kegiatan = KegiatanAdministrasi::where('id', $akun->kegiatan_id)->first();
+        $fungsi = $kegiatan->fungsi;
+
+        // Pass parameters to the export class
+        return Excel::download(new FileCatatanExport($transaksi->nama, $akun->nama, $kegiatan->nama, $fungsi, $id), 'catatan_file.xlsx');
     }
 }

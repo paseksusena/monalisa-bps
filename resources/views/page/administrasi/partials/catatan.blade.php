@@ -21,6 +21,15 @@
     <div
         class="flex justify-between items-center px-6 py-3 font-medium text-base text-center text-gray-700 rounded-t-lg bg-gray-100 dark:bg-gray-800 dark:text-white">
         <span>Catatan</span>
+        <a href="/download-catatan-excel"
+            class="block p-3 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+            <span title="Download Excel">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                    style="fill: rgba(61, 61, 61, 1);transform: ;msFilter:;">
+                    <path d="M19 9h-4V3H9v6H5l7 8zM4 19h16v2H4z"></path>
+                </svg>
+            </span>
+        </a>
     </div>
     <div id="notification-container" class="divide-y divide-gray-100 dark:divide-gray-700 max-h-96 overflow-y-auto">
         <!-- Catatan akan dimuat di sini secara dinamis -->
