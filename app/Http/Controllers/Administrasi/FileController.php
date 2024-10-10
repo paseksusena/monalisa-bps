@@ -132,12 +132,12 @@ class FileController extends Controller
     // public function show($fungsi, $kegiatan, $akun, $transaksi, $filename)
     // {
     //     // Path ke file PDF
-    //     $path = public_path("administrasis/{$fungsi}/{$kegiatan}/{$akun}/{$transaksi}/{$filename}");
+        // $path = public_path("administrasis/{$fungsi}/{$kegiatan}/{$akun}/{$transaksi}/{$filename}");
 
-    //     // Cek apakah file PDF ada
-    //     if (!file_exists($path)) {
-    //         dd('File not found');
-    //     }
+        // // Cek apakah file PDF ada
+        // if (!file_exists($path)) {
+        //     dd('File not found');
+        // }
 
     //     // Tampilkan file PDF
     //     return response()->file($path, ['Content-Type' => 'application/pdf']);

@@ -128,9 +128,11 @@ class KegiatanAdministrasiController extends Controller
                 'tahun' => 'required',
                 'fungsi' => 'required',
             ]);
+            $session = session('selected_year');
 
             $fungsi = $request->fungsi;
-            $kegiatan = KegiatanAdministrasi::where('fungsi', $fungsi)->get();
+            $kegiatan = KegiatanAdministrasi::where('fungsi', $fungsi)->where('tahun', 
+            $session)->get();
             $find = $kegiatan->where('nama', $request->nama)->first();
 
             if ($find) {
